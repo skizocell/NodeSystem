@@ -9,6 +9,9 @@ public class DialogNodeController : NodeControllerBase<NodeDialog>
     #region variable
     protected static Texture2D headerTexture=null;
     protected static GUIStyle headerStyle = null;
+
+    NodePinCallerController callerPin;
+    NodePinCalledController calledPin;
     #endregion
 
     public DialogNodeController(NodeDialog node, Action<NodeControllerComponent> OnClickRemoveNode, Action<NodeControllerComponent> OnSelect) : base(node, OnClickRemoveNode, OnSelect)
@@ -16,9 +19,24 @@ public class DialogNodeController : NodeControllerBase<NodeDialog>
         //method 1 activate rich text
         //style = new GUIStyle();
         //style.richText = true;
+
+        callerPin = new NodePinCallerController(node.nextCall);
+        calledPin = new NodePinCalledController(node.process);
     }
 
+    #region main method
+    protected override void Draw()
+    {
+        //Trick to draw hover a window declare a window without style and draw a box with window style 
+        //but problem when selected because the box is not focused 
+        //The windows skin is always on top 
+        Rect windowRect = GUILayout.Window(nodeWindowsDrawId, node.rect, DrawWindowsContent, "", GUIStyle.none);
+        GUI.Box(windowRect, "", GUI.skin.window);
+        DrawPin(windowRect);
+    }
+    #endregion
 
+    #region Utility method
     protected override Texture2D GetHeaderTexture()
     {
         if(headerTexture == null)
@@ -42,16 +60,6 @@ public class DialogNodeController : NodeControllerBase<NodeDialog>
         return headerStyle;
     }
 
-    protected override void Draw()
-    {
-        //Trick to draw hover a window declare a window without style and draw a box with window style 
-        //but problem when selected because the box is not focused 
-        //The windows skin is always on top 
-        Rect windowRect = GUILayout.Window(nodeWindowsDrawId, node.rect, DrawWindowsContent, "", GUIStyle.none);
-        GUI.Box(windowRect, "", GUI.skin.window);
-        DrawPin(windowRect);
-    }
-
     protected void DrawPin(Rect windowRect)
     {
         //try to create a style or use a texture for these button
@@ -59,14 +67,18 @@ public class DialogNodeController : NodeControllerBase<NodeDialog>
         Color oldGuiColor = GUI.color;
         GUI.backgroundColor = Color.gray;
         GUI.color = Color.gray;
-        if (GUI.Button(new Rect(windowRect.x - 13, windowRect.y +21, 18, 18), pinFlowTargetButtonTexture, GUIStyle.none))
-        {
-            Debug.Log("Bouton 2 ");
-        }
-        if (GUI.Button(new Rect(windowRect.x + windowRect.width-4, windowRect.y +21, 18, 18), pinFlowButtonTexture, GUIStyle.none))
-        {
-            Debug.Log("Overlay Button 3 ");
-        }
+
+        callerPin.Draw(windowRect,21);
+        calledPin.Draw(windowRect,21);
+
+        //if (GUI.Button(new Rect(windowRect.x - 13, windowRect.y + 21, 18, 18), pinFlowTargetButtonTexture, GUIStyle.none))
+        //{
+        //    Debug.Log("Bouton 2 ");
+        //}
+        //if (GUI.Button(new Rect(windowRect.x + windowRect.width-4, windowRect.y +21, 18, 18), pinFlowButtonTexture, GUIStyle.none))
+        //{
+        //    Debug.Log("Overlay Button 3 ");
+        //}
         GUI.backgroundColor = oldBackGroundColor;
 
         if(GUI.Button(new Rect(windowRect.x - 14, windowRect.y + 38, 25, 25), pinDataButtonTexture, GUIStyle.none))
@@ -85,10 +97,10 @@ public class DialogNodeController : NodeControllerBase<NodeDialog>
     {
         //Draw Header with parent function
         DrawHeader();
-        GUILayout.Space(20);
 
         //Content
         EditorGUIUtility.labelWidth = 1;
+
         Dialog dialog = node.GetData();
 
         EditorGUILayout.BeginHorizontal();
@@ -105,6 +117,8 @@ public class DialogNodeController : NodeControllerBase<NodeDialog>
         GUILayout.Space(12);
         EditorGUILayout.LabelField("Test Link output :", EditorStyles.boldLabel);
         EditorGUILayout.EndHorizontal();
+
         EditorGUIUtility.labelWidth = 0;
     }
+    #endregion
 }

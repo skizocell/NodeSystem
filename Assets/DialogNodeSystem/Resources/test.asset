@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 440
-    y: 118
+    x: 426
+    y: 125
     width: 200
     height: 65
   data:
@@ -51,7 +51,7 @@ MonoBehaviour:
   rect:
     serializedVersion: 2
     x: 109
-    y: 105
+    y: 133
     width: 200
     height: 65
   data:
@@ -99,16 +99,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: NodeDialog
+  m_Name: WelCOme3
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 453
-    y: 333
+    x: 340
+    y: 292
     width: 200
     height: 65
   data:
-    text: 
+    text: Coucou
   nextCall:
     type: 0
     target:

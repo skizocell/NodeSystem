@@ -125,6 +125,7 @@ public abstract class NodeControllerBase<T> : NodeControllerComponent where T : 
     {
         GUI.DrawTexture(new Rect(0, 0, node.rect.width + 1, 20), isSelected ? headerSelectedColor : GetHeaderTexture(), ScaleMode.StretchToFill);
         GUI.Label(new Rect(8, 2, node.rect.width - 1, 20), "" + node.name + "", isSelected ? headerSelectedStyle : GetHeaderStyle());
+        GUILayout.Space(20);
     }
 
     //Create the Contextual menu for this node
