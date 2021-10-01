@@ -1,5 +1,77 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8465729608079037067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: NodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 440
+    y: 118
+    width: 200
+    height: 65
+  data:
+    text: dfsdfsdfsd
+  nextCall:
+    type: 0
+    target:
+      type: 1
+      status: 0
+  process:
+    type: 1
+    status: 1
+  emiter:
+    type: 2
+    target:
+      type: 3
+      status: 0
+  receiver:
+    type: 3
+    status: 1
+--- !u!114 &-440385950593552975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: Welcome
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 109
+    y: 105
+    width: 200
+    height: 65
+  data:
+    text: sdfsdfsdfsdfsdfsdfsdfsdf
+  nextCall:
+    type: 0
+    target:
+      type: 1
+      status: 0
+  process:
+    type: 1
+    status: 1
+  emiter:
+    type: 2
+    target:
+      type: 3
+      status: 0
+  receiver:
+    type: 3
+    status: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,4 +85,43 @@ MonoBehaviour:
   m_Name: test
   m_EditorClassIdentifier: 
   nodeGraphControllerType: DialogGraphController
-  nodes: []
+  nodes:
+  - {fileID: -440385950593552975}
+  - {fileID: -8465729608079037067}
+  - {fileID: 3387265979982482315}
+--- !u!114 &3387265979982482315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: NodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 453
+    y: 333
+    width: 200
+    height: 65
+  data:
+    text: 
+  nextCall:
+    type: 0
+    target:
+      type: 1
+      status: 0
+  process:
+    type: 1
+    status: 1
+  emiter:
+    type: 2
+    target:
+      type: 3
+      status: 0
+  receiver:
+    type: 3
+    status: 1

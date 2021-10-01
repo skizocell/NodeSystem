@@ -7,6 +7,5 @@ using UnityEngine;
 public abstract class NodeComponent : ScriptableObject
 {
     public Rect rect;
-    public List<NodePin> pins = new List<NodePin>();
-    public abstract void Update();
+    public abstract void Init();
 }

@@ -8,7 +8,6 @@ public abstract class GraphControllerBase
     protected NodeGraph graph;
     List<NodeControllerComponent> nodes = new List<NodeControllerComponent>();
     NodeControllerComponent curSelectedNode =null;
-    GUISkin guiSkin;
 
     #region MetaData info method
     public abstract string GetAssetPath();
@@ -20,17 +19,12 @@ public abstract class GraphControllerBase
     #region Extensible method
     public abstract void FillMenu(GenericMenu menu, Vector2 mousePosition);
 
-    public virtual string getSkinResourcesPath()
-    {
-        return "GUISkins/NodeEditorSkin";//defaultSkinPath
-    }
-
     public virtual void Update(Event e)
     {
         int i=0;
         foreach (NodeControllerComponent node in nodes)
         {
-            node.Update(i, e, guiSkin);
+            node.Update(i, e);
             i++;
         }
     }
@@ -40,18 +34,12 @@ public abstract class GraphControllerBase
     //set the Graph to manage
     public void SetGraph(NodeGraph graph)
     {
-        guiSkin = (GUISkin)Resources.Load(getSkinResourcesPath());
         this.graph = graph;
 
         foreach (NodeComponent node in graph.nodes)
         {
             SetController(node);
         }
-    }
-
-    public GUISkin GetGUISkin()
-    {
-        return guiSkin;
     }
 
     protected void SetController(NodeComponent node)

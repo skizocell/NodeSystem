@@ -6,48 +6,33 @@ using UnityEngine;
 [Serializable]
 public class NodePin
 {
-    Rect rect;
     public enum PinType
     {
-        Call,
-        Input, //
-        Output
+        Caller,
+        Called,
+        DataEmiter,
+        DataReceiver
     }
+    [SerializeField]
     protected PinType type;
-    //excecution pin 
-    // call what
-    //data pin 
-    // accept what and get from...
-    // 
-    //
-}
-public class NodePinCalled : NodePin
-{
-    Action ActionToBeCalled;
-    public NodePinCalled(Action ActionToBeCalled)
-    {
-        this.ActionToBeCalled = ActionToBeCalled;
-    }
-
-    public void Process()
-    {
-        ActionToBeCalled();
-    }
 }
 
-public abstract class NodePinCaller : NodePin
+[Serializable]
+public abstract class NodePinEmitter : NodePin
 {
     public abstract NodePin GetTarget();
-    public abstract void Process();
+    public abstract void Call();
 }
 
-public class NodePinCall: NodePinCaller
+[Serializable]
+public class NodePinCaller: NodePinEmitter
 {
+    [SerializeField]
     protected NodePinCalled target;
 
-    public NodePinCall()
+    public NodePinCaller()
     {
-        type = PinType.Call;
+        type = PinType.Caller;
     }
 
     public override NodePin GetTarget()
@@ -60,23 +45,32 @@ public class NodePinCall: NodePinCaller
         this.target = target;
     }
 
-    public override void Process()
+    public override void Call()
     {
         if (target != null)
         {
-            Debug.Log("Process pin and call the next ->");
             target.Process();
         }
     }
 }
 
-public class NodePinOutput<T> : NodePinCaller
+[Serializable]
+//TODO DATA EMITER can notify data in multiple client
+public class NodePinDataEmitter<T> : NodePinEmitter
 {
-    protected NodePinInput<T> target;
-    Func<T> DataAccessor;
-    public NodePinOutput(Func<T> DataAccessor)
+    [SerializeField]
+    protected NodePinDataReceiver<T> target;
+
+    [NonSerialized]
+    protected Func<T> DataAccessor;
+
+    public NodePinDataEmitter()
     {
-        type = PinType.Output;
+        type = PinType.DataEmiter;
+    }
+
+    public void SetDataAccessor(Func<T> DataAccessor)
+    {
         this.DataAccessor = DataAccessor;
     }
 
@@ -85,34 +79,83 @@ public class NodePinOutput<T> : NodePinCaller
         return target;
     }
 
-    public void SetTarget(NodePinInput<T> target)
+    public void SetTarget(NodePinDataReceiver<T> target)
     {
         this.target = target;
     }
 
-    public override void Process()
+    public override void Call()
     {
-        Debug.Log("Process pin and set the next ->");
-        target.Set(DataAccessor());
+        if (target != null)
+        {
+            if (DataAccessor == null) throw new Exception("DataAccessor has not been set");
+            target.Push(DataAccessor());
+        }
     }
 }
 
-public class NodePinInput<T> : NodePin
+public class NodePinReceiver : NodePin
 {
     public enum Status
     {
-        Waiting,
-        Done
+        Unset,
+        Ready
     }
-    public Status status = Status.Waiting;
 
-  //  Type type = typeof(T);
+    public Status status;
+}
 
-    Action<T> set;
+[Serializable]
+public class NodePinCalled : NodePinReceiver
+{
+    //Action exposed to caller
+    [NonSerialized]
+    protected Action ActionToBeCalled;
 
-    public void Set(T data)
+    public NodePinCalled()
     {
-        status = Status.Done;
-        set(data);
+        type = PinType.Called;
+        status = Status.Unset;
+    }
+
+    public void SetAction(Action ActionToBeCalled)
+    {
+        status = Status.Ready;
+        this.ActionToBeCalled = ActionToBeCalled;
+    }
+
+    public void Process()
+    {
+        if (status == Status.Ready)
+        {
+            ActionToBeCalled();
+        }
+    }
+}
+
+[Serializable]
+public class NodePinDataReceiver<T> : NodePinReceiver
+{
+    [NonSerialized]
+    protected Action<T> DataPusher;
+
+    public NodePinDataReceiver()
+    {
+        type = PinType.DataReceiver;
+        status = Status.Unset;
+    }
+
+    public void SetDataPusher(Action<T> DataPusher)
+    {
+        status = Status.Ready;
+        this.DataPusher = DataPusher;
+    }
+
+    public void Push(T data)
+    {
+        if (status == Status.Ready)
+        {
+            DataPusher(data);
+        }
     }
 }

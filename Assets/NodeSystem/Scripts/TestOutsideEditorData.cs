@@ -14,27 +14,24 @@ public class TestOutsideEditorData : MonoBehaviour
         //AssetBundle.LoadFromFile(Application.dataPath + " / NodeEditor / Database / Test.asset"); //To test
         Debug.Log("Enable Test " + testGraph.name);
 
-        Debug.Log("node process (count="  + testGraph.nodes.Count+")");
+        Debug.Log("node process (count=" + testGraph.nodes.Count + ")");
         testGraph.nodes.ForEach(p =>
         {
-            p.Update();
+            ((NodeDialog)p).process.Process();
         });
 
-        NodePinCall pin = new NodePinCall(); //initial caller Starter
-
-        NodeDialog dialog1 = new NodeDialog();
+        NodeDialog dialog1 = ScriptableObject.CreateInstance<NodeDialog>();
+        dialog1.name = "dialog1";
         dialog1.GetData().text = "coucou";
 
-        pin.SetTarget(dialog1.process); //attach the starter to dialog1
-
-
-        NodeDialog dialog2 = new NodeDialog();
+        NodeDialog dialog2 = ScriptableObject.CreateInstance<NodeDialog>();
+        dialog2.name = "dialog2";
         dialog2.GetData().text = "En garde";
 
-        dialog1.nextCall = new NodePinCall(); //attach dialog2 to dialog1
-        dialog1.nextCall.SetTarget(dialog2.process);
+        dialog1.nextCall.SetTarget(dialog2.process);//attach dialog2 to dialog1
+        dialog1.emiter.SetTarget(dialog2.receiver);//call the receiver
 
-        pin.Process();
+        dialog1.Process();
     }
 
     // Update is called once per frame

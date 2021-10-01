@@ -6,11 +6,12 @@ using UnityEngine;
 [Serializable]
 public class NodeBase<T> : NodeComponent
 {
+    [SerializeField]
     protected T data;
 
-    public NodeBase()
+    public override void Init()
     {
-        data = (T)Activator.CreateInstance(typeof(T));
+        throw new NotImplementedException();
     }
 
     public T GetData()
@@ -21,10 +22,5 @@ public class NodeBase<T> : NodeComponent
     public void SetData(T data)
     {
         this.data = data;
-    }
-
-    public override void Update()
-    {
-        Debug.Log("Node " + name + "  updated");
     }
 }
