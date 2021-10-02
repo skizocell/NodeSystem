@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 
-public class DialogNodeController : NodeControllerBase<NodeDialog>
+public class DialogNodeController : NodeControllerBase<NodeDialog, DialogGraphController>
 {
     #region variable
     protected static Texture2D headerTexture=null;
@@ -14,14 +14,17 @@ public class DialogNodeController : NodeControllerBase<NodeDialog>
     NodePinCalledController calledPin;
     #endregion
 
-    public DialogNodeController(NodeDialog node, Action<NodeControllerComponent> OnClickRemoveNode, Action<NodeControllerComponent> OnSelect) : base(node, OnClickRemoveNode, OnSelect)
+    public DialogNodeController(DialogGraphController graphController, NodeDialog node, Action<NodeControllerComponent> OnClickRemoveNode, Action<NodeControllerComponent> OnSelect) : base(graphController,node, OnClickRemoveNode, OnSelect)
     {
         //method 1 activate rich text
         //style = new GUIStyle();
         //style.richText = true;
-
+        
         callerPin = new NodePinCallerController(node.nextCall);
         calledPin = new NodePinCalledController(node.process);
+
+        graphController.RegisterNodeControllerPin(callerPin);
+        graphController.RegisterNodeControllerPin(calledPin);
     }
 
     #region main method

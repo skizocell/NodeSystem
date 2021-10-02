@@ -10,9 +10,8 @@ public class DialogGraphController : GraphControllerBase
     private const string Description = "A Graph to create a dialog between character";
     private const string AssetPath = "Assets/DialogNodeSystem/Resources/";
     private const string NodeGraphControllerType = "DialogGraphController";
-
     #endregion
-
+   
     #region MetaData info method
     public override string GetName()
     {
@@ -48,6 +47,11 @@ public class DialogGraphController : GraphControllerBase
     {
         NodeComponent dialog =  NodesUtils.CreateNode(graph, typeof(NodeDialog), new Rect(mousePos.x, mousePos.y, 200f, 65f));
         SetController(dialog);
+    }
+
+    public override void InitFactory()
+    {
+        nodeFactory = new DialogNodeControllerFactory(this);
     }
     #endregion
 }

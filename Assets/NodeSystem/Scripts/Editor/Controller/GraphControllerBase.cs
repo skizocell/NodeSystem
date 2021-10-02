@@ -1,13 +1,21 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 public abstract class GraphControllerBase
 { 
+    private List<INodePinController> nodePins = new List<INodePinController>();
     protected NodeGraph graph;
+    protected INodeControllerFactory nodeFactory;
     List<NodeControllerComponent> nodes = new List<NodeControllerComponent>();
     NodeControllerComponent curSelectedNode =null;
+
+    protected GraphControllerBase()
+    {
+        InitFactory();
+    }
 
     #region MetaData info method
     public abstract string GetAssetPath();
@@ -18,6 +26,7 @@ public abstract class GraphControllerBase
 
     #region Extensible method
     public abstract void FillMenu(GenericMenu menu, Vector2 mousePosition);
+    public abstract void InitFactory();
 
     public virtual void Update(Event e)
     {
@@ -40,11 +49,32 @@ public abstract class GraphControllerBase
         {
             SetController(node);
         }
+
+        InitNodeLink();
     }
 
+    public void RegisterNodeControllerPin(INodePinController pin)
+    {
+        Debug.Log("Node pin registred " + pin);
+        nodePins.Add(pin);
+    }
+
+    public void InitNodeLink()
+    {
+        Debug.Log("InitNodeLink start");
+        //TODO init NodeLink by check emiter target
+        foreach (INodePinController item in nodePins.Where(c=>c.GetNodePin() is NodePinEmitter))
+        {
+            //Test if target is filled with a know receiver and create NodeLink for the graph
+        }
+
+        //Next make control of the NodeLink and establish link between node
+    }
+
+       
     protected void SetController(NodeComponent node)
     {
-        NodeControllerComponent controller = NodeControllerFactory.Build(node, DeleteNode, SelectNode);
+        NodeControllerComponent controller = nodeFactory.Build(node, DeleteNode, SelectNode);
         nodes.Add(controller);
     }
 

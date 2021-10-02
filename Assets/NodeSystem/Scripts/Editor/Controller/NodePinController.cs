@@ -21,10 +21,20 @@ public class NodePinCallerController : NodePinController<NodePinCaller>
         }
     }
 
-    protected override void Action()
-    {
-        Debug.Log("TEST Button caller");
-    }
+    //public override bool Link(NodePin pinTarget)
+    //{
+    //    if (nodePin.GetType() == typeof(NodePinCalled))
+    //    {
+    //        nodePin.SetTarget((NodePinCalled) pinTarget);
+    //        return true;
+    //    }
+    //    return false;
+    //}
+
+    //protected override void Action()
+    //{
+    //    Debug.Log("TEST Button caller");
+    //}
 
     protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
     {
@@ -55,10 +65,15 @@ public class NodePinCalledController : NodePinController<NodePinCalled>
         }
     }
 
-    protected override void Action()
-    {
-        Debug.Log("TEST Button called");
-    }
+    //public override bool Link(NodePin pinTarget)
+    //{
+
+    //}
+
+    //protected override void Action()
+    //{
+    //    Debug.Log("TEST Button called");
+    //}
 
     protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
     {
@@ -71,9 +86,15 @@ public class NodePinCalledController : NodePinController<NodePinCalled>
     }
 }
 
-public abstract class NodePinController<T> where T : NodePin
+public interface INodePinController
 {
-    private T nodePin;
+    void Draw(Rect nodeRect, float yOffset);
+    NodePin GetNodePin();
+}
+
+public abstract class NodePinController<T> : INodePinController where T : NodePin
+{
+    protected T nodePin;
 
     public NodePinController(T nodePin)
     {
@@ -82,13 +103,19 @@ public abstract class NodePinController<T> where T : NodePin
 
     protected abstract Texture2D GetButtonTexture();
     protected abstract Rect GetButtonRect(Rect nodeRect, float yOffset);
-    protected abstract void Action();
+    //protected abstract void Action();
+
+    //public abstract bool Link(NodePin pinTarget);
+    public NodePin GetNodePin()
+    {
+        return nodePin;
+    }
 
     public void Draw(Rect nodeRect, float yOffset)
     {
         if (GUI.Button(GetButtonRect(nodeRect, yOffset), GetButtonTexture(), GUIStyle.none))
         {
-            Action();
+            //Action();
         }
     }
 }

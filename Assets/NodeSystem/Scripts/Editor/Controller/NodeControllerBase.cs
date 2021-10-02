@@ -4,14 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public abstract class NodeControllerBase<T> : NodeControllerComponent where T : NodeComponent
+public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N : NodeComponent where G : GraphControllerBase
 {
     #region variable
     //The windows id for the current node
     protected int nodeWindowsDrawId;
 
     //The node
-    protected T node;
+    protected N node;
+
+    //The Graph controller
+    protected G graphController;
 
     //Pin Texture for pin button
     protected static Texture2D pinDataButtonTexture;
@@ -27,9 +30,10 @@ public abstract class NodeControllerBase<T> : NodeControllerComponent where T : 
     public Action<NodeControllerComponent> OnSelect;
     #endregion
 
-    public NodeControllerBase(T node, Action<NodeControllerComponent> OnClickRemoveNode, Action<NodeControllerComponent> OnSelect)
+    public NodeControllerBase(G graphController, N node, Action<NodeControllerComponent> OnClickRemoveNode, Action<NodeControllerComponent> OnSelect)
     {
         this.node = node;
+        this.graphController = graphController;
         this.OnRemoveNode = OnClickRemoveNode;
         this.OnSelect = OnSelect;
 
