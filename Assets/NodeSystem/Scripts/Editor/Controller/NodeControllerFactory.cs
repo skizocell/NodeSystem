@@ -12,5 +12,5 @@ public abstract class NodeControllerFactory<G> : INodeControllerFactory where G 
         this.graphController = graphController;
     }
 
-    public abstract NodeControllerComponent Build(NodeComponent node, Action<NodeControllerComponent> OnRemove, Action<NodeControllerComponent> OnSelect);
+    public abstract NodeControllerComponent Build(NodeComponent node);
 }

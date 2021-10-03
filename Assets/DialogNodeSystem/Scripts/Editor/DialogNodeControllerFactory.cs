@@ -9,11 +9,11 @@ public class DialogNodeControllerFactory : NodeControllerFactory<DialogGraphCont
     {
     }
 
-    public override NodeControllerComponent Build(NodeComponent node, Action<NodeControllerComponent> OnRemove, Action<NodeControllerComponent> OnSelect)
+    public override NodeControllerComponent Build(NodeComponent node)
     {
         if (node is NodeDialog)
         {
-            return new DialogNodeController(graphController, (NodeDialog)node, OnRemove, OnSelect);
+            return new DialogNodeController(graphController, (NodeDialog)node);
         }
         return null;
     }

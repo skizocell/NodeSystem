@@ -14,7 +14,7 @@ public class DialogNodeController : NodeControllerBase<NodeDialog, DialogGraphCo
     NodePinCalledController calledPin;
     #endregion
 
-    public DialogNodeController(DialogGraphController graphController, NodeDialog node, Action<NodeControllerComponent> OnClickRemoveNode, Action<NodeControllerComponent> OnSelect) : base(graphController,node, OnClickRemoveNode, OnSelect)
+    public DialogNodeController(DialogGraphController graphController, NodeDialog node) : base(graphController,node)
     {
         //method 1 activate rich text
         //style = new GUIStyle();
@@ -40,6 +40,34 @@ public class DialogNodeController : NodeControllerBase<NodeDialog, DialogGraphCo
     #endregion
 
     #region Utility method
+    private void DrawWindowsContent(int windowsId)
+    {
+        //Draw Header with parent function
+        DrawHeader();
+
+        //Content
+        EditorGUIUtility.labelWidth = 1;
+
+        Dialog dialog = node.GetData();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Space(15);
+        EditorGUILayout.LabelField(dialog.GetFirstLine());
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Space(12);
+        EditorGUILayout.LabelField("Test Link input :", EditorStyles.boldLabel);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Space(12);
+        EditorGUILayout.LabelField("Test Link output :", EditorStyles.boldLabel);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUIUtility.labelWidth = 0;
+    }
+
     protected override Texture2D GetHeaderTexture()
     {
         if(headerTexture == null)
@@ -94,34 +122,6 @@ public class DialogNodeController : NodeControllerBase<NodeDialog, DialogGraphCo
         }
         GUI.color = oldGuiColor;
         GUI.backgroundColor = oldBackGroundColor;
-    }
-
-    private void DrawWindowsContent(int windowsId)
-    {
-        //Draw Header with parent function
-        DrawHeader();
-
-        //Content
-        EditorGUIUtility.labelWidth = 1;
-
-        Dialog dialog = node.GetData();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Space(15);
-        EditorGUILayout.LabelField(dialog.GetFirstLine());
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Space(12);
-        EditorGUILayout.LabelField("Test Link input :", EditorStyles.boldLabel);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Space(12);
-        EditorGUILayout.LabelField("Test Link output :", EditorStyles.boldLabel);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUIUtility.labelWidth = 0;
     }
     #endregion
 }

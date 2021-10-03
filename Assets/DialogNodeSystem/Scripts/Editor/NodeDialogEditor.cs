@@ -16,7 +16,10 @@ public class NodeDialogEditor : Editor
         EditorGUILayout.LabelField("Dialog: ", EditorStyles.boldLabel);
         dialog.text = EditorGUILayout.TextArea(dialog.text, GUILayout.MinHeight(200));
 
-        //SerializedProperty pins = serializedObject.FindProperty("pins");
-        //EditorGUILayout.PropertyField(pins);
+        SerializedProperty pinCaller = serializedObject.FindProperty("nextCall");
+        EditorGUILayout.PropertyField(pinCaller);
+
+        SerializedProperty pinCalled = serializedObject.FindProperty("process");
+        EditorGUILayout.PropertyField(pinCalled);
     }
 }

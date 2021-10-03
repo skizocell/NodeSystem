@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8465729608079037067
+--- !u!114 &-4023109864213333456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14,48 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 426
-    y: 125
+    x: 237
+    y: 251
     width: 200
     height: 65
   data:
-    text: dfsdfsdfsd
-  nextCall:
-    type: 0
-    target:
-      type: 1
-      status: 0
-  process:
-    type: 1
-    status: 1
-  emiter:
-    type: 2
-    target:
-      type: 3
-      status: 0
-  receiver:
-    type: 3
-    status: 1
---- !u!114 &-440385950593552975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: Welcome
-  m_EditorClassIdentifier: 
-  rect:
-    serializedVersion: 2
-    x: 109
-    y: 133
-    width: 200
-    height: 65
-  data:
-    text: sdfsdfsdfsdfsdfsdfsdfsdf
+    text: 
   nextCall:
     type: 0
     target:
@@ -86,42 +50,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeGraphControllerType: DialogGraphController
   nodes:
-  - {fileID: -440385950593552975}
-  - {fileID: -8465729608079037067}
-  - {fileID: 3387265979982482315}
---- !u!114 &3387265979982482315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: WelCOme3
-  m_EditorClassIdentifier: 
-  rect:
-    serializedVersion: 2
-    x: 340
-    y: 292
-    width: 200
-    height: 65
-  data:
-    text: Coucou
-  nextCall:
-    type: 0
-    target:
-      type: 1
-      status: 0
-  process:
-    type: 1
-    status: 1
-  emiter:
-    type: 2
-    target:
-      type: 3
-      status: 0
-  receiver:
-    type: 3
-    status: 1
+  - {fileID: -4023109864213333456}

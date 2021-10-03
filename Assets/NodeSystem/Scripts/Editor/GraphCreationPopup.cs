@@ -71,8 +71,22 @@ public class GraphCreationPopup : EditorWindow
             {
                 if (!string.IsNullOrEmpty(wantedName) && wantedName != "Enter a name...")
                 {
-                    callBack(GetGraph(wantedName));
-                    curPopup.Close();
+                    GraphControllerBase controller = controllers[selectedTypeInex];
+                    string newAssetFullPath = controller.GetAssetPath() + wantedName + ".asset";
+
+                    //Search asset with name like wanted Name -> where assetPath == newAssetfull path
+                    bool isAlreadyExist = AssetDatabase.FindAssets(wantedName, new[] { controller.GetAssetPath() })
+                                            .Where(s => AssetDatabase.GUIDToAssetPath(s).Equals(newAssetFullPath))
+                                            .Count() > 0;
+                    if (isAlreadyExist)
+                    {
+                        EditorUtility.DisplayDialog("Info", "The name (" + wantedName + ") already exist in " + controllers[selectedTypeInex].GetAssetPath(), "Ok");
+                    }
+                    else
+                    {
+                        callBack(GetGraph(newAssetFullPath, controller));
+                        curPopup.Close();
+                    }
                 }
                 else
                 {
@@ -96,10 +110,9 @@ public class GraphCreationPopup : EditorWindow
         }
     }
 
-    public GraphControllerBase GetGraph(string wantedName)
+    public GraphControllerBase GetGraph(string path, GraphControllerBase controller)
     {
-        GraphControllerBase controller = controllers[selectedTypeInex];
-        controller.SetGraph(NodesUtils.CreateGraph(controller.GetAssetPath() + wantedName +".asset", controller.GetNodeGraphControllerType()));
+        controller.SetGraph(NodesUtils.CreateGraph(path, controller.GetNodeGraphControllerType()));
         return controller;
     }
     #endregion

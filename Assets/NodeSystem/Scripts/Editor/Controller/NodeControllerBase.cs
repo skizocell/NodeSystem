@@ -17,9 +17,8 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
     protected G graphController;
 
     //Pin Texture for pin button
+    //TODO Clean it 
     protected static Texture2D pinDataButtonTexture;
-    protected static Texture2D pinFlowButtonTexture;
-    protected static Texture2D pinFlowTargetButtonTexture;
 
     //Selected header for windows
     protected static GUIStyle headerSelectedStyle;
@@ -30,12 +29,12 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
     public Action<NodeControllerComponent> OnSelect;
     #endregion
 
-    public NodeControllerBase(G graphController, N node, Action<NodeControllerComponent> OnClickRemoveNode, Action<NodeControllerComponent> OnSelect)
+    public NodeControllerBase(G graphController, N node)
     {
         this.node = node;
         this.graphController = graphController;
-        this.OnRemoveNode = OnClickRemoveNode;
-        this.OnSelect = OnSelect;
+        this.OnRemoveNode = graphController.DeleteNode;
+        this.OnSelect = graphController.SelectNode;
 
         //Init when style is null
         if (headerSelectedStyle==null)
@@ -50,10 +49,8 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
             headerSelectedColor.Apply();
             ///////////////////////////////
 
-            //Pin Icone Texture loading
+            //Pin Icone Texture loading TODO clean it
             pinDataButtonTexture = AssetDatabase.GetBuiltinExtraResource<Texture2D>("UI/Skin/Knob.psd");
-            pinFlowButtonTexture = Resources.Load<Texture2D>("Textures/Editor/arrow");
-            pinFlowTargetButtonTexture = Resources.Load<Texture2D>("Textures/Editor/target");
         }
     }
 

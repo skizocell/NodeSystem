@@ -6,11 +6,11 @@ using UnityEngine;
 
 public abstract class GraphControllerBase
 { 
-    private List<INodePinController> nodePins = new List<INodePinController>();
     protected NodeGraph graph;
     protected INodeControllerFactory nodeFactory;
     List<NodeControllerComponent> nodes = new List<NodeControllerComponent>();
-    NodeControllerComponent curSelectedNode =null;
+    private List<INodePinController> nodePins = new List<INodePinController>();
+    NodeControllerComponent curSelectedNode = null;
 
     protected GraphControllerBase()
     {
@@ -18,14 +18,17 @@ public abstract class GraphControllerBase
     }
 
     #region MetaData info method
-    public abstract string GetAssetPath();
-    public abstract string GetDescription();
-    public abstract string GetName();
-    public abstract string GetNodeGraphControllerType();
+    public abstract string GetAssetPath(); //Where to save your new graph assets 
+    public abstract string GetDescription(); //Description of your graph
+    public abstract string GetName(); //Name of graph
+    public string GetNodeGraphControllerType()//Type of the graph controller
+    {
+        return this.GetType().ToString();
+    }
     #endregion
 
     #region Extensible method
-    public abstract void FillMenu(GenericMenu menu, Vector2 mousePosition);
+    public abstract void FillMenu(GenericMenu menu, Vector2 mousePosition); // mouse position is used to know where to create something on screen if needed
     public abstract void InitFactory();
 
     public virtual void Update(Event e)
@@ -70,14 +73,7 @@ public abstract class GraphControllerBase
 
         //Next make control of the NodeLink and establish link between node
     }
-
        
-    protected void SetController(NodeComponent node)
-    {
-        NodeControllerComponent controller = nodeFactory.Build(node, DeleteNode, SelectNode);
-        nodes.Add(controller);
-    }
-
     public void Drag(Vector2 delta)
     {
         if(curSelectedNode ==null || !curSelectedNode.isSelected)
@@ -104,6 +100,14 @@ public abstract class GraphControllerBase
     public void UnSelectNode()
     {
         if (curSelectedNode != null) curSelectedNode.isSelected = false;
+    }
+    #endregion
+
+    #region utility method
+    protected void SetController(NodeComponent node)
+    {
+        NodeControllerComponent controller = nodeFactory.Build(node);
+        nodes.Add(controller);
     }
     #endregion
 }
