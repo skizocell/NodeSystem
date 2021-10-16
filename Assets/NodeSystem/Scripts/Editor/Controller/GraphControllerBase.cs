@@ -9,8 +9,11 @@ public abstract class GraphControllerBase
     protected NodeGraph graph;
     protected INodeControllerFactory nodeFactory;
     List<NodeControllerComponent> nodes = new List<NodeControllerComponent>();
-    private List<INodePinController> nodePins = new List<INodePinController>();
+    private List<NodePinController> nodePins = new List<NodePinController>();
     NodeControllerComponent curSelectedNode = null;
+
+    private NodePinController selectedEmiterPin;
+    private NodePinController selectedReceiverPin;
 
     protected GraphControllerBase()
     {
@@ -33,6 +36,23 @@ public abstract class GraphControllerBase
 
     public virtual void Update(Event e)
     {
+        DrawConnections();
+        DrawConnectionLine(e);
+
+        switch (e.type)
+        {
+            case EventType.MouseDown:
+                if (e.button == 1)
+                {
+                    if (selectedEmiterPin != null || selectedReceiverPin != null)
+                    {
+                        ClearConnectionSelection();
+                        e.Use();
+                    }
+                }
+                break;
+        }
+
         int i=0;
         foreach (NodeControllerComponent node in nodes)
         {
@@ -52,28 +72,61 @@ public abstract class GraphControllerBase
         {
             SetController(node);
         }
-
-        InitNodeLink();
     }
 
-    public void RegisterNodeControllerPin(INodePinController pin)
+
+
+    public void OnClicPinController(NodePinController nodePin)
     {
-        Debug.Log("Node pin registred " + pin);
+        if (!nodePin.canHaveManyLink)
+        {
+            if (graph.IsLinkExistFor(nodePin.linkedNodeConroller.GetNode(), nodePin.type == NodePinController.Type.Emiter))
+            {
+                return;
+            }
+        }
+
+        if(nodePin.type == NodePinController.Type.Emiter)
+        {
+            if (selectedEmiterPin == null)
+            {
+                selectedEmiterPin = nodePin;
+            }
+        }
+
+        if (nodePin.type == NodePinController.Type.Receiver)
+        {
+            if (selectedReceiverPin == null)
+            {
+                selectedReceiverPin = nodePin;
+            }
+        }
+
+        if(selectedEmiterPin != null && selectedReceiverPin != null)
+        {
+            if (selectedEmiterPin.linkedNodeConroller != selectedReceiverPin.linkedNodeConroller)
+            {
+                NodeLink link = new NodeLink();
+                link.from = selectedEmiterPin.linkedNodeConroller.GetNode();
+                link.to = selectedReceiverPin.linkedNodeConroller.GetNode();
+                link.fromPinId = selectedEmiterPin.nodePinId;
+                link.toPinId = selectedReceiverPin.nodePinId;
+                graph.links.Add(link);
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Node message", "You can't link a node to himself", "Ok");
+
+            }
+            ClearConnectionSelection();
+        }
+    }
+
+    public void RegisterNodeControllerPin(NodePinController pin)
+    {
         nodePins.Add(pin);
     }
 
-    public void InitNodeLink()
-    {
-        Debug.Log("InitNodeLink start");
-        //TODO init NodeLink by check emiter target
-        foreach (INodePinController item in nodePins.Where(c=>c.GetNodePin() is NodePinEmitter))
-        {
-            //Test if target is filled with a know receiver and create NodeLink for the graph
-        }
-
-        //Next make control of the NodeLink and establish link between node
-    }
-       
     public void Drag(Vector2 delta)
     {
         if(curSelectedNode ==null || !curSelectedNode.isSelected)
@@ -104,10 +157,95 @@ public abstract class GraphControllerBase
     #endregion
 
     #region utility method
+    private void ClearConnectionSelection()
+    {
+        selectedEmiterPin = null;
+        selectedReceiverPin = null;
+    }
+
     protected void SetController(NodeComponent node)
     {
         NodeControllerComponent controller = nodeFactory.Build(node);
         nodes.Add(controller);
+    }
+
+    private NodePinController GetNodePinController(NodeComponent node, string nodePinId)
+    {
+        IEnumerable<NodeControllerComponent> result = nodes.Where(n => n.GetNode() == node);
+        if (result.Count() == 1)
+        {
+            return result.First().GetControllerFor(nodePinId);
+        }
+        return null;
+    }
+
+    private void DrawConnections()
+    {
+        if (graph.links != null)
+        {
+            foreach(NodeLink link in graph.links)
+            {
+                NodePinController caller = GetNodePinController(link.from, link.fromPinId);
+                NodePinController called = GetNodePinController(link.to, link.toPinId);
+
+                if(caller == null || called == null)
+                {
+                    Debug.LogError("Remove corrupted node link ");
+                    graph.links.Remove(link);
+                    break;
+                }
+
+                Handles.DrawBezier(
+                        called.GetRect().center,
+                        caller.GetRect().center,
+                        called.GetRect().center + Vector2.left * 50f,
+                        caller.GetRect().center - Vector2.left * 50f,
+                        Color.white,
+                        null,
+                        2f
+                    );
+
+                if (Handles.Button((caller.GetRect().center + called.GetRect().center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
+                {
+                    graph.links.Remove(link);
+                    break;
+                }
+            
+            }
+        }
+    }
+
+    private void DrawConnectionLine(Event e)
+    {
+        if (selectedEmiterPin != null && selectedReceiverPin == null)
+        {
+            Handles.DrawBezier(
+                selectedEmiterPin.GetRect().center,
+                e.mousePosition,
+                selectedEmiterPin.GetRect().center - Vector2.left * 50f,
+                e.mousePosition + Vector2.left * 50f,
+                Color.white,
+                null,
+                2f
+            );
+
+            GUI.changed = true;
+        }
+
+        if (selectedReceiverPin != null && selectedEmiterPin == null)
+        {
+            Handles.DrawBezier(
+                selectedReceiverPin.GetRect().center,
+                e.mousePosition,
+                selectedReceiverPin.GetRect().center + Vector2.left * 50f,
+                e.mousePosition - Vector2.left * 50f,
+                Color.white,
+                null,
+                2f
+            );
+
+            GUI.changed = true;
+        }
     }
     #endregion
 }

@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Reflection;
 
 public class DialogGraphController : GraphControllerBase
 {
@@ -35,13 +37,24 @@ public class DialogGraphController : GraphControllerBase
     public override void FillMenu(GenericMenu menu, Vector2 mousePosition)
     {
         menu.AddItem(new GUIContent("Add Dialog"), false, (mousePos) => AddDialog((Vector2)mousePos), mousePosition);
+        menu.AddItem(new GUIContent("TEST"), false, () => Test());
     }
     #endregion
 
     #region Utility Methods
+    private void Test()
+    {
+        Debug.Log("Test Start");
+        graph.start.Process();
+        NodeLink next = graph.links.Where(n => n.from == graph.start).First();
+
+        MethodInfo method = next.to.GetType().GetMethod(next.toPinId);
+        method.Invoke(next.to, null);
+    }
+
     private void AddDialog(Vector2 mousePos)
     {
-        NodeComponent dialog =  NodesUtils.CreateNode(graph, typeof(NodeDialog), new Rect(mousePos.x, mousePos.y, Width, Height));
+        NodeDialog dialog =  NodesUtils.CreateNode<NodeDialog>(graph, new Rect(mousePos.x, mousePos.y, Width, Height));
         SetController(dialog);
     }
 

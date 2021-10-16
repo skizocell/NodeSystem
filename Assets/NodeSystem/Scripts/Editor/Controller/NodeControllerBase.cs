@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,8 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
     //Action todo when a node is removed or selected
     public Action<NodeControllerComponent> OnRemoveNode;
     public Action<NodeControllerComponent> OnSelect;
+
+    public List<NodePinController> nodePins = new List<NodePinController>();
     #endregion
 
     public NodeControllerBase(G graphController, N node)
@@ -118,9 +121,65 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
     {
         return node;
     }
+
+    //on clic on pin
+    public override void OnClickNodePin(NodePinController nodepin)
+    {
+        graphController.OnClicPinController(nodepin);
+    }
+
+    public override NodePinController GetControllerFor(string key)
+    {
+        IEnumerable<NodePinController> nodePinController = nodePins.Where(p => p.GetNodePinId() == key);
+        if (nodePinController.Count() == 1)
+        {
+            return nodePinController.First();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    protected void DrawPin(Rect windowRect)
+    {
+        //try to create a style or use a texture for these button
+        Color oldBackGroundColor = GUI.backgroundColor;
+        Color oldGuiColor = GUI.color;
+        GUI.backgroundColor = Color.gray;
+        GUI.color = Color.gray;
+
+        foreach(NodePinController pin in nodePins)
+        {
+            pin.Draw(windowRect);
+        }
+
+        //GUI.backgroundColor = oldBackGroundColor;
+
+        //if(GUI.Button(new Rect(windowRect.x - 14, windowRect.y + 38, 25, 25), pinDataButtonTexture, GUIStyle.none))
+        //{
+        //    Debug.Log("input");
+        //}
+        //if (GUI.Button(new Rect(windowRect.x + windowRect.width - 10, windowRect.y + 56, 25, 25), pinDataButtonTexture, GUIStyle.none))
+        //{
+        //    Debug.Log("output");
+        //}
+        GUI.color = oldGuiColor;
+        GUI.backgroundColor = oldBackGroundColor;
+    }
     #endregion
 
     #region Utility method
+    protected void AddNodePin(NodePinController pinController)
+    {
+        if(nodePins.Where(p => p.GetNodePinId() == pinController.GetNodePinId()).Count()>0)
+        {
+            throw new Exception("You can't add another pin with the same id for this controller (" + this.GetNode().name + ")=>" + pinController.nodePinId);
+        }
+        nodePins.Add(pinController);
+        graphController.RegisterNodeControllerPin(pinController);
+    }
+
     //Draw Header of the node window
     protected void DrawHeader()
     {

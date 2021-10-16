@@ -18,9 +18,10 @@ public static class NodesUtils
         return graph;
     }
 
-    public static NodeComponent CreateNode(NodeGraph graph, Type nodeType, Rect rect)
+    public static T CreateNode<T>(NodeGraph graph, Rect rect) where T : NodeComponent
     {
-        NodeComponent node = (NodeComponent) ScriptableObject.CreateInstance(nodeType);
+        Type nodeType = typeof(T);
+        T node = ScriptableObject.CreateInstance<T>();
         node.name = nodeType.Name;
         node.rect = rect;
 
@@ -36,6 +37,10 @@ public static class NodesUtils
     {
         if (nodeGraph != null && nodeGraph.nodes != null)
         {
+            foreach(NodeLink link in nodeGraph.links.Where(l => l.to == node || l.from == node).ToList())
+            {
+                nodeGraph.links.Remove(link);                
+            }
             nodeGraph.nodes.Remove(node);
 
             GameObject.DestroyImmediate(node, true);
@@ -43,6 +48,29 @@ public static class NodesUtils
             AssetDatabase.Refresh();
         }
     }
+
+    //public static NodeLink CreateNodeLink(NodeGraph graph)
+    //{
+    //    NodeLink link = ScriptableObject.CreateInstance<NodeLink>();
+    //    link.name = nameof(NodeLink);
+    //    graph.links.Add(link);
+    //    AssetDatabase.AddObjectToAsset(link, graph);
+    //    AssetDatabase.SaveAssets();
+    //    AssetDatabase.Refresh();
+    //    return link;
+    //}
+
+    //public static void DeleteNodeLink(NodeGraph nodeGraph, NodeLink link)
+    //{
+    //    if (nodeGraph != null && nodeGraph.links != null)
+    //    {
+    //        nodeGraph.links.Remove(link);
+
+    //        GameObject.DestroyImmediate(link, true);
+    //        AssetDatabase.SaveAssets();
+    //        AssetDatabase.Refresh();
+    //    }
+    //}
 
     public static GraphControllerBase LoadGraphController(string graphPath)
     {

@@ -6,28 +6,15 @@ using UnityEngine;
 [Serializable]
 public class NodeDialog : NodeBase<Dialog>
 {
-    public NodePinCaller nextCall;
-    public NodePinCalled process;
-
-    public NodePinDataEmitter<String> emiter;
-    public NodePinDataReceiver<String> receiver;
-
     public override void Init()
     {
         //set inner object
         data = new Dialog();
-        process = new NodePinCalled();
-        nextCall = new NodePinCaller();
-        emiter = new NodePinDataEmitter<string>();
-        receiver = new NodePinDataReceiver<string>();
     }
 
     private void OnEnable()
     {
         if (data == null) Init();
-        process.SetAction(Process);
-        emiter.SetDataAccessor(GetTest);
-        receiver.SetDataPusher(SetTest);
     }
 
     public void Process()
@@ -36,8 +23,8 @@ public class NodeDialog : NodeBase<Dialog>
         //Construct an interface to pass dialog. The settings must be done in the graph node could access graph settings??
         //actually it's attached to controllertype and graph is the same for all...
         Debug.Log(this.name + "Process() text = " + data.text);
-        emiter.Call();
-        if(nextCall!=null) nextCall.Call();
+        //emiter.Call();
+        //if(nextCall!=null) nextCall.Call();
     }
 
     public string GetTest()

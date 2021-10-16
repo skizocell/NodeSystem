@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
+using System.Reflection;
 
 public class DialogNodeController : NodeControllerBase<NodeDialog, DialogGraphController>
 {
@@ -20,11 +21,15 @@ public class DialogNodeController : NodeControllerBase<NodeDialog, DialogGraphCo
         //style = new GUIStyle();
         //style.richText = true;
         
-        callerPin = new NodePinCallerController(node.nextCall);
-        calledPin = new NodePinCalledController(node.process);
+        callerPin = new NodePinCallerController("Next", this, false,21);
+        calledPin = new NodePinCalledController("Previous", this, true,21);
 
-        graphController.RegisterNodeControllerPin(callerPin);
-        graphController.RegisterNodeControllerPin(calledPin);
+        AddNodePin(callerPin);
+        AddNodePin(calledPin);
+
+        //PropertyInfo propertyInfo = typeof(DialogNodeController).GetProperty(nameof(Test));
+        //PinAttribute pinType = (PinAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(PinAttribute));
+        //Debug.Log("Attribute = " + pinType.pintype);
     }
 
     #region main method
@@ -89,39 +94,6 @@ public class DialogNodeController : NodeControllerBase<NodeDialog, DialogGraphCo
             headerStyle.normal.textColor = Color.white;
         }
         return headerStyle;
-    }
-
-    protected void DrawPin(Rect windowRect)
-    {
-        //try to create a style or use a texture for these button
-        Color oldBackGroundColor = GUI.backgroundColor;
-        Color oldGuiColor = GUI.color;
-        GUI.backgroundColor = Color.gray;
-        GUI.color = Color.gray;
-
-        callerPin.Draw(windowRect,21);
-        calledPin.Draw(windowRect,21);
-
-        //if (GUI.Button(new Rect(windowRect.x - 13, windowRect.y + 21, 18, 18), pinFlowTargetButtonTexture, GUIStyle.none))
-        //{
-        //    Debug.Log("Bouton 2 ");
-        //}
-        //if (GUI.Button(new Rect(windowRect.x + windowRect.width-4, windowRect.y +21, 18, 18), pinFlowButtonTexture, GUIStyle.none))
-        //{
-        //    Debug.Log("Overlay Button 3 ");
-        //}
-        GUI.backgroundColor = oldBackGroundColor;
-
-        if(GUI.Button(new Rect(windowRect.x - 14, windowRect.y + 38, 25, 25), pinDataButtonTexture, GUIStyle.none))
-        {
-            Debug.Log("input");
-        }
-        if (GUI.Button(new Rect(windowRect.x + windowRect.width - 10, windowRect.y + 56, 25, 25), pinDataButtonTexture, GUIStyle.none))
-        {
-            Debug.Log("output");
-        }
-        GUI.color = oldGuiColor;
-        GUI.backgroundColor = oldBackGroundColor;
     }
     #endregion
 }

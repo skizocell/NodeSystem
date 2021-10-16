@@ -8,4 +8,6 @@ public abstract class NodeControllerComponent
     public abstract void Drag(Vector2 delta);
     public abstract void Update(int id, Event e);
     public abstract NodeComponent GetNode();
+    public abstract NodePinController GetControllerFor(string key);
+    public abstract void OnClickNodePin(NodePinController nodepin);
 }

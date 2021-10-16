@@ -1,9 +1,53 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class NodePinCallerController : NodePinController<NodePinCaller>
+public abstract class NodePinController
+{
+    public enum Type { Emiter, Receiver }
+    public Type type;
+
+    public NodeControllerComponent linkedNodeConroller;
+    public string nodePinId;//id can also be the method name depending of used method
+
+    public bool canHaveManyLink;
+
+    protected Rect rect;
+    protected abstract Texture2D GetButtonTexture();
+    protected abstract Rect GetButtonRect(Rect nodeRect, float yOffset);
+
+    private float yOffset;
+
+    public NodePinController(string id, NodeControllerComponent linkedNode, bool canHaveManyLink, float yOffset)
+    {
+        this.nodePinId = id;
+        this.linkedNodeConroller = linkedNode;
+        this.canHaveManyLink = canHaveManyLink;
+        this.yOffset = yOffset;
+    }
+
+    public string GetNodePinId()
+    {
+        return nodePinId;
+    }
+
+    public void Draw(Rect nodeRect)
+    {
+        if (GUI.Button(GetButtonRect(nodeRect, yOffset), GetButtonTexture(), GUIStyle.none))
+        {
+            linkedNodeConroller.OnClickNodePin(this);
+        }
+    }
+
+    public Rect GetRect()
+    {
+        return rect;
+    }
+}
+
+public class NodePinCallerController : NodePinController
 {
     private const float WIDTH=18;
     private const float HEIGHT=18;
@@ -12,8 +56,9 @@ public class NodePinCallerController : NodePinController<NodePinCaller>
     //Pin Texture for pin button
     protected static Texture2D buttonTexture;
 
-    public NodePinCallerController(NodePinCaller nodePin) : base(nodePin)
+    public NodePinCallerController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
     {
+        type = Type.Emiter;
         if (buttonTexture == null)
         {
             //Pin Icone Texture loading
@@ -21,24 +66,10 @@ public class NodePinCallerController : NodePinController<NodePinCaller>
         }
     }
 
-    //public override bool Link(NodePin pinTarget)
-    //{
-    //    if (nodePin.GetType() == typeof(NodePinCalled))
-    //    {
-    //        nodePin.SetTarget((NodePinCalled) pinTarget);
-    //        return true;
-    //    }
-    //    return false;
-    //}
-
-    //protected override void Action()
-    //{
-    //    Debug.Log("TEST Button caller");
-    //}
-
     protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
     {
-        return new Rect(nodeRect.x + nodeRect.width + XOFFSET, nodeRect.y + yOffset, WIDTH, HEIGHT);
+        rect = new Rect(nodeRect.x + nodeRect.width + XOFFSET, nodeRect.y + yOffset, WIDTH, HEIGHT);
+        return rect;
     }
 
     protected override Texture2D GetButtonTexture()
@@ -47,7 +78,7 @@ public class NodePinCallerController : NodePinController<NodePinCaller>
     }
 }
 
-public class NodePinCalledController : NodePinController<NodePinCalled>
+public class NodePinCalledController : NodePinController
 {
     private const float WIDTH = 18;
     private const float HEIGHT = 18;
@@ -56,8 +87,9 @@ public class NodePinCalledController : NodePinController<NodePinCalled>
     //Pin Texture for pin button
     protected static Texture2D buttonTexture;
 
-    public NodePinCalledController(NodePinCalled nodePin) : base(nodePin)
+    public NodePinCalledController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
     {
+        type = Type.Receiver;
         if (buttonTexture == null)
         {
             //Pin Icone Texture loading
@@ -65,19 +97,10 @@ public class NodePinCalledController : NodePinController<NodePinCalled>
         }
     }
 
-    //public override bool Link(NodePin pinTarget)
-    //{
-
-    //}
-
-    //protected override void Action()
-    //{
-    //    Debug.Log("TEST Button called");
-    //}
-
     protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
     {
-        return new Rect(nodeRect.x + XOFFSET, nodeRect.y + yOffset, WIDTH, HEIGHT);
+        rect = new Rect(nodeRect.x + XOFFSET, nodeRect.y + yOffset, WIDTH, HEIGHT);
+        return rect;
     }
 
     protected override Texture2D GetButtonTexture()
@@ -86,36 +109,45 @@ public class NodePinCalledController : NodePinController<NodePinCalled>
     }
 }
 
-public interface INodePinController
-{
-    void Draw(Rect nodeRect, float yOffset);
-    NodePin GetNodePin();
-}
 
-public abstract class NodePinController<T> : INodePinController where T : NodePin
-{
-    protected T nodePin;
+//    //No Necessary to link with nodepin NodePin destined to be erased
+//    public abstract class NodePinController<T> : INodePinController where T : NodePin
+//{
+//    string methodName;
+//    protected Rect rect;
+//    protected T nodePin;
 
-    public NodePinController(T nodePin)
-    {
-        this.nodePin = nodePin;
-    }
+//    public NodePinController(T nodePin, string methodName)
+//    {
+//        this.nodePin = nodePin;
+//        this.methodName = methodName;
+//    }
 
-    protected abstract Texture2D GetButtonTexture();
-    protected abstract Rect GetButtonRect(Rect nodeRect, float yOffset);
-    //protected abstract void Action();
+//    public string GetMethodName()
+//    {
+//        return methodName;
+//    }
 
-    //public abstract bool Link(NodePin pinTarget);
-    public NodePin GetNodePin()
-    {
-        return nodePin;
-    }
+//    protected abstract Texture2D GetButtonTexture();
+//    protected abstract Rect GetButtonRect(Rect nodeRect, float yOffset);
+//    //protected abstract void Action();
 
-    public void Draw(Rect nodeRect, float yOffset)
-    {
-        if (GUI.Button(GetButtonRect(nodeRect, yOffset), GetButtonTexture(), GUIStyle.none))
-        {
-            //Action();
-        }
-    }
-}
+//    //public abstract bool Link(NodePin pinTarget);
+//    public NodePin GetNodePin()
+//    {
+//        return nodePin;
+//    }
+
+//    public void Draw(Rect nodeRect, float yOffset)
+//    {
+//        if (GUI.Button(GetButtonRect(nodeRect, yOffset), GetButtonTexture(), GUIStyle.none))
+//        {
+//            //Action();
+//        }
+//    }
+
+//    public Rect GetRect()
+//    {
+//        return rect;
+//    }
+//}
