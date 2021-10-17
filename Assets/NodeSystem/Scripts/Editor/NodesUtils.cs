@@ -26,7 +26,7 @@ public static class NodesUtils
         node.rect = rect;
 
         AssetDatabase.AddObjectToAsset(node, graph);
-        graph.nodes.Add(node);
+        graph.AddNode(node);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -35,42 +35,19 @@ public static class NodesUtils
 
     public static void DeleteNode(NodeGraph nodeGraph, NodeComponent node)
     {
-        if (nodeGraph != null && nodeGraph.nodes != null)
+        if (nodeGraph != null)
         {
-            foreach(NodeLink link in nodeGraph.links.Where(l => l.to == node || l.from == node).ToList())
+            foreach(NodeLink link in nodeGraph.GetLinks().Where(l => l.to == node || l.from == node).ToList())
             {
-                nodeGraph.links.Remove(link);                
+                nodeGraph.RemoveLink(link);                
             }
-            nodeGraph.nodes.Remove(node);
+            nodeGraph.RemoveNode(node);
 
             GameObject.DestroyImmediate(node, true);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
     }
-
-    //public static NodeLink CreateNodeLink(NodeGraph graph)
-    //{
-    //    NodeLink link = ScriptableObject.CreateInstance<NodeLink>();
-    //    link.name = nameof(NodeLink);
-    //    graph.links.Add(link);
-    //    AssetDatabase.AddObjectToAsset(link, graph);
-    //    AssetDatabase.SaveAssets();
-    //    AssetDatabase.Refresh();
-    //    return link;
-    //}
-
-    //public static void DeleteNodeLink(NodeGraph nodeGraph, NodeLink link)
-    //{
-    //    if (nodeGraph != null && nodeGraph.links != null)
-    //    {
-    //        nodeGraph.links.Remove(link);
-
-    //        GameObject.DestroyImmediate(link, true);
-    //        AssetDatabase.SaveAssets();
-    //        AssetDatabase.Refresh();
-    //    }
-    //}
 
     public static GraphControllerBase LoadGraphController(string graphPath)
     {

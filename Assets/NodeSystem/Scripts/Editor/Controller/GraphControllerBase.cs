@@ -68,7 +68,7 @@ public abstract class GraphControllerBase
     {
         this.graph = graph;
 
-        foreach (NodeComponent node in graph.nodes)
+        foreach (NodeComponent node in graph.GetNodes())
         {
             SetController(node);
         }
@@ -111,7 +111,7 @@ public abstract class GraphControllerBase
                 link.to = selectedReceiverPin.linkedNodeConroller.GetNode();
                 link.fromPinId = selectedEmiterPin.nodePinId;
                 link.toPinId = selectedReceiverPin.nodePinId;
-                graph.links.Add(link);
+                graph.AddLink(link);
             }
             else
             {
@@ -181,36 +181,32 @@ public abstract class GraphControllerBase
 
     private void DrawConnections()
     {
-        if (graph.links != null)
+        foreach(NodeLink link in graph.GetLinks())
         {
-            foreach(NodeLink link in graph.links)
+            NodePinController caller = GetNodePinController(link.from, link.fromPinId);
+            NodePinController called = GetNodePinController(link.to, link.toPinId);
+
+            if(caller == null || called == null)
             {
-                NodePinController caller = GetNodePinController(link.from, link.fromPinId);
-                NodePinController called = GetNodePinController(link.to, link.toPinId);
+                Debug.LogError("Remove corrupted node link ");
+                graph.RemoveLink(link);
+                break;
+            }
 
-                if(caller == null || called == null)
-                {
-                    Debug.LogError("Remove corrupted node link ");
-                    graph.links.Remove(link);
-                    break;
-                }
+            Handles.DrawBezier(
+                    called.GetRect().center,
+                    caller.GetRect().center,
+                    called.GetRect().center + Vector2.left * 50f,
+                    caller.GetRect().center - Vector2.left * 50f,
+                    Color.white,
+                    null,
+                    2f
+                );
 
-                Handles.DrawBezier(
-                        called.GetRect().center,
-                        caller.GetRect().center,
-                        called.GetRect().center + Vector2.left * 50f,
-                        caller.GetRect().center - Vector2.left * 50f,
-                        Color.white,
-                        null,
-                        2f
-                    );
-
-                if (Handles.Button((caller.GetRect().center + called.GetRect().center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
-                {
-                    graph.links.Remove(link);
-                    break;
-                }
-            
+            if (Handles.Button((caller.GetRect().center + called.GetRect().center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
+            {
+                graph.RemoveLink(link);
+                break;
             }
         }
     }
