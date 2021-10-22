@@ -40,7 +40,7 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
         this.OnSelect = graphController.SelectNode;
 
         //Init when style is null
-        if (headerSelectedStyle==null)
+        if (headerSelectedStyle == null)
         {
             //Selected Style White on Blue
             headerSelectedStyle = new GUIStyle();
@@ -58,9 +58,9 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
     }
 
     #region Extensible method
-    protected abstract void Draw(); //Draw the node 
     protected abstract Texture2D GetHeaderTexture(); //Get the header texture for the node  
     protected abstract GUIStyle GetHeaderStyle(); //Get the header style for this node 
+    protected abstract void DrawWindowsContent();
 
     //Process Event for this node (selection, context menu and Drag the node)
     protected virtual void ProcessEvents(Event e)
@@ -108,6 +108,19 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
         node.rect.position += delta;
     }
 
+    protected void Draw() //Draw the node
+    {
+        Rect windowRect = GUILayout.Window(nodeWindowsDrawId, node.rect, DrawWindowsContent, "", GUIStyle.none);
+        GUI.Box(windowRect, "", GUI.skin.window);
+        DrawPin(windowRect);
+    }
+
+    private void DrawWindowsContent(int windowsId)
+    {
+        DrawHeader();
+        DrawWindowsContent(); //children content
+    }
+
     //Update the node in screen. Triggered by the Graph Controller
     public override void Update(int nodeWindowsDrawId, Event e)
     {
@@ -153,17 +166,6 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
         {
             pin.Draw(windowRect);
         }
-
-        //GUI.backgroundColor = oldBackGroundColor;
-
-        //if(GUI.Button(new Rect(windowRect.x - 14, windowRect.y + 38, 25, 25), pinDataButtonTexture, GUIStyle.none))
-        //{
-        //    Debug.Log("input");
-        //}
-        //if (GUI.Button(new Rect(windowRect.x + windowRect.width - 10, windowRect.y + 56, 25, 25), pinDataButtonTexture, GUIStyle.none))
-        //{
-        //    Debug.Log("output");
-        //}
         GUI.color = oldGuiColor;
         GUI.backgroundColor = oldBackGroundColor;
     }

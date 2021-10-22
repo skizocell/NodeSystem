@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class Dialog
+public class DemoDialog
 {
     public string text="";
+
+    public string parameter;
 
     public string GetFirstLine()
     {

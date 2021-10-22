@@ -5,7 +5,7 @@ using UnityEditor;
 using System;
 using System.Reflection;
 
-public class DialogNodeController : NodeControllerBase<NodeDialog, DialogGraphController>
+public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog, DemoDialogGraphController>
 {
     #region variable
     protected static Texture2D headerTexture=null;
@@ -13,47 +13,33 @@ public class DialogNodeController : NodeControllerBase<NodeDialog, DialogGraphCo
 
     NodePinCallerController callerPin;
     NodePinCalledController calledPin;
+    NodePinSetterController setterPin;
+    NodePinGetterController getterPin;
     #endregion
 
-    public DialogNodeController(DialogGraphController graphController, NodeDialog node) : base(graphController,node)
+    public DemoDialogNodeController(DemoDialogGraphController graphController, DemoNodeDialog node) : base(graphController,node)
     {
         //method 1 activate rich text
         //style = new GUIStyle();
         //style.richText = true;
         
         callerPin = new NodePinCallerController("Next", this, false,21);
-        calledPin = new NodePinCalledController("Previous", this, true,21);
+        calledPin = new NodePinCalledController("Call", this, true,21);
+        setterPin = new NodePinSetterController("GetTest", this, false, 58);
+        getterPin = new NodePinGetterController("SetTest", this, false, 37);
 
         AddNodePin(callerPin);
         AddNodePin(calledPin);
-
-        //PropertyInfo propertyInfo = typeof(DialogNodeController).GetProperty(nameof(Test));
-        //PinAttribute pinType = (PinAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(PinAttribute));
-        //Debug.Log("Attribute = " + pinType.pintype);
+        AddNodePin(setterPin);
+        AddNodePin(getterPin);
     }
-
-    #region main method
-    protected override void Draw()
-    {
-        //Trick to draw hover a window declare a window without style and draw a box with window style 
-        //but problem when selected because the box is not focused 
-        //The windows skin is always on top 
-        Rect windowRect = GUILayout.Window(nodeWindowsDrawId, node.rect, DrawWindowsContent, "", GUIStyle.none);
-        GUI.Box(windowRect, "", GUI.skin.window);
-        DrawPin(windowRect);
-    }
-    #endregion
 
     #region Utility method
-    private void DrawWindowsContent(int windowsId)
+    protected override void DrawWindowsContent()
     {
-        //Draw Header with parent function
-        DrawHeader();
-
-        //Content
         EditorGUIUtility.labelWidth = 1;
 
-        Dialog dialog = node.GetData();
+        DemoDialog dialog = node.GetData();
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.Space(15);

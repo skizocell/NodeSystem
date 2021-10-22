@@ -4,15 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class NodeBase<T> : NodeComponent
+public abstract class NodeBase<T> : NodeComponent
 {
     [SerializeField]
     protected T data;
-
-    public override void Init()
-    {
-        throw new NotImplementedException();
-    }
 
     public T GetData()
     {

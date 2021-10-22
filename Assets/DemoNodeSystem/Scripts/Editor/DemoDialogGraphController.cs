@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEditor;
 using System.Reflection;
 
-public class DialogGraphController : GraphControllerBase
+public class DemoDialogGraphController : GraphControllerBase
 {
     #region private Variables
-    private const string Name = "Dialog Graph";
+    private const string Name = "Demo Dialog Graph";
     private const string Description = "A Graph to create a dialog between character";
-    private const string AssetPath = "Assets/DialogNodeSystem/Resources/";
+    private const string AssetPath = "Assets/DemoNodeSystem/Resources/";
     private const float Width = 200f;
     private const float Height = 65f;
     #endregion
@@ -37,19 +37,25 @@ public class DialogGraphController : GraphControllerBase
     public override void FillMenu(GenericMenu menu, Vector2 mousePosition)
     {
         menu.AddItem(new GUIContent("Add Dialog"), false, (mousePos) => AddDialog((Vector2)mousePos), mousePosition);
+        menu.AddItem(new GUIContent("Execute"), false, Excecute);
     }
     #endregion
 
     #region Utility Methods
     private void AddDialog(Vector2 mousePos)
     {
-        NodeDialog dialog =  NodesUtils.CreateNode<NodeDialog>(graph, new Rect(mousePos.x, mousePos.y, Width, Height));
+        DemoNodeDialog dialog =  NodesUtils.CreateNode<DemoNodeDialog>(graph, new Rect(mousePos.x, mousePos.y, Width, Height));
         SetController(dialog);
+    }
+
+    private void Excecute()
+    {
+        graph.Excecute();
     }
 
     public override void InitFactory()
     {
-        nodeFactory = new DialogNodeControllerFactory(this);
+        nodeFactory = new DemoDialogNodeControllerFactory(this);
     }
     #endregion
 }

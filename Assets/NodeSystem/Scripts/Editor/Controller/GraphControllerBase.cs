@@ -80,13 +80,13 @@ public abstract class GraphControllerBase
     {
         if (!nodePin.canHaveManyLink)
         {
-            if (graph.IsLinkExistFor(nodePin.linkedNodeConroller.GetNode(), nodePin.type == NodePinController.Type.Emiter))
+            if (graph.IsLinkExistFor(nodePin.linkedNodeConroller.GetNode(), nodePin.nodePinId, nodePin.type == NodePinController.Type.Emiter))
             {
                 return;
             }
         }
 
-        if(nodePin.type == NodePinController.Type.Emiter)
+        if (nodePin.type == NodePinController.Type.Emiter)
         {
             if (selectedEmiterPin == null)
             {
@@ -111,6 +111,7 @@ public abstract class GraphControllerBase
                 link.to = selectedReceiverPin.linkedNodeConroller.GetNode();
                 link.fromPinId = selectedEmiterPin.nodePinId;
                 link.toPinId = selectedReceiverPin.nodePinId;
+                link.linkType = selectedEmiterPin.generateLinkType;
                 graph.AddLink(link);
             }
             else
@@ -153,6 +154,7 @@ public abstract class GraphControllerBase
     public void UnSelectNode()
     {
         if (curSelectedNode != null) curSelectedNode.isSelected = false;
+        Selection.activeObject = graph;
     }
     #endregion
 

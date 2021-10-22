@@ -7,18 +7,18 @@ using UnityEditor;
 public abstract class NodePinController
 {
     public enum Type { Emiter, Receiver }
-    public Type type;
 
-    public NodeControllerComponent linkedNodeConroller;
-    public string nodePinId;//id can also be the method name depending of used method
-
-    public bool canHaveManyLink;
+    private float yOffset;
 
     protected Rect rect;
     protected abstract Texture2D GetButtonTexture();
     protected abstract Rect GetButtonRect(Rect nodeRect, float yOffset);
 
-    private float yOffset;
+    public Type type;
+    public NodeLink.LinkType generateLinkType;
+    public NodeControllerComponent linkedNodeConroller;
+    public string nodePinId;//id can also be the method name depending of used method
+    public bool canHaveManyLink;
 
     public NodePinController(string id, NodeControllerComponent linkedNode, bool canHaveManyLink, float yOffset)
     {
@@ -49,21 +49,15 @@ public abstract class NodePinController
 
 public class NodePinCallerController : NodePinController
 {
+    protected static Texture2D buttonTexture; //Pin Texture for pin button
     private const float WIDTH=18;
     private const float HEIGHT=18;
     private const float XOFFSET=-4;
 
-    //Pin Texture for pin button
-    protected static Texture2D buttonTexture;
-
     public NodePinCallerController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
     {
         type = Type.Emiter;
-        if (buttonTexture == null)
-        {
-            //Pin Icone Texture loading
-            buttonTexture = Resources.Load<Texture2D>("Textures/Editor/arrow");
-        }
+        generateLinkType = NodeLink.LinkType.Call;
     }
 
     protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
@@ -74,27 +68,22 @@ public class NodePinCallerController : NodePinController
 
     protected override Texture2D GetButtonTexture()
     {
+        if (buttonTexture == null) buttonTexture = Resources.Load<Texture2D>("Textures/Editor/arrow");
         return buttonTexture;
     }
 }
 
 public class NodePinCalledController : NodePinController
 {
+    protected static Texture2D buttonTexture; //Pin Texture for pin button
     private const float WIDTH = 18;
     private const float HEIGHT = 18;
     private const float XOFFSET = -13;
 
-    //Pin Texture for pin button
-    protected static Texture2D buttonTexture;
-
     public NodePinCalledController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
     {
         type = Type.Receiver;
-        if (buttonTexture == null)
-        {
-            //Pin Icone Texture loading
-            buttonTexture = Resources.Load<Texture2D>("Textures/Editor/target");
-        }
+        generateLinkType = NodeLink.LinkType.Call;
     }
 
     protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
@@ -105,49 +94,59 @@ public class NodePinCalledController : NodePinController
 
     protected override Texture2D GetButtonTexture()
     {
+        if (buttonTexture == null) buttonTexture = Resources.Load<Texture2D>("Textures/Editor/target");
         return buttonTexture;
     }
 }
 
+public class NodePinSetterController : NodePinController
+{
+    protected static Texture2D buttonTexture; //Pin Texture for pin button
+    private const float WIDTH = 24;
+    private const float HEIGHT = 24;
+    private const float XOFFSET = -9;
 
-//    //No Necessary to link with nodepin NodePin destined to be erased
-//    public abstract class NodePinController<T> : INodePinController where T : NodePin
-//{
-//    string methodName;
-//    protected Rect rect;
-//    protected T nodePin;
+    public NodePinSetterController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+    {
+        type = Type.Emiter;
+        generateLinkType = NodeLink.LinkType.Set;
+    }
 
-//    public NodePinController(T nodePin, string methodName)
-//    {
-//        this.nodePin = nodePin;
-//        this.methodName = methodName;
-//    }
+    protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
+    {
+        rect = new Rect(nodeRect.x + nodeRect.width + XOFFSET, nodeRect.y + yOffset, WIDTH, HEIGHT);
+        return rect;
+    }
 
-//    public string GetMethodName()
-//    {
-//        return methodName;
-//    }
+    protected override Texture2D GetButtonTexture()
+    {
+        if (buttonTexture == null) buttonTexture = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Texture2D>("UI/Skin/Knob.psd");
+        return buttonTexture;
+    }
+}
 
-//    protected abstract Texture2D GetButtonTexture();
-//    protected abstract Rect GetButtonRect(Rect nodeRect, float yOffset);
-//    //protected abstract void Action();
+public class NodePinGetterController : NodePinController
+{
+    protected static Texture2D buttonTexture; //Pin Texture for pin button
+    private const float WIDTH = 24;
+    private const float HEIGHT = 24;
+    private const float XOFFSET = -14;
 
-//    //public abstract bool Link(NodePin pinTarget);
-//    public NodePin GetNodePin()
-//    {
-//        return nodePin;
-//    }
+    public NodePinGetterController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+    {
+        generateLinkType = NodeLink.LinkType.Set;
+        type = Type.Receiver;
+    }
 
-//    public void Draw(Rect nodeRect, float yOffset)
-//    {
-//        if (GUI.Button(GetButtonRect(nodeRect, yOffset), GetButtonTexture(), GUIStyle.none))
-//        {
-//            //Action();
-//        }
-//    }
+    protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
+    {
+        rect = new Rect(nodeRect.x + XOFFSET, nodeRect.y + yOffset, WIDTH, HEIGHT);
+        return rect;
+    }
 
-//    public Rect GetRect()
-//    {
-//        return rect;
-//    }
-//}
+    protected override Texture2D GetButtonTexture()
+    {
+        if (buttonTexture == null) buttonTexture = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Texture2D>("UI/Skin/Knob.psd");
+        return buttonTexture;
+    }
+}

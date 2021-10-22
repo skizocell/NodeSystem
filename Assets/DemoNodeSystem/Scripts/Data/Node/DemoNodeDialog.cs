@@ -4,20 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class NodeDialog : NodeBase<Dialog>
+public class DemoNodeDialog : NodeBase<DemoDialog>
 {
-    public override void Init()
-    {
-        //set inner object
-        data = new Dialog();
-    }
-
     private void OnEnable()
     {
-        if (data == null) Init();
+        if (data == null) data = new DemoDialog();
     }
 
-    public void Process()
+    public override void Process()
     {
         //TODO invoke dialog system with dialog data and wait the return then call the next Dialog. 
         //Construct an interface to pass dialog. The settings must be done in the graph node could access graph settings??
@@ -29,7 +23,7 @@ public class NodeDialog : NodeBase<Dialog>
 
     public string GetTest()
     {
-        return data.text;
+        return data.parameter;
     }
 
     public void SetTest(String test)
@@ -37,7 +31,12 @@ public class NodeDialog : NodeBase<Dialog>
         //When a set is receive and the object is already calculated change the state of the object (to process by example)
         // if other setter is ready...
         Debug.Log(this.name + "SetTextReceived()");
-        data.text=test;
+        data.parameter=test;
+    }
+
+    public void Call()
+    {
+        Debug.Log("Call Done for node labeled (" + this.name + ") parameter = " + data.parameter);
     }
 
 }
