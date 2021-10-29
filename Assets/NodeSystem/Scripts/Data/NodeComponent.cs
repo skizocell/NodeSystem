@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum NodeProcessStatus { Waiting, Running, Done }
+public enum NodeProcessStatus { Waiting, Ready, Running, Done }
 
 [Serializable]
 public abstract class NodeComponent : ScriptableObject

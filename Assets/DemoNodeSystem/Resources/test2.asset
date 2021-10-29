@@ -1,5 +1,68 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2440594107367861930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: Welcome 3
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 441
+    y: 41
+    width: 200
+    height: 65
+  data:
+    text: Beuh
+    parameter: 
+--- !u!114 &-1735219902591372269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: Welcome
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 103
+    y: 102
+    width: 200
+    height: 65
+  data:
+    text: Bonjour
+    parameter: 
+--- !u!114 &-457842617492540993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 717
+    y: 40
+    width: 200
+    height: 65
+  data:
+    text: 
+    parameter: 
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,6 +76,41 @@ MonoBehaviour:
   m_Name: test2
   m_EditorClassIdentifier: 
   nodeGraphControllerType: DemoDialogGraphController
-  nodes: []
-  links: []
+  nodes:
+  - {fileID: -1735219902591372269}
+  - {fileID: 4320267997820564984}
+  - {fileID: -2440594107367861930}
+  - {fileID: -457842617492540993}
+  links:
+  - linkType: 1
+    from: {fileID: -1735219902591372269}
+    to: {fileID: 4320267997820564984}
+    fromPinId: Next
+    toPinId: Call
+  - linkType: 0
+    from: {fileID: 4320267997820564984}
+    to: {fileID: -2440594107367861930}
+    fromPinId: GetTest
+    toPinId: SetTest
   start: {fileID: 0}
+--- !u!114 &4320267997820564984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: Welcome 2
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 310
+    y: 312
+    width: 200
+    height: 65
+  data:
+    text: Coucou
+    parameter: 

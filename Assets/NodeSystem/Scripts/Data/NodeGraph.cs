@@ -51,36 +51,71 @@ public class NodeGraph : ScriptableObject
     public void Excecute()
     {
         Init();
-        //NOT GOOD
-        foreach (NodeComponent n in nodes)
+
+        NodeComponent node = GetNextReadyNode();
+        while (node!=null)
         {
-            if( n.processStatus==NodeProcessStatus.Waiting && !IsWaitingLinkExistFor(n, false))
+            ProcessNode(node);
+            foreach (NodeLink l in GetNextsWaitingNodeLink(node).OrderBy(o => o.linkType))//order to make set before call see LinkType
             {
-                ProcessNode(n);
-                foreach(NodeLink l in GetNextsWaitingNodeLink(n).OrderBy(o => o.linkType)) //order to make set before call see LinkType
+                ProcessLink(l);
+                if (!IsWaitingLinkExistFor(l.to, false))
                 {
-                    ProcessLink(l);
-                    if(!IsWaitingLinkExistFor(l.to, false))
-                    {
-                        ProcessNode(l.to);
-                    }
+                    l.to.processStatus = NodeProcessStatus.Ready;
                 }
-            } 
+            }
+            node = GetNextReadyNode();
         }
     }
     #endregion
 
     #region Utility method
+
+    //For specific nodeGraph just used with ref link and purely has sequence like dialog system.... 
+    //Or with system with a preprocess that can produce a chained link node in term...
+    //praticaly the Same than execute
+    protected List<NodeComponent> GetChainedList()
+    {
+        List<NodeComponent> nodeList = new List<NodeComponent>();
+        Init();
+        NodeComponent node = GetNextReadyNode();
+        while (node != null)
+        {
+            nodeList.Add(node);
+            node.processStatus = NodeProcessStatus.Done;
+            foreach (NodeLink l in GetNextsWaitingNodeLink(node).OrderBy(o => o.linkType))//order to make set before call see LinkType
+            {
+                ProcessLink(l);
+                if (!IsWaitingLinkExistFor(l.to, false))
+                {
+                    l.to.processStatus = NodeProcessStatus.Ready;
+                }
+            }
+            node = GetNextReadyNode();
+        }
+        return nodeList;
+    }
+    
     private void Init()
     {
+        //Get Node waitink for a link to process
+        List<NodeComponent> waitingLinkComponents = links.Select(l => l.to).ToList();
+
         foreach (NodeComponent n in nodes)
         {
-            n.processStatus = NodeProcessStatus.Waiting;
+            if (waitingLinkComponents.Contains(n)) n.processStatus = NodeProcessStatus.Waiting;
+            else n.processStatus = NodeProcessStatus.Ready;
+
         }
         foreach (NodeLink l in links)
         {
             l.processStatus = NodeProcessStatus.Waiting;
         }
+    }
+
+    public NodeComponent GetNextReadyNode()
+    {
+        return nodes.Where(n => n.processStatus == NodeProcessStatus.Ready).FirstOrDefault();
     }
 
     private void ProcessNode(NodeComponent n)
