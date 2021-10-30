@@ -14,33 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 26
-    y: 55
+    x: 206
+    y: 72
     width: 200
     height: 65
   data:
     text: Coucou
-    parameter: 1
---- !u!114 &-2142123800656519799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: Welcome3
-  m_EditorClassIdentifier: 
-  rect:
-    serializedVersion: 2
-    x: 773
-    y: 37
-    width: 200
-    height: 65
-  data:
-    text: jhjk
     parameter: 1
 --- !u!114 &-1496762563950817824
 MonoBehaviour:
@@ -56,8 +35,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 390
-    y: 124
+    x: 655
+    y: 81
     width: 200
     height: 65
   data:
@@ -79,16 +58,10 @@ MonoBehaviour:
   nodes:
   - {fileID: -2848253638173156919}
   - {fileID: -1496762563950817824}
-  - {fileID: -2142123800656519799}
   links:
-  - linkType: 0
+  - linkType: 1
     from: {fileID: -2848253638173156919}
     to: {fileID: -1496762563950817824}
-    fromPinId: GetTest
-    toPinId: SetTest
-  - linkType: 0
-    from: {fileID: -1496762563950817824}
-    to: {fileID: -2142123800656519799}
-    fromPinId: GetTest
-    toPinId: SetTest
+    fromPinId: Next
+    toPinId: Call
   start: {fileID: 0}

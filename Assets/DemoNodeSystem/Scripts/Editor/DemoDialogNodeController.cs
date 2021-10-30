@@ -25,8 +25,8 @@ public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog, DemoD
         
         callerPin = new NodePinCallerController("Next", this, false,21);
         calledPin = new NodePinCalledController("Call", this, true,21);
-        setterPin = new NodePinSetterController("GetTest", this, false, 58);
-        getterPin = new NodePinGetterController("SetTest", this, false, 37);
+        setterPin = new NodePinSetterController("GetTest", this, false, 58, typeof(String));
+        getterPin = new NodePinGetterController("SetTest", this, false, 37, typeof(String));
 
         AddNodePin(callerPin);
         AddNodePin(calledPin);

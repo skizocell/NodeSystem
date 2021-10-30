@@ -6,19 +6,21 @@ using UnityEditor;
 
 public abstract class NodePinController
 {
-    public enum Type { Emiter, Receiver }
+    public enum NodePinType { Emiter, Receiver }
 
     private float yOffset;
 
     protected Rect rect;
     protected abstract Texture2D GetButtonTexture();
     protected abstract Rect GetButtonRect(Rect nodeRect, float yOffset);
+    protected abstract bool IsCompatibleWith(NodePinController pin);
 
-    public Type type;
+    public NodePinType type;
     public NodeLink.LinkType generateLinkType;
     public NodeControllerComponent linkedNodeConroller;
     public string nodePinId;//id can also be the method name depending of used method
     public bool canHaveManyLink;
+    public bool isConnected;
 
     public NodePinController(string id, NodeControllerComponent linkedNode, bool canHaveManyLink, float yOffset)
     {
@@ -39,11 +41,20 @@ public abstract class NodePinController
         {
             linkedNodeConroller.OnClickNodePin(this);
         }
+        isConnected = false;
     }
 
     public Rect GetRect()
     {
         return rect;
+    }
+
+    public bool CanConectTo(NodePinController pin)
+    {
+        return this.type != pin.type 
+            && (pin.canHaveManyLink ? true : !pin.isConnected)
+            && IsCompatibleWith(pin);
+        //TODO Test if type are compatible between geter seter
     }
 }
 
@@ -56,7 +67,7 @@ public class NodePinCallerController : NodePinController
 
     public NodePinCallerController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
     {
-        type = Type.Emiter;
+        type = NodePinType.Emiter;
         generateLinkType = NodeLink.LinkType.Call;
     }
 
@@ -71,6 +82,11 @@ public class NodePinCallerController : NodePinController
         if (buttonTexture == null) buttonTexture = Resources.Load<Texture2D>("Textures/Editor/arrow");
         return buttonTexture;
     }
+
+    protected override bool IsCompatibleWith(NodePinController pin)
+    {
+        return pin.generateLinkType == NodeLink.LinkType.Call;
+    }
 }
 
 public class NodePinCalledController : NodePinController
@@ -82,7 +98,7 @@ public class NodePinCalledController : NodePinController
 
     public NodePinCalledController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
     {
-        type = Type.Receiver;
+        type = NodePinType.Receiver;
         generateLinkType = NodeLink.LinkType.Call;
     }
 
@@ -97,18 +113,43 @@ public class NodePinCalledController : NodePinController
         if (buttonTexture == null) buttonTexture = Resources.Load<Texture2D>("Textures/Editor/target");
         return buttonTexture;
     }
+
+    protected override bool IsCompatibleWith(NodePinController pin)
+    {
+        return pin.generateLinkType == NodeLink.LinkType.Call;
+    }
 }
 
-public class NodePinSetterController : NodePinController
+public abstract class NodePinDataTransfertController : NodePinController
+{
+    public Type transfertDataType;
+    public NodePinDataTransfertController(string id, NodeControllerComponent linkedNode, bool canHaveManyLink, float yOffset, Type transfertDataType) : base(id, linkedNode, canHaveManyLink, yOffset)
+    {
+        this.transfertDataType = transfertDataType;
+    }
+
+    protected override bool IsCompatibleWith(NodePinController pin)
+    {
+        if (pin is NodePinDataTransfertController)
+        {
+            NodePinDataTransfertController other = (NodePinDataTransfertController)pin;
+            return other.generateLinkType == NodeLink.LinkType.Set 
+                && other.transfertDataType == this.transfertDataType;
+        }
+        else return false;
+    }
+}
+
+public class NodePinSetterController : NodePinDataTransfertController
 {
     protected static Texture2D buttonTexture; //Pin Texture for pin button
     private const float WIDTH = 24;
     private const float HEIGHT = 24;
     private const float XOFFSET = -9;
 
-    public NodePinSetterController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+    public NodePinSetterController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset, Type transfertDataType) : base(methodName, node, canHaveManyLink, yOffset, transfertDataType)
     {
-        type = Type.Emiter;
+        type = NodePinType.Emiter;
         generateLinkType = NodeLink.LinkType.Set;
     }
 
@@ -125,17 +166,17 @@ public class NodePinSetterController : NodePinController
     }
 }
 
-public class NodePinGetterController : NodePinController
+public class NodePinGetterController : NodePinDataTransfertController
 {
     protected static Texture2D buttonTexture; //Pin Texture for pin button
     private const float WIDTH = 24;
     private const float HEIGHT = 24;
     private const float XOFFSET = -14;
 
-    public NodePinGetterController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+    public NodePinGetterController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset, Type transfertDataType) : base(methodName, node, canHaveManyLink, yOffset, transfertDataType)
     {
         generateLinkType = NodeLink.LinkType.Set;
-        type = Type.Receiver;
+        type = NodePinType.Receiver;
     }
 
     protected override Rect GetButtonRect(Rect nodeRect, float yOffset)

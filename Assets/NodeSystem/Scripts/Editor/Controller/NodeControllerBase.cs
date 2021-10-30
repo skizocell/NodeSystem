@@ -159,13 +159,48 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
         //try to create a style or use a texture for these button
         Color oldBackGroundColor = GUI.backgroundColor;
         Color oldGuiColor = GUI.color;
+
+        NodePinController nodePinSelected = graphController.IfConnectionModeGetFirstSelected();
         GUI.backgroundColor = Color.gray;
         GUI.color = Color.gray;
 
+
         foreach(NodePinController pin in nodePins)
         {
+            if(nodePinSelected != null)
+            {
+                if(nodePinSelected == pin)
+                {
+                    GUI.backgroundColor = Color.blue;
+                    GUI.color = Color.blue;
+                }
+                else if (nodePinSelected.CanConectTo(pin))
+                {
+                    GUI.backgroundColor = Color.green;
+                    GUI.color = Color.green;
+                }
+                else
+                {
+                    GUI.backgroundColor = Color.red;
+                    GUI.color = Color.red;
+                }
+            }
+            else
+            {
+                if (pin.isConnected)
+                {
+                    GUI.backgroundColor = Color.blue;
+                    GUI.color = Color.blue;
+                }
+                else
+                {
+                    GUI.backgroundColor = Color.gray;
+                    GUI.color = Color.gray;
+                }
+            }
             pin.Draw(windowRect);
         }
+
         GUI.color = oldGuiColor;
         GUI.backgroundColor = oldBackGroundColor;
     }

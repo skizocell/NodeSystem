@@ -80,13 +80,13 @@ public abstract class GraphControllerBase
     {
         if (!nodePin.canHaveManyLink)
         {
-            if (graph.IsLinkExistFor(nodePin.linkedNodeConroller.GetNode(), nodePin.nodePinId, nodePin.type == NodePinController.Type.Emiter))
+            if (graph.IsLinkExistFor(nodePin.linkedNodeConroller.GetNode(), nodePin.nodePinId, nodePin.type == NodePinController.NodePinType.Emiter))
             {
                 return;
             }
         }
 
-        if (nodePin.type == NodePinController.Type.Emiter)
+        if (nodePin.type == NodePinController.NodePinType.Emiter)
         {
             if (selectedEmiterPin == null)
             {
@@ -94,7 +94,7 @@ public abstract class GraphControllerBase
             }
         }
 
-        if (nodePin.type == NodePinController.Type.Receiver)
+        if (nodePin.type == NodePinController.NodePinType.Receiver)
         {
             if (selectedReceiverPin == null)
             {
@@ -106,13 +106,21 @@ public abstract class GraphControllerBase
         {
             if (selectedEmiterPin.linkedNodeConroller != selectedReceiverPin.linkedNodeConroller)
             {
-                NodeLink link = new NodeLink();
-                link.from = selectedEmiterPin.linkedNodeConroller.GetNode();
-                link.to = selectedReceiverPin.linkedNodeConroller.GetNode();
-                link.fromPinId = selectedEmiterPin.nodePinId;
-                link.toPinId = selectedReceiverPin.nodePinId;
-                link.linkType = selectedEmiterPin.generateLinkType;
-                graph.AddLink(link);
+                if (selectedEmiterPin.CanConectTo(selectedReceiverPin))
+                {
+                    //TODO test redondance cyclique !!!
+                    NodeLink link = new NodeLink();
+                    link.from = selectedEmiterPin.linkedNodeConroller.GetNode();
+                    link.to = selectedReceiverPin.linkedNodeConroller.GetNode();
+                    link.fromPinId = selectedEmiterPin.nodePinId;
+                    link.toPinId = selectedReceiverPin.nodePinId;
+                    link.linkType = selectedEmiterPin.generateLinkType;
+                    graph.AddLink(link);
+                }
+                else
+                {
+                    EditorUtility.DisplayDialog("Node message", "This connection can not be done", "Ok");
+                }
             }
             else
             {
@@ -159,6 +167,22 @@ public abstract class GraphControllerBase
     #endregion
 
     #region utility method
+    //private NodePinController selectedEmiterPin;
+    //private NodePinController selectedReceiverPin;
+    private bool IsInNodeConnectionMode()
+    {
+        return (selectedEmiterPin!=null && selectedReceiverPin==null) || (selectedReceiverPin!=null && selectedEmiterPin==null);  
+    }
+
+    public NodePinController IfConnectionModeGetFirstSelected()
+    {
+        if (IsInNodeConnectionMode())
+        {
+            return selectedEmiterPin != null ? selectedEmiterPin : selectedReceiverPin;
+        }
+        return null;
+    }
+
     private void ClearConnectionSelection()
     {
         selectedEmiterPin = null;
@@ -193,6 +217,11 @@ public abstract class GraphControllerBase
                 Debug.LogError("Remove corrupted node link ");
                 graph.RemoveLink(link);
                 break;
+            }
+            else
+            {
+                caller.isConnected = true;
+                called.isConnected = true;
             }
 
             Handles.DrawBezier(
