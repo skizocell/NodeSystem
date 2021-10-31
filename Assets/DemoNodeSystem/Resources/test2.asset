@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 831
-    y: 330
+    x: 829
+    y: 329
     width: 200
     height: 65
   data:
@@ -35,8 +35,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 112
-    y: 110
+    x: 110
+    y: 109
     width: 200
     height: 65
   data:
@@ -56,8 +56,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 642
-    y: 104
+    x: 640
+    y: 103
     width: 200
     height: 65
   data:
@@ -88,21 +88,11 @@ MonoBehaviour:
     to: {fileID: 4320267997820564984}
     fromPinId: Next
     toPinId: Call
-  - linkType: 1
-    from: {fileID: 4320267997820564984}
-    to: {fileID: -457842617492540993}
-    fromPinId: Next
-    toPinId: Call
   - linkType: 0
     from: {fileID: 4320267997820564984}
     to: {fileID: -2379899536125152501}
     fromPinId: GetTest
     toPinId: SetTest
-  - linkType: 1
-    from: {fileID: 5166541589637199374}
-    to: {fileID: -2379899536125152501}
-    fromPinId: Next
-    toPinId: Call
   - linkType: 0
     from: {fileID: 5166541589637199374}
     to: {fileID: 4320267997820564984}
@@ -111,6 +101,16 @@ MonoBehaviour:
   - linkType: 1
     from: {fileID: -457842617492540993}
     to: {fileID: -2379899536125152501}
+    fromPinId: Next
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: 5166541589637199374}
+    to: {fileID: -2379899536125152501}
+    fromPinId: Next
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: 4320267997820564984}
+    to: {fileID: -457842617492540993}
     fromPinId: Next
     toPinId: Call
   start: {fileID: 0}
@@ -128,8 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 380
-    y: 230
+    x: 378
+    y: 229
     width: 200
     height: 65
   data:
@@ -149,8 +149,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 123
-    y: 341
+    x: 121
+    y: 340
     width: 200
     height: 65
   data:

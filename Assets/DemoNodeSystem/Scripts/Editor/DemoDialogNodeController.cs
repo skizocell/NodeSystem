@@ -22,7 +22,6 @@ public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog, DemoD
         //method 1 activate rich text
         //style = new GUIStyle();
         //style.richText = true;
-        
         callerPin = new NodePinCallerController("Next", this, false,21);
         calledPin = new NodePinCalledController("Call", this, true,21);
         setterPin = new NodePinSetterController("GetTest", this, false, 58, typeof(String));
@@ -59,6 +58,7 @@ public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog, DemoD
         EditorGUIUtility.labelWidth = 0;
     }
 
+    //improve to something more easy or make some default color and style to choice
     protected override Texture2D GetHeaderTexture()
     {
         if(headerTexture == null)

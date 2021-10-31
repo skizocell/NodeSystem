@@ -5,5 +5,5 @@ using UnityEngine;
 
 public interface INodeControllerFactory
 {
-    NodeControllerComponent Build(NodeComponent node);
+    NodeControllerComponent BuildNodeControllerComponent(NodeComponent node);
 }

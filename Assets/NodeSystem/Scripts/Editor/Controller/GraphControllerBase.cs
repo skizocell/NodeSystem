@@ -19,7 +19,7 @@ public abstract class GraphControllerBase
 
     protected GraphControllerBase()
     {
-        InitFactory();
+        nodeFactory = new NodeControllerFactory<GraphControllerBase>(this);
     }
 
     #region MetaData info method
@@ -34,8 +34,6 @@ public abstract class GraphControllerBase
 
     #region Extensible method
     public abstract void FillMenu(GenericMenu menu, Vector2 mousePosition); // mouse position is used to know where to create something on screen if needed
-    public abstract void InitFactory();
-
     public virtual void Update(Event e)
     {
         DrawConnections();
@@ -209,7 +207,7 @@ public abstract class GraphControllerBase
 
     protected void SetController(NodeComponent node)
     {
-        NodeControllerComponent controller = nodeFactory.Build(node);
+        NodeControllerComponent controller = nodeFactory.BuildNodeControllerComponent(node);
         nodes.Add(controller);
     }
 

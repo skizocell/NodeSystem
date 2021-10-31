@@ -52,10 +52,5 @@ public class DemoDialogGraphController : GraphControllerBase
     {
         graph.Excecute();
     }
-
-    public override void InitFactory()
-    {
-        nodeFactory = new DemoDialogNodeControllerFactory(this);
-    }
     #endregion
 }
