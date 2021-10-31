@@ -54,7 +54,6 @@ public abstract class NodePinController
         return this.type != pin.type 
             && (pin.canHaveManyLink ? true : !pin.isConnected)
             && IsCompatibleWith(pin);
-        //TODO Test if type are compatible between geter seter
     }
 }
 

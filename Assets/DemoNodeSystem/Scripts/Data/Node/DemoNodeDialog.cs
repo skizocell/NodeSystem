@@ -30,13 +30,13 @@ public class DemoNodeDialog : NodeBase<DemoDialog>
     {
         //When a set is receive and the object is already calculated change the state of the object (to process by example)
         // if other setter is ready...
-        Debug.Log(this.name + "SetTextReceived()");
+        Debug.Log(this.name + "SetTextReceived()" + test);
         data.parameter=test;
     }
 
     public void Call()
     {
-        Debug.Log("Call Done for node labeled (" + this.name + ") parameter = " + data.parameter);
+        Debug.Log("Call Done for node labeled (" + this.name + ")");
     }
 
 }

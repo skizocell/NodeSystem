@@ -1,9 +1,11 @@
 using System.Collections;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+[Serializable]
 public abstract class GraphControllerBase
 { 
     protected NodeGraph graph;
@@ -74,7 +76,10 @@ public abstract class GraphControllerBase
         }
     }
 
-
+    public NodeGraph GetGraph()
+    {
+        return graph;
+    }
 
     public void OnClicPinController(NodePinController nodePin)
     {
@@ -108,7 +113,6 @@ public abstract class GraphControllerBase
             {
                 if (selectedEmiterPin.CanConectTo(selectedReceiverPin))
                 {
-                    //TODO test redondance cyclique !!!
                     NodeLink link = new NodeLink();
                     link.from = selectedEmiterPin.linkedNodeConroller.GetNode();
                     link.to = selectedReceiverPin.linkedNodeConroller.GetNode();
@@ -116,6 +120,20 @@ public abstract class GraphControllerBase
                     link.toPinId = selectedReceiverPin.nodePinId;
                     link.linkType = selectedEmiterPin.generateLinkType;
                     graph.AddLink(link);
+
+                    List<NodeComponent> excecList = graph.GetChainedList();
+                    int i = 0, indexFrom=0, indexTo=0;
+                    foreach (NodeComponent node in excecList)
+                    {
+                        if (node == link.from) indexFrom = i;
+                        else if (node == link.to) indexTo = i;
+                        i++;
+                    }
+                    if (indexFrom>=indexTo)
+                    {
+                        graph.RemoveLink(link);
+                        EditorUtility.DisplayDialog("Node message", "You can not connect with a node behind you in the chain", "Ok");
+                    }
                 }
                 else
                 {

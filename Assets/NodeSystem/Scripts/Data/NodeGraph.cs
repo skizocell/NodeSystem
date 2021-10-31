@@ -74,7 +74,7 @@ public class NodeGraph : ScriptableObject
     //For specific nodeGraph just used with ref link and purely has sequence like dialog system.... 
     //Or with system with a preprocess that can produce a chained link node in term...
     //praticaly the Same than execute
-    protected List<NodeComponent> GetChainedList()
+    public List<NodeComponent> GetChainedList()
     {
         List<NodeComponent> nodeList = new List<NodeComponent>();
         Init();
@@ -95,7 +95,7 @@ public class NodeGraph : ScriptableObject
         }
         return nodeList;
     }
-    
+
     private void Init()
     {
         //Get Node waitink for a link to process

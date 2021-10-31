@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,14 +9,17 @@ using UnityEditor;
 
 //place code for Edito to an Editor folder to exclude them from build
 //https://docs.unity3d.com/Manual/SpecialFolders.html
-public class NodeEditorWindow : EditorWindow
+public class NodesEditorWindow : EditorWindow
 {
     #region public Variables
     #endregion
 
     #region private Variables
-    static NodeEditorWindow curWindow;
+    static NodesEditorWindow curWindow;
     GraphControllerBase curGraphController = null;
+
+    [SerializeField]
+    string lastAssetOpen; //https://blog.unity.com/technology/unity-serialization
     Vector2 offset;
     Vector2 drag;
     #endregion
@@ -25,7 +29,8 @@ public class NodeEditorWindow : EditorWindow
     [MenuItem("Node Editor/Launch Editor")]
     public static void InitNodeEditor()
     {
-        NodeEditorWindow.InitEditorWindow();
+        Debug.Log("InitNodeEditor");
+        NodesEditorWindow.InitEditorWindow();
     }
 
     //Auto Open NodeGraph asset
@@ -35,16 +40,24 @@ public class NodeEditorWindow : EditorWindow
     {
         if (Selection.activeObject != null && Selection.activeObject.GetType() == typeof(NodeGraph))
         {
-            NodeEditorWindow.InitEditorWindow();
+            NodesEditorWindow.InitEditorWindow();
             string NodeCanvasPath = AssetDatabase.GetAssetPath(instanceID);
-            curWindow.curGraphController = NodesUtils.LoadGraphController(NodeCanvasPath);
+            curWindow.lastAssetOpen = NodeCanvasPath;
+            curWindow.OpenAsset();
             return true;
         }
         return false;
     }
 
+    private void OpenAsset()
+    {
+        if(lastAssetOpen!=null)
+        curGraphController = NodesUtils.LoadGraphController(lastAssetOpen);
+    }
+
     private void OnGUI()
     {
+        if (curGraphController == null) OpenAsset();
         DrawGrid(20, 0.2f, Color.gray);
         DrawGrid(100, 0.4f, Color.gray);
 
@@ -65,13 +78,14 @@ public class NodeEditorWindow : EditorWindow
     #region Utility Methods
     public static void InitEditorWindow()
     {
-        curWindow = EditorWindow.GetWindow<NodeEditorWindow>();
+        curWindow = EditorWindow.GetWindow<NodesEditorWindow>();
         curWindow.titleContent.text = "Node Editor";
     }
 
     private void InitGraphController(GraphControllerBase controller)
     {
         curGraphController = controller;
+        lastAssetOpen = controller.GetAssetPath();
     }
 
     private void ProcessEvents(Event e)
@@ -131,12 +145,13 @@ public class NodeEditorWindow : EditorWindow
     private void OnLoadGraph()
     {
         curGraphController = NodesUtils.LoadGraphController();
+        lastAssetOpen = NodesUtils.GetAssetPath(curGraphController.GetGraph());
     }
 
     private void OnUnloadGraph()
     {
         curGraphController = null;
-
+        lastAssetOpen = null;
     }
 
     //draw grid on the editor window

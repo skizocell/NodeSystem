@@ -59,6 +59,11 @@ public static class NodesUtils
         return ConstructController(LoadGraph());
     }
 
+    public static string GetAssetPath(ScriptableObject obj)
+    {
+        return AssetDatabase.GetAssetPath(obj);
+    }
+
     public static Dictionary<string, GraphControllerBase> GetAvailableGraphControllers()
     {
         Dictionary<string, GraphControllerBase> graphTypes = new Dictionary<string, GraphControllerBase>();
@@ -107,7 +112,6 @@ public static class NodesUtils
     private static NodeGraph LoadGraph()
     {
         string graphPath = EditorUtility.OpenFilePanel("Load Graph", Application.dataPath + "/NodeEditor/Database", "");
-
         int appPathLen = Application.dataPath.Length;
         string finalPath = graphPath.Substring(appPathLen - 6);
         return LoadGraph(finalPath);
@@ -120,7 +124,7 @@ public static class NodesUtils
         curGraph = (NodeGraph)AssetDatabase.LoadAssetAtPath(graphPath, typeof(NodeGraph));
         if (curGraph == null)
         {
-            EditorUtility.DisplayDialog("Node Message", "Unable to load selected graph", "Ok");
+            Debug.Log("Unable to load selected graph");
         }
         return curGraph;
     }
