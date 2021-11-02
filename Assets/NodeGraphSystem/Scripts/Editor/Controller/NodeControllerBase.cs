@@ -17,9 +17,8 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
     //The Graph controller
     protected G graphController;
 
-    //Pin Texture for pin button
-    //TODO Clean it 
-    protected static Texture2D pinDataButtonTexture;
+    //NodeStyle
+    protected NodeControllerStyleNodeStyle nodeStyle = null;
 
     //Selected header for windows
     protected static GUIStyle headerSelectedStyle;
@@ -51,15 +50,11 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
             headerSelectedColor.SetPixel(0, 0, new Color(0.2f, 0.6f, 1f));
             headerSelectedColor.Apply();
             ///////////////////////////////
-
-            //Pin Icone Texture loading TODO clean it
-            pinDataButtonTexture = AssetDatabase.GetBuiltinExtraResource<Texture2D>("UI/Skin/Knob.psd");
         }
+        nodeStyle = DefaultNodeControllerStyles.GetStyle(DefaultNodeControllerStyles.StyleName.green); //set to default
     }
 
     #region Extensible method
-    protected abstract Texture2D GetHeaderTexture(); //Get the header texture for the node  
-    protected abstract GUIStyle GetHeaderStyle(); //Get the header style for this node 
     protected abstract void DrawWindowsContent();
 
     //Process Event for this node (selection, context menu and Drag the node)
@@ -220,8 +215,8 @@ public abstract class NodeControllerBase<N, G> : NodeControllerComponent where N
     //Draw Header of the node window
     protected void DrawHeader()
     {
-        GUI.DrawTexture(new Rect(0, 0, node.rect.width + 1, 20), isSelected ? headerSelectedColor : GetHeaderTexture(), ScaleMode.StretchToFill);
-        GUI.Label(new Rect(8, 2, node.rect.width - 1, 20), "" + node.name + "", isSelected ? headerSelectedStyle : GetHeaderStyle());
+        GUI.DrawTexture(new Rect(0, 0, node.rect.width + 1, 20), isSelected ? headerSelectedColor : nodeStyle.headerTexture, ScaleMode.StretchToFill);
+        GUI.Label(new Rect(8, 2, node.rect.width - 1, 20), "" + node.name + "", isSelected ? headerSelectedStyle : nodeStyle.headerStyle);
         GUILayout.Space(20);
     }
 

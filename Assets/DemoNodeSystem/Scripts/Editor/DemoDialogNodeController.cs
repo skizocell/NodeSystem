@@ -8,9 +8,6 @@ using System.Reflection;
 public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog, DemoDialogGraphController>
 {
     #region variable
-    protected static Texture2D headerTexture=null;
-    protected static GUIStyle headerStyle = null;
-
     NodePinCallerController callerPin;
     NodePinCalledController calledPin;
     NodePinSetterController setterPin;
@@ -56,30 +53,6 @@ public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog, DemoD
         EditorGUILayout.EndHorizontal();
 
         EditorGUIUtility.labelWidth = 0;
-    }
-
-    //improve to something more easy or make some default color and style to choice
-    protected override Texture2D GetHeaderTexture()
-    {
-        if(headerTexture == null)
-        {
-            //Normal Style 
-            headerTexture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
-            headerTexture.SetPixel(0, 0, new Color(0.25f, 0.4f, 0.25f));
-            headerTexture.Apply();
-        }
-        return headerTexture;
-    }
-
-    protected override GUIStyle GetHeaderStyle()
-    {
-        if (headerStyle == null)
-        {
-            headerStyle = new GUIStyle();
-            headerStyle.fontStyle = FontStyle.Bold;
-            headerStyle.normal.textColor = Color.white;
-        }
-        return headerStyle;
     }
     #endregion
 }
