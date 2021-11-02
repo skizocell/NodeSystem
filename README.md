@@ -1,4 +1,4 @@
-# NodeSystem
+# Node Graph System
 
 Try to create a generic Node system for my future project.
 
