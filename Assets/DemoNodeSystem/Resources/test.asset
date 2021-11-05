@@ -1,5 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5020721453222906418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 500
+    y: 339
+    width: 200
+    height: 65
+  data:
+    text: 
+    parameter: 
 --- !u!114 &-2848253638173156919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14,8 +35,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 120
-    y: 151
+    x: 78
+    y: 80
     width: 200
     height: 65
   data:
@@ -35,8 +56,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 554
-    y: 120
+    x: 358
+    y: 94
     width: 200
     height: 65
   data:
@@ -58,6 +79,7 @@ MonoBehaviour:
   nodes:
   - {fileID: -2848253638173156919}
   - {fileID: -1496762563950817824}
+  - {fileID: -5020721453222906418}
   links:
   - linkType: 1
     from: {fileID: -2848253638173156919}

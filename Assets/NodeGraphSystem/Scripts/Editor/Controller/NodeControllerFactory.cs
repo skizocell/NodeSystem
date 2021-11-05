@@ -4,11 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeControllerFactory<G> : INodeControllerFactory where G : GraphControllerBase
+public class NodeControllerFactory
 {
-    protected G graphController;
+    protected GraphControllerBase graphController;
 
-    public NodeControllerFactory(G graphController)
+    public NodeControllerFactory(GraphControllerBase graphController)
     {
         this.graphController = graphController;
     }

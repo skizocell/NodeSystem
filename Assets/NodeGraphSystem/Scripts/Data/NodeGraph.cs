@@ -85,7 +85,7 @@ public class NodeGraph : ScriptableObject
             node.processStatus = NodeProcessStatus.Done;
             foreach (NodeLink l in GetNextsWaitingNodeLink(node).OrderBy(o => o.linkType))//order to make set before call see LinkType
             {
-                ProcessLink(l);
+                l.processStatus = NodeProcessStatus.Done;
                 if (!IsWaitingLinkExistFor(l.to, false))
                 {
                     l.to.processStatus = NodeProcessStatus.Ready;

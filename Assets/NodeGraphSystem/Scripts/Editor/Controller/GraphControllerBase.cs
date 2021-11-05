@@ -9,7 +9,7 @@ using UnityEngine;
 public abstract class GraphControllerBase
 { 
     protected NodeGraph graph;
-    protected INodeControllerFactory nodeFactory;
+    protected NodeControllerFactory nodeFactory;
     List<NodeControllerComponent> nodes = new List<NodeControllerComponent>();
     private List<NodePinController> nodePins = new List<NodePinController>();
     NodeControllerComponent curSelectedNode = null;
@@ -19,7 +19,7 @@ public abstract class GraphControllerBase
 
     protected GraphControllerBase()
     {
-        nodeFactory = new NodeControllerFactory<GraphControllerBase>(this);
+        nodeFactory = new NodeControllerFactory(this);
     }
 
     #region MetaData info method
