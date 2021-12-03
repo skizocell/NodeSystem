@@ -12,7 +12,7 @@ public class DemoNodeDialogEditor : Editor
         nodeDialog.name = EditorGUILayout.TextField("Dialog name", nodeDialog.name);
         SerializedObject serializedObject = new UnityEditor.SerializedObject(nodeDialog);
 
-        DemoDialog dialog = nodeDialog.GetData();
+        DemoDialog dialog = nodeDialog.data;
         EditorGUILayout.LabelField("Dialog: ", EditorStyles.boldLabel);
         dialog.text = EditorGUILayout.TextArea(dialog.text, GUILayout.MinHeight(200));
         dialog.parameter = EditorGUILayout.TextField("Parameter", dialog.parameter);

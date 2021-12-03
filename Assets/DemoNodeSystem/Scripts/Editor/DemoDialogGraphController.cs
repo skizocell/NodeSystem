@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Reflection;
+using System;
+using DSGame.GraphSystem;
 
 public class DemoDialogGraphController : GraphControllerBase
 {
@@ -30,6 +32,11 @@ public class DemoDialogGraphController : GraphControllerBase
     {
         return AssetPath;
     }
+
+    public override string GetNodeClassName()
+    {
+        return typeof(Graph).FullName;
+    }
     #endregion
 
     #region main method
@@ -37,6 +44,7 @@ public class DemoDialogGraphController : GraphControllerBase
     public override void FillMenu(GenericMenu menu, Vector2 mousePosition)
     {
         menu.AddItem(new GUIContent("Add Dialog"), false, (mousePos) => AddDialog((Vector2)mousePos), mousePosition);
+        menu.AddItem(new GUIContent("Add Choice"), false, (mousePos) => AddChoice((Vector2)mousePos), mousePosition);
         menu.AddItem(new GUIContent("Execute"), false, Excecute);
     }
     #endregion
@@ -48,9 +56,16 @@ public class DemoDialogGraphController : GraphControllerBase
         SetController(dialog);
     }
 
+    private void AddChoice(Vector2 mousePos)
+    {
+        DemoNodeChoice choice = NodesUtils.CreateNode<DemoNodeChoice>(graph, new Rect(mousePos.x, mousePos.y, Width, Height));
+        SetController(choice);
+    }
+
     private void Excecute()
     {
-        graph.Excecute();
+        
     }
+
     #endregion
 }

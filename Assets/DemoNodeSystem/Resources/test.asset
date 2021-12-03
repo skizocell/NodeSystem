@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5020721453222906418
+--- !u!114 &-3795638886234518689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14,14 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 500
-    y: 339
+    x: 18
+    y: 140
     width: 200
     height: 65
+  processStatus: 3
   data:
     text: 
     parameter: 
---- !u!114 &-2848253638173156919
+--- !u!114 &-2159089597715272236
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -31,18 +32,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: Welcome 1
+  m_Name: DemoNodeDialog
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 78
-    y: 80
+    x: 786
+    y: 93
     width: 200
     height: 65
+  processStatus: 3
   data:
-    text: Coucou
-    parameter: 1
---- !u!114 &-1496762563950817824
+    text: 
+    parameter: 
+--- !u!114 &-1859640423113044021
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -51,18 +53,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: Welcome 2
+  m_Script: {fileID: 11500000, guid: c7ef28746acd9f64995875492b94413d, type: 3}
+  m_Name: DemoNodeChoice
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 358
-    y: 94
+    x: 357
+    y: 142
     width: 200
-    height: 65
-  data:
-    text: Salut
-    parameter: 1
+    height: 141
+  processStatus: 3
+  choices:
+  - id: 0
+    label: Choix 1
+  - id: 1
+    label: Choix 2
+  - id: 2
+    label: Choix 3
+  - id: 3
+    label: Choix 4
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,13 +86,73 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeGraphControllerType: DemoDialogGraphController
   nodes:
-  - {fileID: -2848253638173156919}
-  - {fileID: -1496762563950817824}
-  - {fileID: -5020721453222906418}
+  - {fileID: -3795638886234518689}
+  - {fileID: -2159089597715272236}
+  - {fileID: 3879550369289514801}
+  - {fileID: 4715720634509291947}
+  - {fileID: -1859640423113044021}
   links:
   - linkType: 1
-    from: {fileID: -2848253638173156919}
-    to: {fileID: -1496762563950817824}
+    from: {fileID: -3795638886234518689}
+    to: {fileID: -1859640423113044021}
     fromPinId: Next
+    toPinId: T$Node
+  - linkType: 1
+    from: {fileID: -1859640423113044021}
+    to: {fileID: 3879550369289514801}
+    fromPinId: F$choices$1
     toPinId: Call
-  start: {fileID: 0}
+  - linkType: 1
+    from: {fileID: -1859640423113044021}
+    to: {fileID: 4715720634509291947}
+    fromPinId: F$choices$2
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -1859640423113044021}
+    to: {fileID: -2159089597715272236}
+    fromPinId: F$choices$0
+    toPinId: Call
+--- !u!114 &3879550369289514801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 799
+    y: 191
+    width: 200
+    height: 65
+  processStatus: 3
+  data:
+    text: 
+    parameter: 
+--- !u!114 &4715720634509291947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 804
+    y: 314
+    width: 200
+    height: 65
+  processStatus: 3
+  data:
+    text: 
+    parameter: 

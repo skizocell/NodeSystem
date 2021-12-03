@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using System.Reflection;
+using DSGame.GraphSystem;
 
-public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog, DemoDialogGraphController>
+public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog>
 {
     #region variable
     NodePinCallerController callerPin;
@@ -35,7 +36,7 @@ public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog, DemoD
     {
         EditorGUIUtility.labelWidth = 1;
 
-        DemoDialog dialog = node.GetData();
+        DemoDialog dialog = node.data;
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.Space(15);
