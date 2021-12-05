@@ -136,8 +136,9 @@ namespace DSGame.GraphSystem
                         }
                         if (indexFrom >= indexTo)
                         {
-                            graph.RemoveLink(link);
-                            EditorUtility.DisplayDialog("Node message", "You can not connect with a node behind you in the chain", "Ok");
+                            //TODO arrange that
+                            //graph.RemoveLink(link);
+                            //EditorUtility.DisplayDialog("Node message", "You can not connect with a node behind you in the chain", "Ok");
                         }
                     }
                     else

@@ -9,16 +9,10 @@ using System;
 [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.receiver }, label = "Choices:")]
 public class DemoNodeChoice : Node
 {
+    //todo review label and id management
     [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.caller }, label="label", id ="id" )]
-    public List<Choice> choices;
+    public List<Branch> choices; //Fork
 
-    [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.caller, NodePin.PinType.receiver }, label = "parameters")]
+    [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.getter, NodePin.PinType.setter }, label = "parameters")]
     string test = "dfdsf";
-}
-
-[Serializable]
-public class Choice
-{
-    public int id;
-    public string label; 
 }

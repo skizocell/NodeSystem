@@ -50,18 +50,18 @@ namespace DSGame.GraphSystem
             return links;
         }
 
-        public void Excecute()
+        public void Excecute(Action<Node> OnProcessNode)
         {
             Init();
 
             Node node = GetNextReadyNode();
             while (node != null)
             {
-                ProcessNode(node);
-                foreach (NodeLink l in GetNextsWaitingNodeLink(node).OrderBy(o => o.linkType))//order to make set before call see LinkType
+                ProcessNode(node, OnProcessNode);
+                foreach (NodeLink l in GetNextsReadyNodeLink(node).OrderBy(o => o.linkType))//order to make set before call see LinkType
                 {
                     ProcessLink(l);
-                    if (!IsWaitingLinkExistFor(l.to, false))
+                    if (!IsReadyLinkExistFor(l.to, false))
                     {
                         l.to.processStatus = ProcessStatus.Ready;
                     }
@@ -82,10 +82,10 @@ namespace DSGame.GraphSystem
             {
                 nodeList.Add(node);
                 node.processStatus = ProcessStatus.Done;
-                foreach (NodeLink l in GetNextsWaitingNodeLink(node).OrderBy(o => o.linkType))//order to make set before call see LinkType
+                foreach (NodeLink l in GetNextsReadyNodeLink(node).OrderBy(o => o.linkType))//order to make set before call see LinkType
                 {
                     l.processStatus = ProcessStatus.Done;
-                    if (!IsWaitingLinkExistFor(l.to, false))
+                    if (!IsReadyLinkExistFor(l.to, false))
                     {
                         l.to.processStatus = ProcessStatus.Ready;
                     }
@@ -109,8 +109,14 @@ namespace DSGame.GraphSystem
             }
             foreach (NodeLink l in links)
             {
-                l.processStatus = ProcessStatus.Waiting;
+                if(l.fromPinId.LastIndexOf("$")>1) l.processStatus = ProcessStatus.Waiting;
+                else l.processStatus = ProcessStatus.Ready;
             }
+        }
+
+        public List<Node> GetNextReadyNodes()
+        {
+            return nodes.Where(n => n.processStatus == ProcessStatus.Ready).ToList();
         }
 
         public Node GetNextReadyNode()
@@ -118,10 +124,45 @@ namespace DSGame.GraphSystem
             return nodes.Where(n => n.processStatus == ProcessStatus.Ready).FirstOrDefault();
         }
 
-        private void ProcessNode(Node n)
+        private void ProcessNode(Node n, Action<Node> OnProcessNode)
         {
             n.processStatus = ProcessStatus.Running;
+            OnProcessNode(n);
+
+            //List of waiting list for this node
+            foreach(NodeLink link in links.Where(l => l.from == n && l.processStatus == ProcessStatus.Waiting).ToList())
+            {
+                //F$(choices)$[0]
+                //TODO Improve that:
+                //Activate link where branch isOn...
+                if (link.fromPinId.LastIndexOf("$") > 1)
+                {
+                    int indexStart = 3;
+                    int indexEnd = link.fromPinId.LastIndexOf(")");
+                    string field = link.fromPinId.Substring(indexStart, indexEnd-indexStart);
+
+                    indexStart = link.fromPinId.IndexOf("[")+1;
+                    indexEnd = link.fromPinId.IndexOf("]");
+                    int id = int.Parse(link.fromPinId.Substring(indexStart, indexEnd - indexStart));
+
+                    FieldInfo fieldInfo = n.GetType().GetField(field, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    List<Branch> branches = (List<Branch>) fieldInfo.GetValue(n);
+                    if(branches.Where(b => b.id == id).SingleOrDefault().isOn)
+                    {
+                        link.processStatus = ProcessStatus.Ready;
+                    }
+                }
+            }
+            ResetPreviousLink(n);
             n.processStatus = ProcessStatus.Done;
+        }
+
+        private void ResetPreviousLink(Node n)
+        {
+            foreach(NodeLink link in links.Where(l => l.to == n))
+            {
+                link.processStatus = ProcessStatus.Waiting;
+            }
         }
 
         private void ProcessLink(NodeLink l)
@@ -129,14 +170,16 @@ namespace DSGame.GraphSystem
             l.processStatus = ProcessStatus.Running;
             switch (l.linkType)
             {
-                case NodeLink.LinkType.Call:
-                    MethodInfo method = l.to.GetType().GetMethod(l.toPinId);
-                    method.Invoke(l.to, null);
-                    break;
-                case NodeLink.LinkType.Set:
-                    MethodInfo setMethod = l.to.GetType().GetMethod(l.toPinId);
-                    MethodInfo getMethod = l.from.GetType().GetMethod(l.fromPinId);
-                    setMethod.Invoke(l.to, new object[] { getMethod.Invoke(l.from, null) });
+                //case NodeLink.LinkType.Call:
+                //    MethodInfo method = l.to.GetType().GetMethod(l.toPinId);
+                //    method.Invoke(l.to, null);
+                //    break;
+                //case NodeLink.LinkType.Set:
+                //    MethodInfo setMethod = l.to.GetType().GetMethod(l.toPinId);
+                //    MethodInfo getMethod = l.from.GetType().GetMethod(l.fromPinId);
+                //    setMethod.Invoke(l.to, new object[] { getMethod.Invoke(l.from, null) });
+                //    break;
+                default:
                     break;
             }
             l.processStatus = ProcessStatus.Done;
@@ -152,19 +195,19 @@ namespace DSGame.GraphSystem
             }
         }
 
-        private bool IsWaitingLinkExistFor(Node component, bool isCallerType)
+        private bool IsReadyLinkExistFor(Node component, bool isCallerType)
         {
             if (isCallerType)
-                return links.Where(l => l.from == component && l.processStatus == ProcessStatus.Waiting).Count() > 0;
+                return links.Where(l => l.from == component && l.processStatus == ProcessStatus.Ready).Count() > 0;
             else
             {
-                return links.Where(l => l.to == component && l.processStatus == ProcessStatus.Waiting).Count() > 0;
+                return links.Where(l => l.to == component && l.processStatus == ProcessStatus.Ready).Count() > 0;
             }
         }
 
-        private IEnumerable<NodeLink> GetNextsWaitingNodeLink(Node node)
+        private IEnumerable<NodeLink> GetNextsReadyNodeLink(Node node)
         {
-            return links.Where(l => l.processStatus == ProcessStatus.Waiting
+            return links.Where(l => l.processStatus == ProcessStatus.Ready
                                     && l.from.Equals(node));
         }
         #endregion

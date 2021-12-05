@@ -10,9 +10,17 @@ public class TestOutsideEditorData : MonoBehaviour
     void Start()
     {
         Graph testGraph = Resources.Load<Graph>("Test");
-        GraphExcecutor<DemoNodeGraph> executor = new GraphExcecutor<DemoNodeGraph>();
-        executor.Excecute();
-
+        testGraph.Excecute(
+            n =>
+            {
+                Debug.Log("Node " + n + "Go");
+                if (n is DemoNodeChoice)
+                {
+                    ((DemoNodeChoice)n).choices.ElementAt(0).isOn = true;
+                    Debug.Log("element 0 is on");
+                }
+            }
+        );
         
         //testGraph.Excecute();
 
