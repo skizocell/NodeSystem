@@ -9,6 +9,7 @@ public class TestOutsideEditorData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bool first = true;
         Graph testGraph = Resources.Load<Graph>("Test");
         testGraph.Excecute(
             n =>
@@ -16,8 +17,12 @@ public class TestOutsideEditorData : MonoBehaviour
                 Debug.Log("Node " + n + "Go");
                 if (n is DemoNodeChoice)
                 {
+                    if (first)
+                    {
+                        first = false;
+                    }
                     ((DemoNodeChoice)n).choices.ElementAt(0).isOn = true;
-                    Debug.Log("element 0 is on");
+                    ((DemoNodeChoice)n).conditional.isOn = true;
                 }
             }
         );

@@ -21,12 +21,17 @@ namespace DSGame.GraphSystem
         public string id { get; set; }
     }
 
+    public class BranchChange : Attribute
+    {
+        public string OnChangeCall { get; set; }
+    }
+
     [Serializable]
     public abstract class Node : ScriptableObject
     {
         public Rect rect;
-        //[NonSerialized]
-        public ProcessStatus processStatus;
+        [NonSerialized] public ProcessStatus processStatus;
+        [NonSerialized] public bool isDirty;
     }
 
     [Serializable]

@@ -124,7 +124,7 @@ namespace DSGame.GraphSystem
                         link.fromPinId = selectedEmiterPin.nodePinId;
                         link.toPinId = selectedReceiverPin.nodePinId;
                         link.linkType = selectedEmiterPin.generateLinkType;
-                        graph.AddLink(link);
+                        AddLink(link);
 
                         List<Node> excecList = graph.GetChainedList();
                         int i = 0, indexFrom = 0, indexTo = 0;
@@ -137,7 +137,7 @@ namespace DSGame.GraphSystem
                         if (indexFrom >= indexTo)
                         {
                             //TODO arrange that
-                            //graph.RemoveLink(link);
+                            //RemoveLink(link);
                             //EditorUtility.DisplayDialog("Node message", "You can not connect with a node behind you in the chain", "Ok");
                         }
                     }
@@ -243,7 +243,7 @@ namespace DSGame.GraphSystem
                 if (caller == null || called == null)
                 {
                     Debug.LogError("Remove corrupted node link ");
-                    graph.RemoveLink(link);
+                    RemoveLink(link);
                     break;
                 }
                 else
@@ -264,7 +264,7 @@ namespace DSGame.GraphSystem
 
                 if (Handles.Button((caller.GetRect().center + called.GetRect().center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
                 {
-                    graph.RemoveLink(link);
+                    RemoveLink(link);
                     break;
                 }
             }
@@ -301,6 +301,23 @@ namespace DSGame.GraphSystem
 
                 GUI.changed = true;
             }
+        }
+
+        private void AddLink(NodeLink link)
+        {
+            graph.AddLink(link);
+            ForceSave();
+        }
+
+        private void RemoveLink(NodeLink link)
+        {
+            graph.RemoveLink(link);
+            ForceSave();
+        }
+
+        private void ForceSave()
+        {
+            EditorUtility.SetDirty(graph);
         }
         #endregion
     }

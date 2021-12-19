@@ -47,20 +47,30 @@ namespace DSGame.GraphSystem
                 NodePin nodePinAttr = (NodePin)prop.GetCustomAttribute(typeof(NodePin));
                 if (nodePinAttr != null)
                 {
+                    //If its a list
                     if (typeof(IList).IsAssignableFrom(prop.FieldType))
                     {
-                        if (prop.GetValue(node) != null)
+                        Type[] typeParameters = prop.FieldType.GetGenericArguments();
+                        //If it's a list of Branch
+                        if (typeof(Branch).IsAssignableFrom(typeParameters[0]))
                         {
-                            foreach (var obj in (IEnumerable)prop.GetValue(node))
+                            //Get the fork and create pin
+                            IList<Branch> fork = (IList<Branch>)prop.GetValue(node);
+                            if ( fork != null)
                             {
-                                string id = ReflectionUtils.GetObjectFieldValue(nodePinAttr.id, obj);
-                                string label = ReflectionUtils.GetObjectFieldValue(nodePinAttr.label, obj);
-
-                                labels.Add(label); //add to the list to display
-                                CreatePins("(" + prop.Name + ")$[" + id + "]", obj, nodePinAttr.nodePinsType, yPos);
-                                yPos += offset;
+                                foreach (Branch branch in (IEnumerable)prop.GetValue(node))
+                                {
+                                    CreatePinFromBranch(yPos, prop.Name, nodePinAttr, branch);
+                                    yPos += offset;
+                                }
                             }
                         }
+                    }
+                    else if (typeof(Branch).IsAssignableFrom(prop.FieldType))
+                    {
+                        Branch branch = (Branch)prop.GetValue(node);
+                        CreatePinFromBranch(yPos, prop.Name, nodePinAttr, branch);
+                        yPos += offset;
                     }
                     else
                     {
@@ -69,7 +79,7 @@ namespace DSGame.GraphSystem
                             label = nodePinAttr.label;
                         
                         labels.Add(label);
-                        CreatePins(label, prop.GetValue(node), nodePinAttr.nodePinsType, yPos);
+                        CreatePins(prop.Name, prop.GetValue(node), nodePinAttr.nodePinsType, yPos);
                         yPos += offset;
                     }
                 }
@@ -77,6 +87,12 @@ namespace DSGame.GraphSystem
 
             //auto update height of the node
             node.rect.height = yPos;
+        }
+
+        private void CreatePinFromBranch(int yPos, String fieldName, NodePin nodePinAttr, Branch branch)
+        {
+            labels.Add(branch.label); //add to the list to display
+            CreatePins("(" + fieldName + ")$[" + branch.id + "]", branch, nodePinAttr.nodePinsType, yPos);
         }
 
         private void CreatePins(String origin, System.Object obj, NodePin.PinType[] pTypes, int yPosition)
@@ -100,6 +116,7 @@ namespace DSGame.GraphSystem
                     default:
                         break;
                 }
+                EditorUtility.SetDirty(graphController.GetGraph());
             }
         }
 

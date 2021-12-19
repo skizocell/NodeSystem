@@ -14,15 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 615
-    y: 246
+    x: 686
+    y: 74
     width: 200
     height: 65
-  processStatus: 3
   data:
     text: 
     parameter: 
---- !u!114 &-5750370141942402946
+--- !u!114 &-8004858284635475930
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -31,19 +30,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: DemoNodeDialog
+  m_Script: {fileID: 11500000, guid: c7ef28746acd9f64995875492b94413d, type: 3}
+  m_Name: DemoNodeChoice
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 865
-    y: 218
+    x: 562
+    y: 343
     width: 200
-    height: 65
-  processStatus: 3
-  data:
-    text: 
-    parameter: 
+    height: 101
+  choices:
+  - id: 0
+    label: xcvcxvcx
+    isOn: 1
+  conditional:
+    id: 0
+    label: jhgjhgj
+    isOn: 1
+  test: dfdsf
 --- !u!114 &-3795638886234518689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,33 +62,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 29
-    y: 137
+    x: 14
+    y: 161
     width: 200
     height: 65
-  processStatus: 3
-  data:
-    text: 
-    parameter: 
---- !u!114 &-2159089597715272236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: DemoNodeDialog
-  m_EditorClassIdentifier: 
-  rect:
-    serializedVersion: 2
-    x: 813
-    y: 29
-    width: 200
-    height: 65
-  processStatus: 0
   data:
     text: 
     parameter: 
@@ -102,11 +83,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 340
-    y: 211
+    x: 300
+    y: 176
     width: 200
-    height: 141
-  processStatus: 3
+    height: 161
   choices:
   - id: 0
     label: Choix 1
@@ -120,6 +100,11 @@ MonoBehaviour:
   - id: 3
     label: Choix 4
     isOn: 0
+  conditional:
+    id: 0
+    label: Conditional Branch
+    isOn: 1
+  test: coucou
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,17 +120,12 @@ MonoBehaviour:
   nodeGraphControllerType: DemoDialogGraphController
   nodes:
   - {fileID: -3795638886234518689}
-  - {fileID: -2159089597715272236}
-  - {fileID: 4715720634509291947}
   - {fileID: -1859640423113044021}
   - {fileID: -9142951530811796090}
-  - {fileID: -5750370141942402946}
+  - {fileID: -8004858284635475930}
+  - {fileID: 7864344902742247434}
+  - {fileID: 955640758446751512}
   links:
-  - linkType: 1
-    from: {fileID: -9142951530811796090}
-    to: {fileID: -5750370141942402946}
-    fromPinId: Next
-    toPinId: Call
   - linkType: 1
     from: {fileID: -3795638886234518689}
     to: {fileID: -1859640423113044021}
@@ -153,15 +133,25 @@ MonoBehaviour:
     toPinId: T$Node
   - linkType: 1
     from: {fileID: -1859640423113044021}
+    to: {fileID: -8004858284635475930}
+    fromPinId: F$(conditional)$[0]
+    toPinId: T$Node
+  - linkType: 1
+    from: {fileID: -1859640423113044021}
     to: {fileID: -9142951530811796090}
     fromPinId: F$(choices)$[0]
     toPinId: Call
   - linkType: 1
-    from: {fileID: -1859640423113044021}
-    to: {fileID: -2159089597715272236}
-    fromPinId: F$(choices)$[1]
+    from: {fileID: -8004858284635475930}
+    to: {fileID: 955640758446751512}
+    fromPinId: F$(choices)$[0]
     toPinId: Call
---- !u!114 &4715720634509291947
+  - linkType: 0
+    from: {fileID: -8004858284635475930}
+    to: {fileID: 955640758446751512}
+    fromPinId: F$test
+    toPinId: SetTest
+--- !u!114 &955640758446751512
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,11 +165,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 735
-    y: 382
+    x: 854
+    y: 348
     width: 200
     height: 65
-  processStatus: 3
+  data:
+    text: 
+    parameter: 
+--- !u!114 &7864344902742247434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 687
+    y: 181
+    width: 200
+    height: 65
   data:
     text: 
     parameter: 
