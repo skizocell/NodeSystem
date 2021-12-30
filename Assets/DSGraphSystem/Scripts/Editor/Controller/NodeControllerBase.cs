@@ -60,6 +60,8 @@ namespace DSGame.GraphSystem
         #region Extensible method
         protected abstract void DrawWindowsContent();
 
+        protected abstract void RefreshController();
+
         //Process Event for this node (selection, context menu and Drag the node)
         protected virtual void ProcessEvents(Event e)
         {
@@ -124,6 +126,12 @@ namespace DSGame.GraphSystem
         {
             this.nodeWindowsDrawId = nodeWindowsDrawId;
             ProcessEvents(e);
+            if (node.isEditorUpdateNeeded)
+            {
+                node.isEditorUpdateNeeded = false;
+                RefreshController();
+                EditorUtility.SetDirty(node);
+            }
             Draw();
         }
 

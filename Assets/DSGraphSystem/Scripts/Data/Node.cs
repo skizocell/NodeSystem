@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DSGame.GraphSystem;
 
 namespace DSGame.GraphSystem
 {
@@ -18,10 +15,9 @@ namespace DSGame.GraphSystem
         public enum PinType { caller, receiver, getter, setter }
         public PinType[] nodePinsType { get; set; }
         public string label { get; set; }
-        public string id { get; set; }
     }
 
-    public class BranchChange : Attribute
+    public class NodeFieldEditorChangeActionAttribute : PropertyAttribute
     {
         public string OnChangeCall { get; set; }
     }
@@ -31,7 +27,12 @@ namespace DSGame.GraphSystem
     {
         public Rect rect;
         [NonSerialized] public ProcessStatus processStatus;
-        [NonSerialized] public bool isDirty;
+        [NonSerialized] public bool isEditorUpdateNeeded;
+
+        public void EditorUpdate()
+        {
+            isEditorUpdateNeeded = true;
+        }
     }
 
     [Serializable]

@@ -16,11 +16,5 @@ public class DemoNodeDialogEditor : Editor
         EditorGUILayout.LabelField("Dialog: ", EditorStyles.boldLabel);
         dialog.text = EditorGUILayout.TextArea(dialog.text, GUILayout.MinHeight(200));
         dialog.parameter = EditorGUILayout.TextField("Parameter", dialog.parameter);
-
-        //SerializedProperty pinCaller = serializedObject.FindProperty("nextCall");
-        //EditorGUILayout.PropertyField(pinCaller);
-
-        //SerializedProperty pinCalled = serializedObject.FindProperty("process");
-        //EditorGUILayout.PropertyField(pinCalled);
     }
 }

@@ -126,20 +126,20 @@ namespace DSGame.GraphSystem
                         link.linkType = selectedEmiterPin.generateLinkType;
                         AddLink(link);
 
-                        List<Node> excecList = graph.GetChainedList();
-                        int i = 0, indexFrom = 0, indexTo = 0;
-                        foreach (Node node in excecList)
-                        {
-                            if (node == link.from) indexFrom = i;
-                            else if (node == link.to) indexTo = i;
-                            i++;
-                        }
-                        if (indexFrom >= indexTo)
-                        {
-                            //TODO arrange that
-                            //RemoveLink(link);
-                            //EditorUtility.DisplayDialog("Node message", "You can not connect with a node behind you in the chain", "Ok");
-                        }
+                        //List<Node> excecList = graph.GetChainedList();
+                        //int i = 0, indexFrom = 0, indexTo = 0;
+                        //foreach (Node node in excecList)
+                        //{
+                        //    if (node == link.from) indexFrom = i;
+                        //    else if (node == link.to) indexTo = i;
+                        //    i++;
+                        //}
+                        //if (indexFrom >= indexTo)
+                        //{
+                        //    //TODO arrange that
+                        //    //RemoveLink(link);
+                        //    //EditorUtility.DisplayDialog("Node message", "You can not connect with a node behind you in the chain", "Ok");
+                        //}
                     }
                     else
                     {

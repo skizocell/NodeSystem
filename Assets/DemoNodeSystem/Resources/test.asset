@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9142951530811796090
+--- !u!114 &-8512350062441663720
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 686
-    y: 74
+    x: 736
+    y: 191
     width: 200
     height: 65
   data:
-    text: 
+    text: 'Bienvenouti '
     parameter: 
---- !u!114 &-8004858284635475930
+--- !u!114 &-6549044222294898707
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30,24 +30,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7ef28746acd9f64995875492b94413d, type: 3}
-  m_Name: DemoNodeChoice
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 562
-    y: 343
+    x: 734
+    y: 412
     width: 200
-    height: 101
-  choices:
-  - id: 0
-    label: xcvcxvcx
-    isOn: 1
-  conditional:
-    id: 0
-    label: jhgjhgj
-    isOn: 1
-  test: dfdsf
+    height: 65
+  data:
+    text: Konnichiwa
+    parameter: 
 --- !u!114 &-3795638886234518689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,14 +56,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 14
-    y: 161
+    x: 36
+    y: 164
     width: 200
     height: 65
   data:
-    text: 
+    text: "Coucou, o\xF9 vas-t-on?"
+    parameter: test
+--- !u!114 &-3205896441279742862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 735
+    y: 75
+    width: 200
+    height: 65
+  data:
+    text: Bienvenue din ch nord
     parameter: 
---- !u!114 &-1859640423113044021
+--- !u!114 &-2394375754976213601
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -83,28 +98,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 300
-    y: 176
+    x: 346
+    y: 167
     width: 200
     height: 161
   choices:
   - id: 0
-    label: Choix 1
+    label: Allons au Nord
     isOn: 1
   - id: 1
-    label: Choix 2
+    label: Allons au Sud
     isOn: 0
   - id: 2
-    label: Choix 3
+    label: "Allons \xE0 l'Est"
     isOn: 0
   - id: 3
-    label: Choix 4
+    label: "Allons \xE0 l'Ouest"
     isOn: 0
   conditional:
     id: 0
-    label: Conditional Branch
-    isOn: 1
-  test: coucou
+    label: Conditional
+    isOn: 0
+  test: dfdsf
+--- !u!114 &-939849044188626453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 743
+    y: 300
+    width: 200
+    height: 65
+  data:
+    text: Welcome
+    parameter: 
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,76 +156,34 @@ MonoBehaviour:
   nodeGraphControllerType: DemoDialogGraphController
   nodes:
   - {fileID: -3795638886234518689}
-  - {fileID: -1859640423113044021}
-  - {fileID: -9142951530811796090}
-  - {fileID: -8004858284635475930}
-  - {fileID: 7864344902742247434}
-  - {fileID: 955640758446751512}
+  - {fileID: -2394375754976213601}
+  - {fileID: -3205896441279742862}
+  - {fileID: -8512350062441663720}
+  - {fileID: -939849044188626453}
+  - {fileID: -6549044222294898707}
   links:
   - linkType: 1
+    from: {fileID: -2394375754976213601}
+    to: {fileID: -3205896441279742862}
+    fromPinId: F$(choices)$[0]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -2394375754976213601}
+    to: {fileID: -8512350062441663720}
+    fromPinId: F$(choices)$[1]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -2394375754976213601}
+    to: {fileID: -939849044188626453}
+    fromPinId: F$(choices)$[2]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -2394375754976213601}
+    to: {fileID: -6549044222294898707}
+    fromPinId: F$(choices)$[3]
+    toPinId: Call
+  - linkType: 1
     from: {fileID: -3795638886234518689}
-    to: {fileID: -1859640423113044021}
+    to: {fileID: -2394375754976213601}
     fromPinId: Next
     toPinId: T$Node
-  - linkType: 1
-    from: {fileID: -1859640423113044021}
-    to: {fileID: -8004858284635475930}
-    fromPinId: F$(conditional)$[0]
-    toPinId: T$Node
-  - linkType: 1
-    from: {fileID: -1859640423113044021}
-    to: {fileID: -9142951530811796090}
-    fromPinId: F$(choices)$[0]
-    toPinId: Call
-  - linkType: 1
-    from: {fileID: -8004858284635475930}
-    to: {fileID: 955640758446751512}
-    fromPinId: F$(choices)$[0]
-    toPinId: Call
-  - linkType: 0
-    from: {fileID: -8004858284635475930}
-    to: {fileID: 955640758446751512}
-    fromPinId: F$test
-    toPinId: SetTest
---- !u!114 &955640758446751512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: DemoNodeDialog
-  m_EditorClassIdentifier: 
-  rect:
-    serializedVersion: 2
-    x: 854
-    y: 348
-    width: 200
-    height: 65
-  data:
-    text: 
-    parameter: 
---- !u!114 &7864344902742247434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: DemoNodeDialog
-  m_EditorClassIdentifier: 
-  rect:
-    serializedVersion: 2
-    x: 687
-    y: 181
-    width: 200
-    height: 65
-  data:
-    text: 
-    parameter: 

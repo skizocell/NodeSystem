@@ -128,26 +128,23 @@ namespace DSGame.GraphSystem
         }
 
         //Process Link mark it to Done, put value in another node...
-        //TODO GETER SETER
         private void ProcessLink(NodeLink l)
         {
             l.processStatus = ProcessStatus.Running;
             switch (l.linkType)
             {
-                //case NodeLink.LinkType.Call:
-                //    MethodInfo method = l.to.GetType().GetMethod(l.toPinId);
-                //    method.Invoke(l.to, null);
-                //    break;
                 case NodeLink.LinkType.Set:
                     int indexStart = 2;
-                    string fieldName = l.fromPinId.Substring(indexStart);
+                    string fromFieldName = l.fromPinId.Substring(indexStart);
+                    string toFieldName = l.toPinId.Substring(indexStart);
 
-                    FieldInfo toParam = l.to.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo fromParam = l.from.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    toParam.SetValue(l.to, fromParam.GetValue(l.from));
-                    //MethodInfo setMethod = l.to.GetType().GetMethod(l.toPinId);
-                    //MethodInfo getMethod = l.from.GetType().GetMethod(l.fromPinId);
-                    //setMethod.Invoke(l.to, new object[] { getMethod.Invoke(l.from, null) });
+                    FieldInfo toParam = l.to.GetType().GetField(toFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    FieldInfo fromParam = l.from.GetType().GetField(fromFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (toParam == null)
+                        Debug.LogError("No field named " + toFieldName + " found in " + l.to.GetType() + " Object");
+                    else if (fromParam == null)
+                        Debug.LogError("No field named " + fromFieldName + " found in " + l.from.GetType() + " Object");
+                    else toParam.SetValue(l.to, fromParam.GetValue(l.from));
                     break;
                 default:
                     break;
@@ -156,7 +153,6 @@ namespace DSGame.GraphSystem
         }
 
         //process Waiting link to become ready (activate conditional branch)
-        //TODO make possible to have one branch without list
         private void ProcessWaitingLinks(Node n)
         {
             //List of waiting list for this node

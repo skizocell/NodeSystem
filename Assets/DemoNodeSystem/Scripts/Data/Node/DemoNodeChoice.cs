@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using DSGame.GraphSystem;
 using System;
 
@@ -10,15 +8,18 @@ using System;
 [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.receiver }, label = "Choices:")]
 public class DemoNodeChoice : Node
 {
-    //TODO review label and id management
-    //MAKE a portal Node
-    [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.caller }, label="label", id ="id" )]
+    //TODO MAKE a portal Node
+    //TODO Possibility to choose if multi connection is possible
+    //TODO Zoom 
+    //TODO Improve the code
+    [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.caller })]
+    [NodeFieldEditorChangeAction(OnChangeCall = "EditorUpdate")]
     public List<Branch> choices; //Fork
 
     //look to make this more generic and call a CustomPropertyDrawer conditionaly on the pin and activate it where branch is used
     //when the modification is detected make sure the controller to redraw the component 
-    [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.caller }, label = "conditional branch", id = "id")]
-    [BranchChange(OnChangeCall = "")]
+    [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.caller })]
+    [NodeFieldEditorChangeAction(OnChangeCall = "EditorUpdate")]
     public Branch conditional;
 
     [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.getter, NodePin.PinType.setter }, label = "parameters")]

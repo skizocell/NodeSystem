@@ -22,8 +22,8 @@ public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog>
         //style.richText = true;
         callerPin = new NodePinCallerController("Next", this, false,21);
         calledPin = new NodePinCalledController("Call", this, true,21);
-        setterPin = new NodePinSetterController("GetTest", this, false, 58, typeof(String));
-        getterPin = new NodePinGetterController("SetTest", this, false, 37, typeof(String));
+        setterPin = new NodePinSetterController("F$test", this, false, 58, typeof(String));
+        getterPin = new NodePinGetterController("T$test", this, false, 37, typeof(String));
 
         AddNodePin(callerPin);
         AddNodePin(calledPin);
@@ -54,6 +54,11 @@ public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog>
         EditorGUILayout.EndHorizontal();
 
         EditorGUIUtility.labelWidth = 0;
+    }
+
+    protected override void RefreshController()
+    {
+        throw new NotImplementedException();
     }
     #endregion
 }

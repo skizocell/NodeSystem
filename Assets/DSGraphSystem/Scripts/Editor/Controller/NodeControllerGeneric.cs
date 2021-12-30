@@ -15,14 +15,12 @@ namespace DSGame.GraphSystem
             RefreshController();
         }
 
-        private void RefreshController()
+        protected override void RefreshController()
         {
             int yPos = 21;
             int offset = 20;
             labels = new List<string>();
             nodePins = new List<NodePinController>();
-
-            //https://www.pluralsight.com/guides/how-to-create-custom-attributes-csharp
 
             //Check NodeBox attribute color on Node class...
             NodeBox nodeBoxParam = (NodeBox)typeof(N).GetCustomAttribute(typeof(NodeBox), true);
@@ -108,10 +106,10 @@ namespace DSGame.GraphSystem
                         nodePins.Add(new NodePinCalledController("T$" + origin, this, true, yPosition));
                         break;
                     case NodePin.PinType.getter:
-                        nodePins.Add(new NodePinGetterController("T$" + origin, this, true, yPosition, obj.GetType()));
+                        nodePins.Add(new NodePinGetterController("T$" + origin, this, false, yPosition, obj.GetType()));
                         break;
                     case NodePin.PinType.setter:
-                        nodePins.Add(new NodePinSetterController("F$" + origin, this, true, yPosition, obj.GetType()));
+                        nodePins.Add(new NodePinSetterController("F$" + origin, this, false, yPosition, obj.GetType()));
                         break;
                     default:
                         break;
