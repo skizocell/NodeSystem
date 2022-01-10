@@ -10,7 +10,7 @@ using DSGame.GraphSystem;
 public class DemoNodeDialog : Node
 {
     [NodePin(nodePinsType = new NodePin.PinType[] { NodePin.PinType.getter, NodePin.PinType.setter }, label = "parameters")]
-    string test="dfdsf";
+    public string test="dfdsf";
 
     public DemoDialog data;
 

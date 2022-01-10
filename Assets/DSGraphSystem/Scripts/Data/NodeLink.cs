@@ -8,7 +8,7 @@ namespace DSGame.GraphSystem
     [Serializable]
     public class NodeLink
     {
-        public enum LinkType { Set, Call }
+        public enum LinkType { Set, Call, Portal }
         public LinkType linkType;
         public Node from;
         public Node to;

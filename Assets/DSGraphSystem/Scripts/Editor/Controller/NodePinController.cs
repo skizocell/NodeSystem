@@ -86,7 +86,20 @@ namespace DSGame.GraphSystem
 
         protected override bool IsCompatibleWith(NodePinController pin)
         {
-            return pin.generateLinkType == NodeLink.LinkType.Call;
+            return pin.generateLinkType == NodeLink.LinkType.Call || pin.generateLinkType == NodeLink.LinkType.Portal;
+        }
+    }
+
+    public class NodePinPortalOutController : NodePinCallerController
+    {
+        public NodePinPortalOutController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+        {
+            generateLinkType = NodeLink.LinkType.Portal;
+        }
+
+        protected override bool IsCompatibleWith(NodePinController pin)
+        {
+            return pin.generateLinkType == NodeLink.LinkType.Call || pin.generateLinkType == NodeLink.LinkType.Set;
         }
     }
 
@@ -117,8 +130,22 @@ namespace DSGame.GraphSystem
 
         protected override bool IsCompatibleWith(NodePinController pin)
         {
-            return pin.generateLinkType == NodeLink.LinkType.Call;
+            return pin.generateLinkType == NodeLink.LinkType.Call || pin.generateLinkType == NodeLink.LinkType.Portal;
         }
+    }
+
+    public class NodePinPortalInController : NodePinCalledController
+    {
+        public NodePinPortalInController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+        {
+            generateLinkType = NodeLink.LinkType.Portal;
+        }
+
+        protected override bool IsCompatibleWith(NodePinController pin)
+        {
+            return pin.generateLinkType == NodeLink.LinkType.Call || pin.generateLinkType == NodeLink.LinkType.Set;
+        }
+
     }
 
     public abstract class NodePinDataTransfertController : NodePinController
@@ -135,8 +162,9 @@ namespace DSGame.GraphSystem
             {
                 NodePinDataTransfertController other = (NodePinDataTransfertController)pin;
                 return other.generateLinkType == NodeLink.LinkType.Set
-                    && other.transfertDataType == this.transfertDataType;
+                        && other.transfertDataType == this.transfertDataType;
             }
+            else if (pin is NodePinPortalInController) return true;
             else return false;
         }
     }

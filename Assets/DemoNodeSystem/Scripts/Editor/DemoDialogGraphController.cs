@@ -43,6 +43,7 @@ public class DemoDialogGraphController : GraphControllerBase
     //Add menu option to main menu
     public override void FillMenu(GenericMenu menu, Vector2 mousePosition)
     {
+        base.FillMenu(menu, mousePosition);
         menu.AddItem(new GUIContent("Add Dialog"), false, (mousePos) => AddDialog((Vector2)mousePos), mousePosition);
         menu.AddItem(new GUIContent("Add Choice"), false, (mousePos) => AddChoice((Vector2)mousePos), mousePosition);
         menu.AddItem(new GUIContent("Execute"), false, Excecute);

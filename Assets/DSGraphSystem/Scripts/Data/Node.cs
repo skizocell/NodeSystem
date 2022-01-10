@@ -12,9 +12,14 @@ namespace DSGame.GraphSystem
 
     public class NodePin : Attribute
     {
-        public enum PinType { caller, receiver, getter, setter }
+        public enum PinType { caller, receiver, getter, setter, portalIn, portalOut }
         public PinType[] nodePinsType { get; set; }
         public string label { get; set; }
+    }
+
+    public class NodeDataShow : Attribute
+    {
+        public string data { get; set; }
     }
 
     public class NodeFieldEditorChangeActionAttribute : PropertyAttribute

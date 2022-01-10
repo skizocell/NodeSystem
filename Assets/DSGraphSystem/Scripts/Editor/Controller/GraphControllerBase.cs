@@ -36,8 +36,27 @@ namespace DSGame.GraphSystem
         }
         #endregion
 
+        private void AddPortalIn(Vector2 mousePos)
+        {
+            PortalIn portalIn = NodesUtils.CreateNode<PortalIn>(graph, new Rect(mousePos.x, mousePos.y, 200f, 65f));
+            portalIn.graph =graph;
+            SetController(portalIn);
+        }
+
+        private void AddPortalOut(Vector2 mousePos)
+        {
+            PortalOut portalOut = NodesUtils.CreateNode<PortalOut>(graph, new Rect(mousePos.x, mousePos.y, 200f, 65f));
+            SetController(portalOut);
+        }
+
         #region Extensible method
-        public abstract void FillMenu(GenericMenu menu, Vector2 mousePosition); // mouse position is used to know where to create something on screen if needed
+        // mouse position is used to know where to create something on screen if needed
+        public virtual void FillMenu(GenericMenu menu, Vector2 mousePosition)
+        {
+            menu.AddItem(new GUIContent("Portal Out"), false, (mousePos) => AddPortalOut((Vector2)mousePos), mousePosition);
+            menu.AddItem(new GUIContent("Prortal In"), false, (mousePos) => AddPortalIn((Vector2)mousePos), mousePosition);
+        }
+
         public virtual void Update(Event e)
         {
             DrawConnections();

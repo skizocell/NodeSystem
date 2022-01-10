@@ -17,6 +17,7 @@ namespace DSGame.GraphSystem
         #endregion
 
         #region private Variables
+        //float zoomScale = 1.0f;
         static NodesEditorWindow curWindow;
         GraphControllerBase curGraphController = null;
 
@@ -57,8 +58,13 @@ namespace DSGame.GraphSystem
                 curGraphController = NodesUtils.LoadGraphController(lastAssetOpen);
         }
 
+        //https://cdn2.hubspot.net/hubfs/2603837/CustomZoomableEditorWindowsinUnity3D-2.pdf?t=1504038261535
         private void OnGUI()
         {
+            //zoomScale = EditorGUILayout.Slider("zoom", zoomScale, 1.0f / 25.0f, 2.0f);
+            //float xFactor = Screen.width / 1024f * zoomScale;
+            //float yFactor = Screen.height / 768f * zoomScale;
+            //GUIUtility.ScaleAroundPivot(new Vector2(xFactor, yFactor), Vector2.zero);
             if (curGraphController == null) OpenAsset();
             DrawGrid(20, 0.2f, Color.gray);
             DrawGrid(100, 0.4f, Color.gray);
@@ -168,12 +174,13 @@ namespace DSGame.GraphSystem
             offset += drag * 0.5f;
             Vector3 newOffset = new Vector3(offset.x % gridSpacing, offset.y % gridSpacing, 0);
 
-            for (int i = 0; i < widthDivs; i++)
+            //Handles.DrawLine(new Vector3(-20, 10, 0) + newOffset, new Vector3(20, position.height, 0f) );
+            for (int i = -20; i < widthDivs; i++)
             {
                 Handles.DrawLine(new Vector3(gridSpacing * i, -gridSpacing, 0) + newOffset, new Vector3(gridSpacing * i, position.height, 0f) + newOffset);
             }
 
-            for (int j = 0; j < heightDivs; j++)
+            for (int j = -20; j < heightDivs; j++)
             {
                 Handles.DrawLine(new Vector3(-gridSpacing, gridSpacing * j, 0) + newOffset, new Vector3(position.width, gridSpacing * j, 0f) + newOffset);
             }

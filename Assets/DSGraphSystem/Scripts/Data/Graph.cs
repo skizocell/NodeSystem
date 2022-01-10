@@ -58,37 +58,9 @@ namespace DSGame.GraphSystem
             while (node != null)
             {
                 ProcessNode(node, OnProcessNode);
-
                 ProcessReadyLinks(node);
-
                 node = GetNextReadyNode();
             }
-        }
-
-        //For specific nodeGraph just used with ref link and purely has sequence 
-        //Or with system with a preprocess that can produce a chained link node in term...
-        //praticaly the Same than execute
-        [Obsolete("This method is no more adequate with the system logic")]
-        public List<Node> GetChainedList()
-        {
-            List<Node> nodeList = new List<Node>();
-            Init();
-            Node node = GetNextReadyNode();
-            while (node != null)
-            {
-                nodeList.Add(node);
-                node.processStatus = ProcessStatus.Done;
-                foreach (NodeLink l in GetNextsReadyNodeLink(node).OrderBy(o => o.linkType))//order to make set before call see LinkType
-                {
-                    l.processStatus = ProcessStatus.Done;
-                    if (!IsReadyLinkExistFor(l.to, false))
-                    {
-                        l.to.processStatus = ProcessStatus.Ready;
-                    }
-                }
-                node = GetNextReadyNode();
-            }
-            return nodeList;
         }
         #endregion
 
@@ -115,16 +87,59 @@ namespace DSGame.GraphSystem
         private void ProcessNode(Node n, Action<Node> OnProcessNode)
         {
             n.processStatus = ProcessStatus.Running;
-            //Give control on user code with current active Node
-            OnProcessNode(n);
 
-            //process link (get, set, call)
-            ProcessWaitingLinks(n);
+            if (n is PortalIn)
+            {
+                ProcessPortal((PortalIn)n);
+            }
+            else if (n is PortalOut==false)
+            {
+                //Give control on user code with current active Node
+                OnProcessNode(n);
 
-            //reset previous link for an other use
-            ResetPreviousLink(n);
+                //process link (get, set, call)
+                ProcessWaitingLinks(n);
 
-            n.processStatus = ProcessStatus.Done;
+                //reset previous link for an other use
+                ResetPreviousLink(n);
+
+                n.processStatus = ProcessStatus.Done;
+
+                
+            }
+        }
+
+        private void ProcessPortal(PortalIn portalIn)
+        {
+            //Create a node direct node link with portal link:
+            NodeLink inLink = links.Where(l => l.to.Equals(portalIn)).FirstOrDefault();
+            NodeLink outLink = links.Where(l => l.from.Equals(portalIn.portalOut)).FirstOrDefault();
+
+            if(inLink == null || outLink == null)
+            {
+                Debug.LogWarning("Portal not correctly set is ignored. One of them has no entry");
+            }
+
+            NodeLink finalLink = new NodeLink();
+            finalLink.from = inLink.from;
+            finalLink.to = outLink.to;
+            finalLink.fromPinId = inLink.fromPinId;
+            finalLink.toPinId = outLink.toPinId;
+            finalLink.linkType = inLink.linkType;
+            ProcessLink(finalLink);
+
+            //Make portal in processed
+            portalIn.processStatus = ProcessStatus.Done;
+            portalIn.portalOut.processStatus = ProcessStatus.Done;
+            inLink.processStatus = ProcessStatus.Done;
+            outLink.processStatus = ProcessStatus.Done;
+
+            ResetPreviousLink(portalIn);
+            //if target node have no link waiting, this node become ready
+            if (!IsReadyLinkExistFor(finalLink.to, false))
+            {
+                finalLink.to.processStatus = ProcessStatus.Ready;
+            }
         }
 
         //Process Link mark it to Done, put value in another node...
@@ -134,17 +149,21 @@ namespace DSGame.GraphSystem
             switch (l.linkType)
             {
                 case NodeLink.LinkType.Set:
-                    int indexStart = 2;
-                    string fromFieldName = l.fromPinId.Substring(indexStart);
-                    string toFieldName = l.toPinId.Substring(indexStart);
+                    if (l.to is PortalIn == false)
+                    {
+                        int indexStart = 2;
+                        string fromFieldName = l.fromPinId.Substring(indexStart);
+                        string toFieldName = l.toPinId.Substring(indexStart);
 
-                    FieldInfo toParam = l.to.GetType().GetField(toFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo fromParam = l.from.GetType().GetField(fromFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    if (toParam == null)
-                        Debug.LogError("No field named " + toFieldName + " found in " + l.to.GetType() + " Object");
-                    else if (fromParam == null)
-                        Debug.LogError("No field named " + fromFieldName + " found in " + l.from.GetType() + " Object");
-                    else toParam.SetValue(l.to, fromParam.GetValue(l.from));
+                        FieldInfo toParam = l.to.GetType().GetField(toFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                        FieldInfo fromParam = l.from.GetType().GetField(fromFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (toParam == null)
+                            Debug.LogError("No field named " + toFieldName + " found in " + l.to.GetType() + " Object");
+                        else if (fromParam == null)
+                            Debug.LogError("No field named " + fromFieldName + " found in " + l.from.GetType() + " Object");
+                        else
+                            toParam.SetValue(l.to, fromParam.GetValue(l.from));
+                    }
                     break;
                 default:
                     break;
@@ -204,6 +223,7 @@ namespace DSGame.GraphSystem
         //Process all ready link for a node
         private void ProcessReadyLinks(Node node)
         {
+            //Debug.Log("Process ready links node "  + node.name);
             //For each ready link on the node -> process it
             //order to make set before call (see LinkType)
             foreach (NodeLink l in GetNextsReadyNodeLink(node).OrderBy(o => o.linkType))

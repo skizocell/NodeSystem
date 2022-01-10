@@ -72,7 +72,8 @@ namespace DSGame.GraphSystem
                     }
                     else
                     {
-                        string label = prop.Name;
+                        String label = DataShowAttrProcess(prop, node);
+                        if(label==null) label = prop.Name;
                         if (nodePinAttr.label != null && nodePinAttr.label != String.Empty)
                             label = nodePinAttr.label;
                         
@@ -81,10 +82,39 @@ namespace DSGame.GraphSystem
                         yPos += offset;
                     }
                 }
+                else
+                {
+                    NodeDataShow nodeDataShowAttr = (NodeDataShow)prop.GetCustomAttribute(typeof(NodeDataShow));
+                    if (nodeDataShowAttr != null)
+                    {
+                        String label = DataShowAttrProcess(prop, node);
+                        labels.Add(label);
+                        yPos += offset;
+                    }
+                }
             }
 
             //auto update height of the node
             node.rect.height = yPos;
+        }
+
+        private String DataShowAttrProcess(FieldInfo prop, Node node)
+        {
+            NodeDataShow nodeDataShowAttr = (NodeDataShow)prop.GetCustomAttribute(typeof(NodeDataShow));
+            if (nodeDataShowAttr != null)
+            {
+                System.Object data = prop.GetValue(node);
+                return data==null ? null : data.ToString();
+            }
+            return null;
+        }
+
+        private void AddDataShowLabel(int yPos, System.Object field, NodeDataShow nodeDataShow)
+        {
+            if (field != null)
+            {
+                labels.Add(field.ToString());
+            }
         }
 
         private void CreatePinFromBranch(int yPos, String fieldName, NodePin nodePinAttr, Branch branch)
@@ -110,6 +140,12 @@ namespace DSGame.GraphSystem
                         break;
                     case NodePin.PinType.setter:
                         nodePins.Add(new NodePinSetterController("F$" + origin, this, false, yPosition, obj.GetType()));
+                        break;
+                    case NodePin.PinType.portalOut:
+                        nodePins.Add(new NodePinPortalOutController("F$" + origin, this, false, yPosition));
+                        break;
+                    case NodePin.PinType.portalIn:
+                        nodePins.Add(new NodePinPortalInController("T$" + origin, this, true, yPosition));
                         break;
                     default:
                         break;
