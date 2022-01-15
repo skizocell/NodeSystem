@@ -35,7 +35,7 @@ namespace DSGame.GraphSystem
             if (nodePinParam != null)
             {
                 labels.Add(nodePinParam.label);
-                CreatePins("Node", node, nodePinParam.nodePinsType, yPos);
+                CreatePins("Node", node, nodePinParam, yPos);
                 yPos += offset;
             }
 
@@ -78,7 +78,7 @@ namespace DSGame.GraphSystem
                             label = nodePinAttr.label;
                         
                         labels.Add(label);
-                        CreatePins(prop.Name, prop.GetValue(node), nodePinAttr.nodePinsType, yPos);
+                        CreatePins(prop.Name, prop.GetValue(node), nodePinAttr, yPos);
                         yPos += offset;
                     }
                 }
@@ -120,32 +120,36 @@ namespace DSGame.GraphSystem
         private void CreatePinFromBranch(int yPos, String fieldName, NodePin nodePinAttr, Branch branch)
         {
             labels.Add(branch.label); //add to the list to display
-            CreatePins("(" + fieldName + ")$[" + branch.id + "]", branch, nodePinAttr.nodePinsType, yPos);
+            CreatePins("(" + fieldName + ")$[" + branch.id + "]", branch, nodePinAttr, yPos);
         }
 
-        private void CreatePins(String origin, System.Object obj, NodePin.PinType[] pTypes, int yPosition)
+        private void CreatePins(String origin, System.Object obj, NodePin nodePinAttr, int yPosition)
         {
-            foreach (NodePin.PinType pType in pTypes)
+            for(int i = 0; i < nodePinAttr.nodePinsType.Length; i++)
+            //foreach (NodePin.PinType pType in nodePinAttr.)
             {
+                NodePin.PinType pType = nodePinAttr.nodePinsType[i];
+                Nullable<bool> acceptMany = null;
+                if (nodePinAttr.acceptMany != null && nodePinAttr.acceptMany.Length >= i) acceptMany = nodePinAttr.acceptMany[i];
                 switch (pType)
                 {
                     case NodePin.PinType.caller:
-                        nodePins.Add(new NodePinCallerController("F$" + origin, this, false, yPosition));
+                        nodePins.Add(new NodePinCallerController("F$" + origin, this, acceptMany, yPosition));
                         break;
                     case NodePin.PinType.receiver:
-                        nodePins.Add(new NodePinCalledController("T$" + origin, this, true, yPosition));
+                        nodePins.Add(new NodePinCalledController("T$" + origin, this, acceptMany, yPosition));
                         break;
                     case NodePin.PinType.getter:
-                        nodePins.Add(new NodePinGetterController("T$" + origin, this, false, yPosition, obj.GetType()));
+                        nodePins.Add(new NodePinGetterController("T$" + origin, this, acceptMany, yPosition, obj.GetType()));
                         break;
                     case NodePin.PinType.setter:
-                        nodePins.Add(new NodePinSetterController("F$" + origin, this, false, yPosition, obj.GetType()));
+                        nodePins.Add(new NodePinSetterController("F$" + origin, this, acceptMany, yPosition, obj.GetType()));
                         break;
                     case NodePin.PinType.portalOut:
-                        nodePins.Add(new NodePinPortalOutController("F$" + origin, this, false, yPosition));
+                        nodePins.Add(new NodePinPortalOutController("F$" + origin, this, acceptMany, yPosition));
                         break;
                     case NodePin.PinType.portalIn:
-                        nodePins.Add(new NodePinPortalInController("T$" + origin, this, true, yPosition));
+                        nodePins.Add(new NodePinPortalInController("T$" + origin, this, acceptMany, yPosition));
                         break;
                     default:
                         break;

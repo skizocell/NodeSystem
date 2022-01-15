@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 747
-    y: 44
+    x: 818
+    y: 34
     width: 200
     height: 65
   test: dfdsf
@@ -80,8 +80,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 528.0893
-    y: 324.15295
+    x: 529.0893
+    y: 328.15295
     width: 200
     height: 65
   test: dfdsf
@@ -102,8 +102,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 757
-    y: 413
+    x: 929
+    y: 394
     width: 200
     height: 65
   test: dfdsf
@@ -166,8 +166,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 523.0893
-    y: 44.15265
+    x: 498.0893
+    y: 12.152649
     width: 200
     height: 65
   test: dfdsf
@@ -188,8 +188,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 247.58667
-    y: 164.65302
+    x: 263.58667
+    y: 177.65302
     width: 200
     height: 181
   choices:
@@ -198,7 +198,7 @@ MonoBehaviour:
     isOn: 0
   - id: 1
     label: Allons au Sud
-    isOn: 1
+    isOn: 0
   - id: 2
     label: "Allons \xE0 l'Est"
     isOn: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
     isOn: 0
   - id: 4
     label: "Restons l\xE0"
-    isOn: 0
+    isOn: 1
   conditional:
     id: 0
     label: Conditional
@@ -262,11 +262,6 @@ MonoBehaviour:
   - {fileID: -3489568451164316926}
   - {fileID: 289423928784891331}
   links:
-  - linkType: 1
-    from: {fileID: -2394375754976213601}
-    to: {fileID: -3205896441279742862}
-    fromPinId: F$(choices)$[0]
-    toPinId: Call
   - linkType: 1
     from: {fileID: -2394375754976213601}
     to: {fileID: -8512350062441663720}
@@ -332,6 +327,21 @@ MonoBehaviour:
     to: {fileID: -3489568451164316926}
     fromPinId: Next
     toPinId: T$portalOut
+  - linkType: 0
+    from: {fileID: -6872355474738511175}
+    to: {fileID: -4255998455900882095}
+    fromPinId: F$test
+    toPinId: T$test
+  - linkType: 0
+    from: {fileID: -2394375754976213601}
+    to: {fileID: -6872355474738511175}
+    fromPinId: F$test
+    toPinId: T$test
+  - linkType: 1
+    from: {fileID: -2394375754976213601}
+    to: {fileID: -3205896441279742862}
+    fromPinId: F$(choices)$[0]
+    toPinId: Call
 --- !u!114 &79208440079699304
 MonoBehaviour:
   m_ObjectHideFlags: 0

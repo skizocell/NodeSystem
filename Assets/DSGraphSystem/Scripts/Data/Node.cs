@@ -14,6 +14,7 @@ namespace DSGame.GraphSystem
     {
         public enum PinType { caller, receiver, getter, setter, portalIn, portalOut }
         public PinType[] nodePinsType { get; set; }
+        public bool[] acceptMany { get; set; }
         public string label { get; set; }
     }
 

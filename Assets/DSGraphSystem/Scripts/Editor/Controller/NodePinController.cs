@@ -24,11 +24,11 @@ namespace DSGame.GraphSystem
         public bool canHaveManyLink;
         public bool isConnected;
 
-        public NodePinController(string id, NodeControllerComponent linkedNode, bool canHaveManyLink, float yOffset)
+        public NodePinController(string id, NodeControllerComponent linkedNode, Nullable<bool> canHaveManyLink, float yOffset)
         {
             this.nodePinId = id;
             this.linkedNodeConroller = linkedNode;
-            this.canHaveManyLink = canHaveManyLink;
+            this.canHaveManyLink = canHaveManyLink==true;
             this.yOffset = yOffset;
         }
 
@@ -66,10 +66,11 @@ namespace DSGame.GraphSystem
         private const float HEIGHT = 18;
         private const float XOFFSET = -4;
 
-        public NodePinCallerController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+        public NodePinCallerController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
         {
             type = NodePinType.Emiter;
             generateLinkType = NodeLink.LinkType.Call;
+            if (!canHaveManyLink.HasValue) canHaveManyLink = false;
         }
 
         protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
@@ -92,9 +93,10 @@ namespace DSGame.GraphSystem
 
     public class NodePinPortalOutController : NodePinCallerController
     {
-        public NodePinPortalOutController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+        public NodePinPortalOutController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
         {
             generateLinkType = NodeLink.LinkType.Portal;
+            if (!canHaveManyLink.HasValue) canHaveManyLink = false;
         }
 
         protected override bool IsCompatibleWith(NodePinController pin)
@@ -110,10 +112,11 @@ namespace DSGame.GraphSystem
         private const float HEIGHT = 18;
         private const float XOFFSET = -13;
 
-        public NodePinCalledController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+        public NodePinCalledController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
         {
             type = NodePinType.Receiver;
             generateLinkType = NodeLink.LinkType.Call;
+            if (!canHaveManyLink.HasValue) canHaveManyLink = true;
         }
 
         protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
@@ -136,9 +139,10 @@ namespace DSGame.GraphSystem
 
     public class NodePinPortalInController : NodePinCalledController
     {
-        public NodePinPortalInController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
+        public NodePinPortalInController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
         {
             generateLinkType = NodeLink.LinkType.Portal;
+            if (!canHaveManyLink.HasValue) canHaveManyLink = true;
         }
 
         protected override bool IsCompatibleWith(NodePinController pin)
@@ -151,7 +155,7 @@ namespace DSGame.GraphSystem
     public abstract class NodePinDataTransfertController : NodePinController
     {
         public Type transfertDataType;
-        public NodePinDataTransfertController(string id, NodeControllerComponent linkedNode, bool canHaveManyLink, float yOffset, Type transfertDataType) : base(id, linkedNode, canHaveManyLink, yOffset)
+        public NodePinDataTransfertController(string id, NodeControllerComponent linkedNode, Nullable<bool> canHaveManyLink, float yOffset, Type transfertDataType) : base(id, linkedNode, canHaveManyLink, yOffset)
         {
             this.transfertDataType = transfertDataType;
         }
@@ -176,10 +180,11 @@ namespace DSGame.GraphSystem
         private const float HEIGHT = 24;
         private const float XOFFSET = -9;
 
-        public NodePinSetterController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset, Type transfertDataType) : base(methodName, node, canHaveManyLink, yOffset, transfertDataType)
+        public NodePinSetterController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset, Type transfertDataType) : base(methodName, node, canHaveManyLink, yOffset, transfertDataType)
         {
             type = NodePinType.Emiter;
             generateLinkType = NodeLink.LinkType.Set;
+            if (!canHaveManyLink.HasValue) canHaveManyLink = false;
         }
 
         protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
@@ -202,10 +207,11 @@ namespace DSGame.GraphSystem
         private const float HEIGHT = 24;
         private const float XOFFSET = -14;
 
-        public NodePinGetterController(string methodName, NodeControllerComponent node, bool canHaveManyLink, float yOffset, Type transfertDataType) : base(methodName, node, canHaveManyLink, yOffset, transfertDataType)
+        public NodePinGetterController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset, Type transfertDataType) : base(methodName, node, canHaveManyLink, yOffset, transfertDataType)
         {
             generateLinkType = NodeLink.LinkType.Set;
             type = NodePinType.Receiver;
+            if (!canHaveManyLink.HasValue) canHaveManyLink = false;
         }
 
         protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
