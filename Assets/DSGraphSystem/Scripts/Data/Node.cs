@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace DSGame.GraphSystem
 {
+    #region Attribute
     public class NodeBox : Attribute
     {
         public enum StyleName { green, dark_blue, blue, turquoise, purple, red, orange }
@@ -27,6 +28,7 @@ namespace DSGame.GraphSystem
     {
         public string OnChangeCall { get; set; }
     }
+    #endregion
 
     [Serializable]
     public abstract class Node : ScriptableObject

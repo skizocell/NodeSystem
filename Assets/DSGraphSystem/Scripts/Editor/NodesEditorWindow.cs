@@ -22,7 +22,7 @@ namespace DSGame.GraphSystem
         GraphControllerBase curGraphController = null;
 
         [SerializeField]
-        string lastAssetOpen; //https://blog.unity.com/technology/unity-serialization
+        string lastAssetOpen;
         Vector2 offset;
         Vector2 drag;
         #endregion
@@ -32,7 +32,6 @@ namespace DSGame.GraphSystem
         [MenuItem("Node Editor/Launch Editor")]
         public static void InitNodeEditor()
         {
-            Debug.Log("InitNodeEditor");
             NodesEditorWindow.InitEditorWindow();
         }
 
@@ -77,11 +76,6 @@ namespace DSGame.GraphSystem
             if (GUI.changed) Repaint();
         }
         #endregion
-
-        #region Main methods
-
-        #endregion
-
 
         #region Utility Methods
         public static void InitEditorWindow()

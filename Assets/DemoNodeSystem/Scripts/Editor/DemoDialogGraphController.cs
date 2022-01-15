@@ -7,6 +7,7 @@ using System.Reflection;
 using System;
 using DSGame.GraphSystem;
 
+//Exemple custome Graph controller
 public class DemoDialogGraphController : GraphControllerBase
 {
     #region private Variables
@@ -14,7 +15,7 @@ public class DemoDialogGraphController : GraphControllerBase
     private const string Description = "A Graph to create a dialog between character";
     private const string AssetPath = "Assets/DemoNodeSystem/Resources/";
     private const float Width = 200f;
-    private const float Height = 65f;
+    private const float Height = 45f;
     #endregion
 
     #region MetaData info method

@@ -6,13 +6,12 @@ using System;
 using System.Reflection;
 using DSGame.GraphSystem;
 
+//Exemple custom Controller
 public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog>
 {
     #region variable
     NodePinCallerController callerPin;
     NodePinCalledController calledPin;
-    NodePinSetterController setterPin;
-    NodePinGetterController getterPin;
     #endregion
 
     public DemoDialogNodeController(DemoDialogGraphController graphController, DemoNodeDialog node) : base(graphController,node)
@@ -22,13 +21,9 @@ public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog>
         //style.richText = true;
         callerPin = new NodePinCallerController("Next", this, false,21);
         calledPin = new NodePinCalledController("Call", this, true,21);
-        setterPin = new NodePinSetterController("F$test", this, false, 58, typeof(String));
-        getterPin = new NodePinGetterController("T$test", this, false, 37, typeof(String));
 
         AddNodePin(callerPin);
         AddNodePin(calledPin);
-        AddNodePin(setterPin);
-        AddNodePin(getterPin);
     }
 
     #region Utility method
@@ -43,15 +38,15 @@ public class DemoDialogNodeController : NodeControllerBase<DemoNodeDialog>
         EditorGUILayout.LabelField(dialog.GetFirstLine());
         EditorGUILayout.EndHorizontal();
 
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Space(12);
-        EditorGUILayout.LabelField("Test Link input :", EditorStyles.boldLabel);
-        EditorGUILayout.EndHorizontal();
+        //EditorGUILayout.BeginHorizontal();
+        //GUILayout.Space(12);
+        //EditorGUILayout.LabelField("Test Link input :", EditorStyles.boldLabel);
+        //EditorGUILayout.EndHorizontal();
 
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Space(12);
-        EditorGUILayout.LabelField("Test Link output :", EditorStyles.boldLabel);
-        EditorGUILayout.EndHorizontal();
+        //EditorGUILayout.BeginHorizontal();
+        //GUILayout.Space(12);
+        //EditorGUILayout.LabelField("Test Link output :", EditorStyles.boldLabel);
+        //EditorGUILayout.EndHorizontal();
 
         EditorGUIUtility.labelWidth = 0;
     }

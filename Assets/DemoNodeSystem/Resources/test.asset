@@ -18,7 +18,6 @@ MonoBehaviour:
     y: 34
     width: 200
     height: 65
-  test: dfdsf
   data:
     text: Cha va biloutte
     parameter: 
@@ -40,7 +39,6 @@ MonoBehaviour:
     y: 139.15314
     width: 200
     height: 65
-  test: dfdsf
   data:
     text: 'Bienvenouti '
     parameter: 
@@ -58,11 +56,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 533
-    y: 414
+    x: 529
+    y: 429
     width: 200
     height: 65
-  test: dfdsf
   data:
     text: End
     parameter: 
@@ -84,7 +81,6 @@ MonoBehaviour:
     y: 328.15295
     width: 200
     height: 65
-  test: dfdsf
   data:
     text: Konnichiwa
     parameter: 
@@ -106,7 +102,6 @@ MonoBehaviour:
     y: 394
     width: 200
     height: 65
-  test: dfdsf
   data:
     text: Exit
     parameter: 
@@ -128,7 +123,6 @@ MonoBehaviour:
     y: 114.20648
     width: 200
     height: 65
-  test: dfdsf
   data:
     text: "Coucou, o\xF9 vas-t-on?"
     parameter: test
@@ -166,11 +160,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 498.0893
-    y: 12.152649
+    x: 519.0893
+    y: 26.152649
     width: 200
     height: 65
-  test: dfdsf
   data:
     text: Bienvenue din ch nord
     parameter: 
@@ -188,10 +181,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 263.58667
-    y: 177.65302
+    x: 260.58667
+    y: 176.65302
     width: 200
-    height: 181
+    height: 141
   choices:
   - id: 0
     label: Allons au Nord
@@ -203,16 +196,11 @@ MonoBehaviour:
     label: "Allons \xE0 l'Est"
     isOn: 0
   - id: 3
-    label: "Allons \xE0 l'Ouest"
+    label: "Allons \xE0 l'ouest"
     isOn: 0
   - id: 4
     label: "Restons l\xE0"
     isOn: 1
-  conditional:
-    id: 0
-    label: Conditional
-    isOn: 0
-  test: dfdsf
 --- !u!114 &-939849044188626453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,7 +219,6 @@ MonoBehaviour:
     y: 236.1529
     width: 200
     height: 65
-  test: dfdsf
   data:
     text: Welcome
     parameter: 
@@ -274,29 +261,14 @@ MonoBehaviour:
     toPinId: Call
   - linkType: 1
     from: {fileID: -2394375754976213601}
-    to: {fileID: -6549044222294898707}
-    fromPinId: F$(choices)$[3]
-    toPinId: Call
-  - linkType: 1
-    from: {fileID: -2394375754976213601}
     to: {fileID: -6872355474738511175}
     fromPinId: F$(choices)$[4]
     toPinId: Call
-  - linkType: 1
-    from: {fileID: -3795638886234518689}
-    to: {fileID: -2394375754976213601}
-    fromPinId: Next
-    toPinId: T$Node
   - linkType: 1
     from: {fileID: -3205896441279742862}
     to: {fileID: -9131093401125899523}
     fromPinId: Next
     toPinId: Call
-  - linkType: 2
-    from: {fileID: 79208440079699304}
-    to: {fileID: -2394375754976213601}
-    fromPinId: F$Node
-    toPinId: T$Node
   - linkType: 1
     from: {fileID: -6872355474738511175}
     to: {fileID: -4255998455900882095}
@@ -327,21 +299,26 @@ MonoBehaviour:
     to: {fileID: -3489568451164316926}
     fromPinId: Next
     toPinId: T$portalOut
-  - linkType: 0
-    from: {fileID: -6872355474738511175}
-    to: {fileID: -4255998455900882095}
-    fromPinId: F$test
-    toPinId: T$test
-  - linkType: 0
-    from: {fileID: -2394375754976213601}
-    to: {fileID: -6872355474738511175}
-    fromPinId: F$test
-    toPinId: T$test
   - linkType: 1
     from: {fileID: -2394375754976213601}
     to: {fileID: -3205896441279742862}
     fromPinId: F$(choices)$[0]
     toPinId: Call
+  - linkType: 1
+    from: {fileID: -2394375754976213601}
+    to: {fileID: -6549044222294898707}
+    fromPinId: F$(choices)$[3]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -3795638886234518689}
+    to: {fileID: -2394375754976213601}
+    fromPinId: Next
+    toPinId: T$Node
+  - linkType: 2
+    from: {fileID: 79208440079699304}
+    to: {fileID: -2394375754976213601}
+    fromPinId: F$Node
+    toPinId: T$Node
 --- !u!114 &79208440079699304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,11 +351,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 749
-    y: 140
+    x: 796
+    y: 133
     width: 200
     height: 65
-  test: dfdsf
   data:
     text: Que catso fi
     parameter: 

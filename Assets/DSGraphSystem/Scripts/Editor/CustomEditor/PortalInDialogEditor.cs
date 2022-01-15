@@ -6,6 +6,7 @@ using UnityEditor;
 
 namespace DSGame.GraphSystem
 {
+    //Custom inspector screen for portalin
     [CustomEditor(typeof(PortalIn))]
     public class PortalInDialogEditor : Editor
     {

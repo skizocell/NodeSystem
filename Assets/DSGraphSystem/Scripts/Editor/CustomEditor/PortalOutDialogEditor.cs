@@ -4,8 +4,9 @@ using UnityEditor;
 
 namespace DSGame.GraphSystem
 {
+    //Custom inspector screen for portalout
     [CustomEditor(typeof(PortalOut))]
-    public class DemoNodeDialogEditor : Editor
+    public class PortalOutDialogEditor : Editor
     {
         public override void OnInspectorGUI()
         {

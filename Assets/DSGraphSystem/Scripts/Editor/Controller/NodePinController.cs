@@ -6,6 +6,8 @@ using UnityEditor;
 
 namespace DSGame.GraphSystem
 {
+    //Controllers for different node pin
+
     public abstract class NodePinController
     {
         public enum NodePinType { Emiter, Receiver }
@@ -70,7 +72,7 @@ namespace DSGame.GraphSystem
         {
             type = NodePinType.Emiter;
             generateLinkType = NodeLink.LinkType.Call;
-            if (!canHaveManyLink.HasValue) canHaveManyLink = false;
+            if (!canHaveManyLink.HasValue) this.canHaveManyLink = false;
         }
 
         protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
@@ -96,7 +98,7 @@ namespace DSGame.GraphSystem
         public NodePinPortalOutController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
         {
             generateLinkType = NodeLink.LinkType.Portal;
-            if (!canHaveManyLink.HasValue) canHaveManyLink = false;
+            if (!canHaveManyLink.HasValue) this.canHaveManyLink = false;
         }
 
         protected override bool IsCompatibleWith(NodePinController pin)
@@ -116,7 +118,7 @@ namespace DSGame.GraphSystem
         {
             type = NodePinType.Receiver;
             generateLinkType = NodeLink.LinkType.Call;
-            if (!canHaveManyLink.HasValue) canHaveManyLink = true;
+            if (!canHaveManyLink.HasValue) this.canHaveManyLink = true;
         }
 
         protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
@@ -142,7 +144,7 @@ namespace DSGame.GraphSystem
         public NodePinPortalInController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
         {
             generateLinkType = NodeLink.LinkType.Portal;
-            if (!canHaveManyLink.HasValue) canHaveManyLink = true;
+            if (!canHaveManyLink.HasValue) this.canHaveManyLink = true;
         }
 
         protected override bool IsCompatibleWith(NodePinController pin)
@@ -184,7 +186,7 @@ namespace DSGame.GraphSystem
         {
             type = NodePinType.Emiter;
             generateLinkType = NodeLink.LinkType.Set;
-            if (!canHaveManyLink.HasValue) canHaveManyLink = false;
+            if (!canHaveManyLink.HasValue) this.canHaveManyLink = false;
         }
 
         protected override Rect GetButtonRect(Rect nodeRect, float yOffset)
@@ -211,7 +213,7 @@ namespace DSGame.GraphSystem
         {
             generateLinkType = NodeLink.LinkType.Set;
             type = NodePinType.Receiver;
-            if (!canHaveManyLink.HasValue) canHaveManyLink = false;
+            if (!canHaveManyLink.HasValue) this.canHaveManyLink = false;
         }
 
         protected override Rect GetButtonRect(Rect nodeRect, float yOffset)

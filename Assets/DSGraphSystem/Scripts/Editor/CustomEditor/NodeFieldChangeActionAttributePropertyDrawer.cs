@@ -6,6 +6,7 @@ using UnityEditor;
 
 namespace DSGame.GraphSystem
 {
+    //custom property drawer to force update graph when the field marked by annotation NodeFieldEditorChangeActionAttribute is updated
     [CustomPropertyDrawer(typeof(NodeFieldEditorChangeActionAttribute))]
     public class NodeFieldChangeActionAttributePropertyDrawer : PropertyDrawer
     {

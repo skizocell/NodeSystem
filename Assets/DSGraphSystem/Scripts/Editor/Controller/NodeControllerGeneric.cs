@@ -7,6 +7,7 @@ using System.Reflection;
 
 namespace DSGame.GraphSystem
 {
+    //Node controller Generic used by default. Node annotation controll is behavior
     public class NodeControllerGeneric<N> : NodeControllerBase<N> where N : Node
     {
         public List<string> labels;

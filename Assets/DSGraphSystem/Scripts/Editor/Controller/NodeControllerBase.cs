@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace DSGame.GraphSystem
 {
+    //node controler base system
     public abstract class NodeControllerBase<N> : NodeControllerComponent where N : Node
     {
         #region variable

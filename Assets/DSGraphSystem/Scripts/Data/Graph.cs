@@ -50,6 +50,7 @@ namespace DSGame.GraphSystem
             return links;
         }
 
+        //Read the graph and call your process function 
         public void Excecute(Action<Node> OnProcessNode)
         {
             Init();
@@ -72,11 +73,13 @@ namespace DSGame.GraphSystem
             //Get Node waitink for a link to process
             List<Node> waitingLinkComponents = links.Select(l => l.to).ToList();
 
+            //if node not waiting a link process -> ready else -> wait
             foreach (Node n in nodes)
             {
                 if (waitingLinkComponents.Contains(n)) n.processStatus = ProcessStatus.Waiting;
                 else n.processStatus = ProcessStatus.Ready;
             }
+            //init link to waiting
             foreach (NodeLink l in links)
             {
                 l.processStatus = ProcessStatus.Waiting;
@@ -87,7 +90,7 @@ namespace DSGame.GraphSystem
         private void ProcessNode(Node n, Action<Node> OnProcessNode)
         {
             n.processStatus = ProcessStatus.Running;
-
+            //if portal
             if (n is PortalIn)
             {
                 ProcessPortal((PortalIn)n);
@@ -104,14 +107,12 @@ namespace DSGame.GraphSystem
                 ResetPreviousLink(n);
 
                 n.processStatus = ProcessStatus.Done;
-
-                
             }
         }
 
         private void ProcessPortal(PortalIn portalIn)
         {
-            //Create a node direct node link with portal link:
+            //Create a direct node link with portal link:
             NodeLink inLink = links.Where(l => l.to.Equals(portalIn)).FirstOrDefault();
             NodeLink outLink = links.Where(l => l.from.Equals(portalIn.portalOut)).FirstOrDefault();
 
@@ -120,6 +121,7 @@ namespace DSGame.GraphSystem
                 Debug.LogWarning("Portal not correctly set is ignored. One of them has no entry");
             }
 
+            //Create real ling between node
             NodeLink finalLink = new NodeLink();
             finalLink.from = inLink.from;
             finalLink.to = outLink.to;
@@ -134,7 +136,9 @@ namespace DSGame.GraphSystem
             inLink.processStatus = ProcessStatus.Done;
             outLink.processStatus = ProcessStatus.Done;
 
+            //reset to reuse if a loop is occured
             ResetPreviousLink(portalIn);
+
             //if target node have no link waiting, this node become ready
             if (!IsReadyLinkExistFor(finalLink.to, false))
             {
@@ -148,6 +152,7 @@ namespace DSGame.GraphSystem
             l.processStatus = ProcessStatus.Running;
             switch (l.linkType)
             {
+                //set value to another link
                 case NodeLink.LinkType.Set:
                     if (l.to is PortalIn == false)
                     {
@@ -191,6 +196,7 @@ namespace DSGame.GraphSystem
                     indexEnd = link.fromPinId.IndexOf("]");
                     int branchIndex = int.Parse(link.fromPinId.Substring(indexStart, indexEnd - indexStart));
 
+                    //test if it's a list of branch
                     FieldInfo fieldInfo = n.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                     if (typeof(IList).IsAssignableFrom(fieldInfo.FieldType))
                     {
@@ -203,6 +209,7 @@ namespace DSGame.GraphSystem
                             link.processStatus = ProcessStatus.Ready;
                         }
                     }
+                    //if it's a solo branch
                     else if (typeof(Branch).IsAssignableFrom(fieldInfo.FieldType))
                     {
                         Branch branch = (Branch)fieldInfo.GetValue(n);
@@ -223,7 +230,6 @@ namespace DSGame.GraphSystem
         //Process all ready link for a node
         private void ProcessReadyLinks(Node node)
         {
-            //Debug.Log("Process ready links node "  + node.name);
             //For each ready link on the node -> process it
             //order to make set before call (see LinkType)
             foreach (NodeLink l in GetNextsReadyNodeLink(node).OrderBy(o => o.linkType))

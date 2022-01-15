@@ -25,7 +25,7 @@ public class TestOutsideEditorData : MonoBehaviour
                 if (n is DemoNodeDialog)
                 {
                     DemoNodeDialog dialog = (DemoNodeDialog)n;
-                    Debug.Log(dialog.data.text + " test = " + dialog.test);
+                    Debug.Log(dialog.data.text);
                 }
 
                 else if (n is DemoNodeChoice)

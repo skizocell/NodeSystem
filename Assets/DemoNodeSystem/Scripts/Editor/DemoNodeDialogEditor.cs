@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+//Exemple custom node inspector
 [CustomEditor(typeof(DemoNodeDialog))]
 public class DemoNodeDialogEditor : Editor
 {

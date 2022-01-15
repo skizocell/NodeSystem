@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DSGame.GraphSystem
 {
+    //Predefined style to use with attribute NodeBox.StyleName.
     public class DefaultNodeControllerStyles
     {
         static DefaultNodeControllerStyles instance;

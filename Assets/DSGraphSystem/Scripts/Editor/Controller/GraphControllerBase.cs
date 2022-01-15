@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Reflection;
 
+//Graph controller base system
 namespace DSGame.GraphSystem
 {
     [Serializable]
@@ -35,19 +36,6 @@ namespace DSGame.GraphSystem
             return this.GetType().ToString();
         }
         #endregion
-
-        private void AddPortalIn(Vector2 mousePos)
-        {
-            PortalIn portalIn = NodesUtils.CreateNode<PortalIn>(graph, new Rect(mousePos.x, mousePos.y, 200f, 65f));
-            portalIn.graph =graph;
-            SetController(portalIn);
-        }
-
-        private void AddPortalOut(Vector2 mousePos)
-        {
-            PortalOut portalOut = NodesUtils.CreateNode<PortalOut>(graph, new Rect(mousePos.x, mousePos.y, 200f, 65f));
-            SetController(portalOut);
-        }
 
         #region Extensible method
         // mouse position is used to know where to create something on screen if needed
@@ -210,8 +198,19 @@ namespace DSGame.GraphSystem
         #endregion
 
         #region utility method
-        //private NodePinController selectedEmiterPin;
-        //private NodePinController selectedReceiverPin;
+        private void AddPortalIn(Vector2 mousePos)
+        {
+            PortalIn portalIn = NodesUtils.CreateNode<PortalIn>(graph, new Rect(mousePos.x, mousePos.y, 200f, 65f));
+            portalIn.graph = graph;
+            SetController(portalIn);
+        }
+
+        private void AddPortalOut(Vector2 mousePos)
+        {
+            PortalOut portalOut = NodesUtils.CreateNode<PortalOut>(graph, new Rect(mousePos.x, mousePos.y, 200f, 65f));
+            SetController(portalOut);
+        }
+
         private bool IsInNodeConnectionMode()
         {
             return (selectedEmiterPin != null && selectedReceiverPin == null) || (selectedReceiverPin != null && selectedEmiterPin == null);
