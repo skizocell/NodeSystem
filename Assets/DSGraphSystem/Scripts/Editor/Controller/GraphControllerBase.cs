@@ -6,6 +6,10 @@ using UnityEditor;
 using UnityEngine;
 using System.Reflection;
 
+//new way to do that:
+//using UnityEditor.Experimental.GraphView;
+//look here https://www.youtube.com/watch?v=7KHGH0fPL84
+
 //Graph controller base system
 namespace DSGame.GraphSystem
 {
