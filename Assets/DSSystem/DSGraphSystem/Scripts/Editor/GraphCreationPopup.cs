@@ -16,7 +16,7 @@ namespace DSGame.GraphSystem
         #region private Variables
         static GraphCreationPopup curPopup;
         string wantedName = "Enter a name...";
-        private int selectedTypeInex = 0;
+        private int selectedTypeIndex = 0;
         String[] controllersNames;
         GraphControllerBase[] controllers;
         Action<GraphControllerBase> callBack;
@@ -49,7 +49,7 @@ namespace DSGame.GraphSystem
                     controllers[i] = graphTypes[graphName];
                     i++;
                 }
-                selectedTypeInex = 0;
+                selectedTypeIndex = 0;
             }
         }
 
@@ -65,24 +65,24 @@ namespace DSGame.GraphSystem
                 EditorGUILayout.LabelField("Create New Graph:", EditorStyles.boldLabel);
                 wantedName = EditorGUILayout.TextField("Enter Name:", wantedName);
                 EditorGUILayout.LabelField("Graph Type:", EditorStyles.boldLabel);
-                selectedTypeInex = EditorGUILayout.Popup(selectedTypeInex, controllersNames);
+                selectedTypeIndex = EditorGUILayout.Popup(selectedTypeIndex, controllersNames);
+                EditorGUILayout.LabelField("Save Folder = " + controllers[selectedTypeIndex].GetGraphSaveFolderPath());
                 GUILayout.Space(20);
-
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("Create Graph", GUILayout.Height(40)))
                 {
                     if (!string.IsNullOrEmpty(wantedName) && wantedName != "Enter a name...")
                     {
-                        GraphControllerBase controller = controllers[selectedTypeInex];
-                        string newAssetFullPath = controller.GetAssetPath() + wantedName + ".asset";
+                        GraphControllerBase controller = controllers[selectedTypeIndex];
+                        string newAssetFullPath = controller.GetGraphSaveFolderPath() + wantedName + ".asset";
 
                         //Search asset with name like wanted Name -> where assetPath == newAssetfull path
-                        bool isAlreadyExist = AssetDatabase.FindAssets(wantedName, new[] { controller.GetAssetPath() })
+                        bool isAlreadyExist = AssetDatabase.FindAssets(wantedName, new[] { controller.GetGraphSaveFolderPath() })
                                                 .Where(s => AssetDatabase.GUIDToAssetPath(s).Equals(newAssetFullPath))
                                                 .Count() > 0;
                         if (isAlreadyExist)
                         {
-                            EditorUtility.DisplayDialog("Info", "The name (" + wantedName + ") already exist in " + controllers[selectedTypeInex].GetAssetPath(), "Ok");
+                            EditorUtility.DisplayDialog("Info", "The name (" + wantedName + ") already exist in " + controllers[selectedTypeIndex].GetGraphSaveFolderPath(), "Ok");
                         }
                         else
                         {
@@ -94,6 +94,12 @@ namespace DSGame.GraphSystem
                     {
                         EditorUtility.DisplayDialog("Node message", "Please enter a valid Graph Name", "Ok");
                     }
+                }
+                if (GUILayout.Button("Change Save Folder", GUILayout.Height(40)))
+                {
+                    String path = EditorUtility.OpenFolderPanel("Load Graph", controllers[selectedTypeIndex].GetGraphSaveFolderPath(), "");
+                    path = path.Substring(path.IndexOf("Assets")) + "/";
+                    controllers[selectedTypeIndex].SetGraphSaveFolderPath(path);
                 }
                 if (GUILayout.Button("Cancel", GUILayout.Height(40)))
                 {

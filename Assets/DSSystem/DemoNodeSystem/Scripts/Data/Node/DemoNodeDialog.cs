@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DSGame.GraphSystem;
 
-//Show Node with a custom controller
+//Show Node with a custom controller.
 [Serializable]
 public class DemoNodeDialog : Node
 {

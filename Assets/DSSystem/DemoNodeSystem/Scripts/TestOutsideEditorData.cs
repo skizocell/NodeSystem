@@ -10,18 +10,9 @@ public class TestOutsideEditorData : MonoBehaviour
     void Start()
     {
         Graph testGraph = Resources.Load<Graph>("Test");
-        int i = 0;
         testGraph.Excecute(
             n =>
             {
-                if (i > 10)
-                {
-                    Debug.Log("Stop");
-                    #if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-                    #endif
-                    throw new System.Exception("Stop");
-                }
                 if (n is DemoNodeDialog)
                 {
                     DemoNodeDialog dialog = (DemoNodeDialog)n;
@@ -31,10 +22,17 @@ public class TestOutsideEditorData : MonoBehaviour
                 else if (n is DemoNodeChoice)
                 {
                     DemoNodeChoice choice = (DemoNodeChoice)n;
+                    int onIndex = -1;
+                    for (int i=0; i<choice.choices.Count; i++)
+                    {
+                        if (choice.choices[i].isOn) onIndex = i;
+                        choice.choices[i].isOn = false;
+                    }
+                    onIndex++;
+                    if (onIndex < choice.choices.Count) choice.choices[onIndex].isOn = true;
+                    Debug.Log(choice.choices[onIndex].label);
 
-                    Debug.Log(choice.choices.Where(c => c.isOn).Single().label);
                 }
-                i++;
 
             }
             

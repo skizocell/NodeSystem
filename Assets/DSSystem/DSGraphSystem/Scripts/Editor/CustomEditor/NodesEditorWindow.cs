@@ -17,7 +17,7 @@ namespace DSGame.GraphSystem
         #endregion
 
         #region private Variables
-        float zoomScale = 0.5f;
+        float zoomScale = 1f;
         static NodesEditorWindow curWindow;
         GraphControllerBase curGraphController = null;
 
@@ -88,9 +88,10 @@ namespace DSGame.GraphSystem
         private void InitGraphController(GraphControllerBase controller)
         {
             curGraphController = controller;
-            lastAssetOpen = controller.GetAssetPath();
+            lastAssetOpen = AssetDatabase.GetAssetPath(controller.GetGraph().GetInstanceID());
         }
 
+        
         private void ProcessEvents(Event e)
         {
             drag = Vector2.zero;
@@ -132,7 +133,7 @@ namespace DSGame.GraphSystem
                     break;
 
                 case EventType.MouseDrag:
-                    if (e.button == 0)
+                    if (e.button == 2)
                     {
                         OnDrag(e.delta);
                     }
@@ -159,7 +160,7 @@ namespace DSGame.GraphSystem
         private void OnLoadGraph()
         {
             curGraphController = NodesUtils.LoadGraphController();
-            lastAssetOpen = NodesUtils.GetAssetPath(curGraphController.GetGraph());
+            if(curGraphController != null) lastAssetOpen = NodesUtils.GetAssetPath(curGraphController.GetGraph());
         }
 
         private void OnUnloadGraph()

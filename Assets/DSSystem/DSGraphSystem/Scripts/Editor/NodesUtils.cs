@@ -12,7 +12,7 @@ namespace DSGame.GraphSystem
         #region main method
         public static Graph CreateGraph(string assetFilePath, GraphControllerBase nodeController)
         {
-            Graph graph = (Graph)ScriptableObject.CreateInstance(nodeController.GetNodeClassName());
+            Graph graph = (Graph)ScriptableObject.CreateInstance(nodeController.GetGraphClassName());
             graph.nodeGraphControllerType = nodeController.GetNodeGraphControllerType();
             AssetDatabase.CreateAsset(graph, assetFilePath);
             AssetDatabase.SaveAssets();
@@ -113,6 +113,7 @@ namespace DSGame.GraphSystem
         private static Graph LoadGraph()
         {
             string graphPath = EditorUtility.OpenFilePanel("Load Graph", Application.dataPath + "/NodeEditor/Database", "");
+            if (graphPath == null || graphPath == "") return null;
             int appPathLen = Application.dataPath.Length;
             string finalPath = graphPath.Substring(appPathLen - 6);
             return LoadGraph(finalPath);
@@ -123,10 +124,6 @@ namespace DSGame.GraphSystem
         {
             Graph curGraph = null;
             curGraph = (Graph)AssetDatabase.LoadAssetAtPath(graphPath, typeof(Graph));
-            if (curGraph == null)
-            {
-                Debug.Log("Unable to load selected graph");
-            }
             return curGraph;
         }
 

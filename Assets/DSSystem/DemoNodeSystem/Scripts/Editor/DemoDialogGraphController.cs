@@ -13,7 +13,7 @@ public class DemoDialogGraphController : GraphControllerBase
     #region private Variables
     private const string Name = "Demo Dialog Graph";
     private const string Description = "A Graph to create a dialog between character";
-    private const string AssetPath = "Assets/DemoNodeSystem/Resources/";
+    private const string DefaultSaveFolderPath = "Assets/DSSystem/DemoNodeSystem/Resources/";
     private const float Width = 200f;
     private const float Height = 45f;
     #endregion
@@ -29,14 +29,14 @@ public class DemoDialogGraphController : GraphControllerBase
         return Description;
     }
 
-    public override string GetAssetPath()
-    {
-        return AssetPath;
-    }
-
-    public override string GetNodeClassName()
+    public override string GetGraphClassName()
     {
         return typeof(Graph).FullName;
+    }
+
+    public override string GetDefaultSaveFolderPath()
+    {
+        return DefaultSaveFolderPath;
     }
     #endregion
 
@@ -68,6 +68,5 @@ public class DemoDialogGraphController : GraphControllerBase
     {
         
     }
-
     #endregion
 }

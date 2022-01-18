@@ -1,0 +1,209 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8481328135715668573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 566
+    y: 51
+    width: 200
+    height: 45
+  data:
+    text: Allez ici
+    parameter: 
+--- !u!114 &-6122040494555025703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7ef28746acd9f64995875492b94413d, type: 3}
+  m_Name: DemoNodeChoice
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 301
+    y: 90
+    width: 200
+    height: 101
+  choices:
+  - id: 0
+    label: Choix 1
+    isOn: 0
+  - id: 1
+    label: Choix 2
+    isOn: 0
+  - id: 2
+    label: Choix 3
+    isOn: 1
+--- !u!114 &-904669508094689265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469cb4ac8ca1d314eb688fe055b00ba2, type: 3}
+  m_Name: PortalChoix1
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 28
+    y: 156
+    width: 200
+    height: 41
+--- !u!114 &-841173467862365546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39b3cabab6fdf9499916477a177ab9c, type: 3}
+  m_Name: PortalIn
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 864
+    y: 103
+    width: 200
+    height: 41
+  graph: {fileID: 11400000}
+  portalOut: {fileID: -904669508094689265}
+--- !u!114 &-530622093082127946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 573
+    y: 130
+    width: 200
+    height: 45
+  data:
+    text: "Allez l\xE0"
+    parameter: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb68d9971a67b7c42a9a7004053a3ea5, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  nodeGraphControllerType: DemoDialogGraphController
+  nodes:
+  - {fileID: 3324754225898362167}
+  - {fileID: -6122040494555025703}
+  - {fileID: -904669508094689265}
+  - {fileID: -8481328135715668573}
+  - {fileID: -530622093082127946}
+  - {fileID: 8492548776832912384}
+  - {fileID: -841173467862365546}
+  links:
+  - linkType: 1
+    from: {fileID: 3324754225898362167}
+    to: {fileID: -6122040494555025703}
+    fromPinId: Next
+    toPinId: T$Node
+  - linkType: 2
+    from: {fileID: -904669508094689265}
+    to: {fileID: -6122040494555025703}
+    fromPinId: F$Node
+    toPinId: T$Node
+  - linkType: 1
+    from: {fileID: -6122040494555025703}
+    to: {fileID: -8481328135715668573}
+    fromPinId: F$(choices)$[0]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -6122040494555025703}
+    to: {fileID: -530622093082127946}
+    fromPinId: F$(choices)$[1]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -6122040494555025703}
+    to: {fileID: 8492548776832912384}
+    fromPinId: F$(choices)$[2]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -8481328135715668573}
+    to: {fileID: -841173467862365546}
+    fromPinId: Next
+    toPinId: T$portalOut
+  - linkType: 1
+    from: {fileID: -530622093082127946}
+    to: {fileID: -841173467862365546}
+    fromPinId: Next
+    toPinId: T$portalOut
+--- !u!114 &3324754225898362167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 26
+    y: 68
+    width: 200
+    height: 45
+  data:
+    text: Coucou
+    parameter: 
+--- !u!114 &8492548776832912384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 568
+    y: 227
+    width: 200
+    height: 45
+  data:
+    text: Au revoir
+    parameter: 

@@ -64,7 +64,7 @@ namespace DSGame.GraphSystem
         protected abstract void RefreshController();
 
         //Process Event for this node (selection, context menu and Drag the node)
-        protected virtual void ProcessEvents(Event e)
+        protected virtual void ProcessEvents(Event e, bool candrag)
         {
             switch (e.type)
             {
@@ -86,9 +86,9 @@ namespace DSGame.GraphSystem
                     break;
                 case EventType.MouseDrag:
                     //Drag the selected node on mouse position 
-                    if (e.button == 0 && isSelected)
+                    if (candrag && e.button == 0 && isSelected && !e.control)
                     {
-                        Drag(e.delta);
+                        graphController.DragSelectedNode(e.delta);
                         e.Use();
                     }
                     break;
@@ -123,10 +123,10 @@ namespace DSGame.GraphSystem
         }
 
         //Update the node in screen. Triggered by the Graph Controller
-        public override void Update(int nodeWindowsDrawId, Event e)
+        public override void Update(int nodeWindowsDrawId, Event e, bool canDrag)
         {
             this.nodeWindowsDrawId = nodeWindowsDrawId;
-            ProcessEvents(e);
+            ProcessEvents(e, canDrag);
             if (node.isEditorUpdateNeeded)
             {
                 node.isEditorUpdateNeeded = false;
