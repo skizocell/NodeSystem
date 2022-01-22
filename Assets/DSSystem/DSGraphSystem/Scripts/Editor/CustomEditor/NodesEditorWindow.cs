@@ -1,25 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 namespace DSGame.GraphSystem
 {
-    //Selection.activeObject = this; pour sélectioner l'objet adéquat dans l'inspecteur
-    //On peut aussi créer des custom inspector si on veut un formulaire spécifique.
-
-    //place code for Edito to an Editor folder to exclude them from build
-    //https://docs.unity3d.com/Manual/SpecialFolders.html
+    //The Widndows used to draw our graph
     public class NodesEditorWindow : EditorWindow
     {
-        #region public Variables
-        #endregion
-
         #region private Variables
-        float zoomScale = 1f;
         static NodesEditorWindow curWindow;
         GraphControllerBase curGraphController = null;
+        float zoomScale = 1f;
 
         [SerializeField]
         string lastAssetOpen;
@@ -59,8 +49,6 @@ namespace DSGame.GraphSystem
 
         private void OnGUI()
         {
-            //zoomScale = EditorGUILayout.Slider("zoom", zoomScale, 0.5f, 1.0f);
-           
             if (curGraphController == null) OpenAsset();
             DrawGrid(20, 0.2f, Color.gray);
             DrawGrid(100, 0.4f, Color.gray);
@@ -68,11 +56,13 @@ namespace DSGame.GraphSystem
             Event e = Event.current;
 
             Rect _zoomArea = new Rect(0.0f, 0.0f, Screen.width, Screen.height);
+
             EditorZoomArea.Begin(zoomScale, _zoomArea);
             BeginWindows();
             if (curGraphController != null) curGraphController.Update(e);
             EndWindows();
             EditorZoomArea.End();
+
             ProcessEvents(e);
             if (GUI.changed) Repaint();
         }
@@ -91,12 +81,12 @@ namespace DSGame.GraphSystem
             lastAssetOpen = AssetDatabase.GetAssetPath(controller.GetGraph().GetInstanceID());
         }
 
-        
         private void ProcessEvents(Event e)
         {
             drag = Vector2.zero;
             switch (e.type)
             {
+                //Manage zoom with scroll Wheel 
                 case EventType.ScrollWheel:
                     if (e.delta.y < 0)
                     {
@@ -111,7 +101,7 @@ namespace DSGame.GraphSystem
                 case EventType.MouseDown:
                     if (e.button == 1)
                     {
-                        //Display main menu
+                        //Left clic -> Display main menu
                         GenericMenu menu = new GenericMenu();
                         if (curGraphController != null)
                         {
@@ -127,6 +117,7 @@ namespace DSGame.GraphSystem
 
                     if (e.button == 0)
                     {
+                        //Right clic in empty space
                         if (curGraphController != null) curGraphController.UnSelectNode();
                         GUI.changed = true;
                     }
@@ -135,12 +126,14 @@ namespace DSGame.GraphSystem
                 case EventType.MouseDrag:
                     if (e.button == 2)
                     {
+                        //OnDrag with scroll wheel button pushed
                         OnDrag(e.delta);
                     }
                     break;
             }
         }
 
+        //Drag the graph
         private void OnDrag(Vector2 delta)
         {
             drag = delta;

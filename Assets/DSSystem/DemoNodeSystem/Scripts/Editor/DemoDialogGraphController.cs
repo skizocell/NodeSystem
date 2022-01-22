@@ -1,13 +1,8 @@
-using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System.Reflection;
-using System;
 using DSGame.GraphSystem;
 
-//Exemple custome Graph controller
+//Exemple custom Graph controller
 public class DemoDialogGraphController : GraphControllerBase
 {
     #region private Variables
@@ -31,7 +26,7 @@ public class DemoDialogGraphController : GraphControllerBase
 
     public override string GetGraphClassName()
     {
-        return typeof(Graph).FullName;
+        return typeof(DemoNodeGraph).FullName;
     }
 
     public override string GetDefaultSaveFolderPath()

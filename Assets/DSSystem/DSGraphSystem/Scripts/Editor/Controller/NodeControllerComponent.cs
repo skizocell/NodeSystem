@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace DSGame.GraphSystem
 {
+    //Base Node Controller Component
     public abstract class NodeControllerComponent
     {
         public bool isSelected = false;

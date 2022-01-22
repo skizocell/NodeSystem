@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System.Reflection;
 
 namespace DSGame.GraphSystem
 {
@@ -22,7 +20,7 @@ namespace DSGame.GraphSystem
         protected GraphControllerBase graphController;
 
         //NodeStyle
-        protected NodeControllerStyleNodeStyle nodeStyle = null;
+        protected NodeControllerStyle nodeStyle = null;
 
         //Selected header for windows
         protected static GUIStyle headerSelectedStyle;
@@ -85,7 +83,7 @@ namespace DSGame.GraphSystem
                     }
                     break;
                 case EventType.MouseDrag:
-                    //Drag the selected node on mouse position 
+                    //Drag all selected node on mouse position (responsability is for the graphcontroller) 
                     if (candrag && e.button == 0 && isSelected && !e.control)
                     {
                         graphController.DragSelectedNode(e.delta);
@@ -109,26 +107,16 @@ namespace DSGame.GraphSystem
             node.rect.position += delta;
         }
 
-        protected void Draw() //Draw the node
-        {
-            Rect windowRect = GUILayout.Window(nodeWindowsDrawId, node.rect, DrawWindowsContent, "", GUIStyle.none);
-            GUI.Box(windowRect, "", GUI.skin.window);
-            DrawPin(windowRect);
-        }
-
-        private void DrawWindowsContent(int windowsId)
-        {
-            DrawHeader();
-            DrawWindowsContent(); //children content
-        }
-
         //Update the node in screen. Triggered by the Graph Controller
         public override void Update(int nodeWindowsDrawId, Event e, bool canDrag)
         {
             this.nodeWindowsDrawId = nodeWindowsDrawId;
             ProcessEvents(e, canDrag);
+
+            //If the node editor update is triggered
             if (node.isEditorUpdateNeeded)
             {
+                //Force refresh
                 node.isEditorUpdateNeeded = false;
                 RefreshController();
                 EditorUtility.SetDirty(node);
@@ -142,7 +130,7 @@ namespace DSGame.GraphSystem
             return node;
         }
 
-        //on clic on pin
+        //On clic on pin
         public override void OnClickNodePin(NodePinController nodepin)
         {
             graphController.OnClicPinController(nodepin);
@@ -160,68 +148,21 @@ namespace DSGame.GraphSystem
                 return null;
             }
         }
-
-        protected void DrawPin(Rect windowRect)
-        {
-            //try to create a style or use a texture for these button
-            Color oldBackGroundColor = GUI.backgroundColor;
-            Color oldGuiColor = GUI.color;
-
-            NodePinController nodePinSelected = graphController.IfConnectionModeGetFirstSelected();
-            GUI.backgroundColor = Color.gray;
-            GUI.color = Color.gray;
-
-
-            foreach (NodePinController pin in nodePins)
-            {
-                if (nodePinSelected != null)
-                {
-                    if (nodePinSelected == pin)
-                    {
-                        GUI.backgroundColor = Color.blue;
-                        GUI.color = Color.blue;
-                    }
-                    else if (nodePinSelected.CanConectTo(pin))
-                    {
-                        GUI.backgroundColor = Color.green;
-                        GUI.color = Color.green;
-                    }
-                    else
-                    {
-                        GUI.backgroundColor = Color.red;
-                        GUI.color = Color.red;
-                    }
-                }
-                else
-                {
-                    if (pin.isConnected)
-                    {
-                        GUI.backgroundColor = Color.blue;
-                        GUI.color = Color.blue;
-                    }
-                    else
-                    {
-                        GUI.backgroundColor = Color.gray;
-                        GUI.color = Color.gray;
-                    }
-                }
-                pin.Draw(windowRect);
-            }
-
-            GUI.color = oldGuiColor;
-            GUI.backgroundColor = oldBackGroundColor;
-        }
         #endregion
 
         #region Utility method
-        protected void AddNodePin(NodePinController pinController)
+        //Draw the node Draw call DrawWindowsContent
+        protected void Draw()
         {
-            if (nodePins.Where(p => p.GetNodePinId() == pinController.GetNodePinId()).Count() > 0)
-            {
-                throw new Exception("You can't add another pin with the same id for this controller (" + this.GetNode().name + ")=>" + pinController.nodePinId);
-            }
-            nodePins.Add(pinController);
-            graphController.RegisterNodeControllerPin(pinController);
+            Rect windowRect = GUILayout.Window(nodeWindowsDrawId, node.rect, DrawWindowsContent, "", GUIStyle.none);
+            GUI.Box(windowRect, "", GUI.skin.window);
+            DrawPin(windowRect);
+        }
+
+        private void DrawWindowsContent(int windowsId)
+        {
+            DrawHeader();
+            DrawWindowsContent(); //children content
         }
 
         //Draw Header of the node window
@@ -232,6 +173,77 @@ namespace DSGame.GraphSystem
             GUILayout.Space(20);
         }
 
+        //Draw nodePins 
+        protected void DrawPin(Rect windowRect)
+        {
+            //try to create a style or use a texture for these button
+            Color oldBackGroundColor = GUI.backgroundColor;
+            Color oldGuiColor = GUI.color;
+
+            //Draw node pin in a color related to the situation
+            NodePinController nodePinSelected = graphController.IfConnectionModeGetFirstSelected();
+            GUI.backgroundColor = Color.gray;
+            GUI.color = Color.gray;
+
+            foreach (NodePinController pin in nodePins)
+            {
+                //If we try to make a ling nodepin selected is not null
+                if (nodePinSelected != null)
+                {
+                    //Il this pin is the one first selected draw it in blue
+                    if (nodePinSelected == pin)
+                    {
+                        GUI.backgroundColor = Color.blue;
+                        GUI.color = Color.blue;
+                    }
+                    //If it's another, if he can connect -> green
+                    else if (nodePinSelected.CanConectTo(pin))
+                    {
+                        GUI.backgroundColor = Color.green;
+                        GUI.color = Color.green;
+                    }
+                    //else Red
+                    else
+                    {
+                        GUI.backgroundColor = Color.red;
+                        GUI.color = Color.red;
+                    }
+                }
+                //Else we are not in link creation
+                else
+                {
+                    //In connected blue
+                    if (pin.isConnected)
+                    {
+                        GUI.backgroundColor = Color.blue;
+                        GUI.color = Color.blue;
+                    }
+                    //else gray
+                    else
+                    {
+                        GUI.backgroundColor = Color.gray;
+                        GUI.color = Color.gray;
+                    }
+                }
+                //Finaly draw the node pin after color selection
+                pin.Draw(windowRect);
+            }
+
+            GUI.color = oldGuiColor;
+            GUI.backgroundColor = oldBackGroundColor;
+        }
+
+        //Add node Pin to the node and register it to the graph
+        protected void AddNodePin(NodePinController pinController)
+        {
+            if (nodePins.Where(p => p.GetNodePinId() == pinController.GetNodePinId()).Count() > 0)
+            {
+                throw new Exception("You can't add another pin with the same id for this controller (" + this.GetNode().name + ")=>" + pinController.nodePinId);
+            }
+            nodePins.Add(pinController);
+            graphController.RegisterNodeControllerPin(pinController);
+        }
+
         //Create the Contextual menu for this node
         private void ProcessContextMenu()
         {
@@ -240,7 +252,7 @@ namespace DSGame.GraphSystem
             genericMenu.ShowAsContext();
         }
 
-        //What todo when remove is called with the contextual menu
+        //Call OnRemove action
         private void OnClickRemoveNode()
         {
             if (OnRemoveNode != null)

@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace DSGame.GraphSystem
 {
-    //Node controller Generic used by default. Node annotation controll is behavior
+    //Node controller Generic used by default. Node annotation control is behavior
     public class NodeControllerGeneric<N> : NodeControllerBase<N> where N : Node
     {
         public List<string> labels;
@@ -16,6 +16,7 @@ namespace DSGame.GraphSystem
             RefreshController();
         }
 
+        #region Main method
         protected override void RefreshController()
         {
             int yPos = 21;
@@ -23,10 +24,11 @@ namespace DSGame.GraphSystem
             labels = new List<string>();
             nodePins = new List<NodePinController>();
 
-            //Check NodeBox attribute color on Node class...
+            //Check NodeBox attribute on Node class...
             NodeBox nodeBoxParam = (NodeBox)typeof(N).GetCustomAttribute(typeof(NodeBox), true);
             if (nodeBoxParam != null)
             {
+                //Apply style parameter
                 nodeStyle = DefaultNodeControllerStyles.GetStyle(nodeBoxParam.style);
                 node.rect.width = nodeBoxParam.width == 0 ? 200 : nodeBoxParam.width;
             }
@@ -35,6 +37,7 @@ namespace DSGame.GraphSystem
             NodePin nodePinParam = (NodePin)typeof(N).GetCustomAttribute(typeof(NodePin), true);
             if (nodePinParam != null)
             {
+                //Create a label with the required pins
                 labels.Add(nodePinParam.label);
                 CreatePins("Node", node, nodePinParam, yPos);
                 yPos += offset;
@@ -59,25 +62,29 @@ namespace DSGame.GraphSystem
                             {
                                 foreach (Branch branch in (IEnumerable)prop.GetValue(node))
                                 {
+                                    //create label and pin for branch
                                     CreatePinFromBranch(yPos, prop.Name, nodePinAttr, branch);
                                     yPos += offset;
                                 }
                             }
                         }
                     }
+                    //If it's a Branch
                     else if (typeof(Branch).IsAssignableFrom(prop.FieldType))
                     {
+                        //create label and pin for branch
                         Branch branch = (Branch)prop.GetValue(node);
                         CreatePinFromBranch(yPos, prop.Name, nodePinAttr, branch);
                         yPos += offset;
                     }
                     else
                     {
-                        String label = DataShowAttrProcess(prop, node);
-                        if(label==null) label = prop.Name;
-                        if (nodePinAttr.label != null && nodePinAttr.label != String.Empty)
+                        String label = DataShowAttrProcess(prop, node);//if a a datshow attribute is present take the data.toString() value
+                        if(label==null) label = prop.Name; //Else take the property name
+                        if (nodePinAttr.label != null && nodePinAttr.label != String.Empty)//if an attribute is set take this
                             label = nodePinAttr.label;
                         
+                        //create label and pin
                         labels.Add(label);
                         CreatePins(prop.Name, prop.GetValue(node), nodePinAttr, yPos);
                         yPos += offset;
@@ -85,10 +92,9 @@ namespace DSGame.GraphSystem
                 }
                 else
                 {
-                    NodeDataShow nodeDataShowAttr = (NodeDataShow)prop.GetCustomAttribute(typeof(NodeDataShow));
-                    if (nodeDataShowAttr != null)
+                    String label = DataShowAttrProcess(prop, node);
+                    if (label != null)
                     {
-                        String label = DataShowAttrProcess(prop, node);
                         labels.Add(label);
                         yPos += offset;
                     }
@@ -99,6 +105,21 @@ namespace DSGame.GraphSystem
             node.rect.height = yPos;
         }
 
+        protected override void DrawWindowsContent()
+        {
+            EditorGUIUtility.labelWidth = 1;
+            foreach (string label in labels)
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Space(15);
+                EditorGUILayout.LabelField(label);
+                EditorGUILayout.EndHorizontal();
+            }
+            EditorGUIUtility.labelWidth = 0;
+        }
+        #endregion
+
+        #region Utility method
         private String DataShowAttrProcess(FieldInfo prop, Node node)
         {
             NodeDataShow nodeDataShowAttr = (NodeDataShow)prop.GetCustomAttribute(typeof(NodeDataShow));
@@ -108,14 +129,6 @@ namespace DSGame.GraphSystem
                 return data==null ? null : data.ToString();
             }
             return null;
-        }
-
-        private void AddDataShowLabel(int yPos, System.Object field, NodeDataShow nodeDataShow)
-        {
-            if (field != null)
-            {
-                labels.Add(field.ToString());
-            }
         }
 
         private void CreatePinFromBranch(int yPos, String fieldName, NodePin nodePinAttr, Branch branch)
@@ -158,18 +171,6 @@ namespace DSGame.GraphSystem
                 EditorUtility.SetDirty(graphController.GetGraph());
             }
         }
-
-        protected override void DrawWindowsContent()
-        {
-            EditorGUIUtility.labelWidth = 1;
-            foreach (string label in labels)
-            {
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Space(15);
-                EditorGUILayout.LabelField(label);
-                EditorGUILayout.EndHorizontal();
-            }
-            EditorGUIUtility.labelWidth = 0;
-        }
+        #endregion
     }
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8481328135715668573
+--- !u!114 &-7158920724063183646
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 566
-    y: 51
+    x: 637
+    y: 191
     width: 200
     height: 45
   data:
-    text: Allez ici
+    text: Au revoir
     parameter: 
---- !u!114 &-6122040494555025703
+--- !u!114 &-3996031735866071659
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30,26 +30,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7ef28746acd9f64995875492b94413d, type: 3}
-  m_Name: DemoNodeChoice
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 301
-    y: 90
+    x: 637
+    y: 66
     width: 200
-    height: 101
-  choices:
-  - id: 0
-    label: Choix 1
-    isOn: 0
-  - id: 1
-    label: Choix 2
-    isOn: 0
-  - id: 2
-    label: Choix 3
-    isOn: 1
---- !u!114 &-904669508094689265
+    height: 45
+  data:
+    text: Aller ici
+    parameter: 
+--- !u!114 &-3618376044357770813
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,16 +51,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 469cb4ac8ca1d314eb688fe055b00ba2, type: 3}
-  m_Name: PortalChoix1
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 28
-    y: 156
+    x: 50
+    y: 58
     width: 200
-    height: 41
---- !u!114 &-841173467862365546
+    height: 45
+  data:
+    text: Coucou
+    parameter: 
+--- !u!114 &-1706096574551360384
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,13 +77,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 864
-    y: 103
+    x: 940
+    y: 95
     width: 200
     height: 41
   graph: {fileID: 11400000}
-  portalOut: {fileID: -904669508094689265}
---- !u!114 &-530622093082127946
+  portalOut: {fileID: -1090793055284961705}
+--- !u!114 &-1090793055284961705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,18 +92,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: DemoNodeDialog
+  m_Script: {fileID: 11500000, guid: 469cb4ac8ca1d314eb688fe055b00ba2, type: 3}
+  m_Name: Go Choice1
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 573
-    y: 130
+    x: 50
+    y: 127
     width: 200
-    height: 45
-  data:
-    text: "Allez l\xE0"
-    parameter: 
+    height: 41
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,55 +110,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb68d9971a67b7c42a9a7004053a3ea5, type: 3}
+  m_Script: {fileID: 11500000, guid: 4de558c6f87c60247b24583df28c32a8, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
   nodeGraphControllerType: DemoDialogGraphController
   nodes:
-  - {fileID: 3324754225898362167}
-  - {fileID: -6122040494555025703}
-  - {fileID: -904669508094689265}
-  - {fileID: -8481328135715668573}
-  - {fileID: -530622093082127946}
-  - {fileID: 8492548776832912384}
-  - {fileID: -841173467862365546}
+  - {fileID: -3618376044357770813}
+  - {fileID: 3386975879546473186}
+  - {fileID: -1090793055284961705}
+  - {fileID: -3996031735866071659}
+  - {fileID: 1285158615994544264}
+  - {fileID: -7158920724063183646}
+  - {fileID: -1706096574551360384}
   links:
   - linkType: 1
-    from: {fileID: 3324754225898362167}
-    to: {fileID: -6122040494555025703}
+    from: {fileID: -3618376044357770813}
+    to: {fileID: 3386975879546473186}
     fromPinId: Next
     toPinId: T$Node
   - linkType: 2
-    from: {fileID: -904669508094689265}
-    to: {fileID: -6122040494555025703}
+    from: {fileID: -1090793055284961705}
+    to: {fileID: 3386975879546473186}
     fromPinId: F$Node
     toPinId: T$Node
   - linkType: 1
-    from: {fileID: -6122040494555025703}
-    to: {fileID: -8481328135715668573}
+    from: {fileID: 3386975879546473186}
+    to: {fileID: -3996031735866071659}
     fromPinId: F$(choices)$[0]
     toPinId: Call
   - linkType: 1
-    from: {fileID: -6122040494555025703}
-    to: {fileID: -530622093082127946}
+    from: {fileID: 3386975879546473186}
+    to: {fileID: 1285158615994544264}
     fromPinId: F$(choices)$[1]
     toPinId: Call
   - linkType: 1
-    from: {fileID: -6122040494555025703}
-    to: {fileID: 8492548776832912384}
+    from: {fileID: 3386975879546473186}
+    to: {fileID: -7158920724063183646}
     fromPinId: F$(choices)$[2]
     toPinId: Call
   - linkType: 1
-    from: {fileID: -8481328135715668573}
-    to: {fileID: -841173467862365546}
+    from: {fileID: 1285158615994544264}
+    to: {fileID: -1706096574551360384}
     fromPinId: Next
     toPinId: T$portalOut
   - linkType: 1
-    from: {fileID: -530622093082127946}
-    to: {fileID: -841173467862365546}
+    from: {fileID: -3996031735866071659}
+    to: {fileID: -1706096574551360384}
     fromPinId: Next
     toPinId: T$portalOut
---- !u!114 &3324754225898362167
+--- !u!114 &1285158615994544264
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,14 +172,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 26
-    y: 68
+    x: 639
+    y: 128
     width: 200
     height: 45
   data:
-    text: Coucou
+    text: "Aller l\xE0"
     parameter: 
---- !u!114 &8492548776832912384
+--- !u!114 &3386975879546473186
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -195,15 +188,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
-  m_Name: DemoNodeDialog
+  m_Script: {fileID: 11500000, guid: c7ef28746acd9f64995875492b94413d, type: 3}
+  m_Name: DemoNodeChoice
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 568
-    y: 227
+    x: 356
+    y: 96
     width: 200
-    height: 45
-  data:
-    text: Au revoir
-    parameter: 
+    height: 101
+  choices:
+  - id: 0
+    label: Choix 1
+  - id: 1
+    label: Choix 2
+  - id: 2
+    label: Choix 3

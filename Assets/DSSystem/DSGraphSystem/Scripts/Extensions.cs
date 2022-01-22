@@ -1,29 +1,53 @@
 using System.Reflection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public static class ReflectionExtensions
+namespace DSGame.GraphSystem
 {
-    //public static IList<FieldInfo> GetAllFields(this Type type, BindingFlags flags)
-    //{
-    //    if (type == typeof(System.Object)) return new List<FieldInfo>();
-
-    //    List<FieldInfo> list = type.BaseType.GetAllFields(flags).ToList();
-    //    // in order to avoid duplicates, force BindingFlags.DeclaredOnly
-    //    list.AddRange(type.GetFields(flags | BindingFlags.DeclaredOnly));
-    //    return list;
-    //}
-
-    public static FieldInfo GetDeepField(this Type type, String name, BindingFlags flags)
+    //Extension for Reflection
+    public static class ReflectionExtensions
     {
-        Debug.Log("Search " + name + " in type " + type );
-        if (type == typeof(System.Object)) return null;
+        //Get a field in the parent class
+        public static FieldInfo GetDeepField(this Type type, String name, BindingFlags flags)
+        {
+            if (type == typeof(System.Object)) return null;
 
-        FieldInfo info = type.GetField(name, flags);
-        if (info == null) info = type.BaseType.GetDeepField(name, flags);
-        Debug.Log(info);
-        return info;
+            FieldInfo info = type.GetField(name, flags);
+            if (info == null) info = type.BaseType.GetDeepField(name, flags);
+            Debug.Log(info);
+            return info;
+        }
+    }
+
+    //Extension for Rect
+    public static class RectExtensions
+    {
+        //Make a rect between 2 point in from upper left
+        public static Rect MakeRect(Vector2 point1, Vector2 point2)
+        {
+            float startX, startY, endX, endY;
+            if (point1.x <= point2.x)
+            {
+                startX = point1.x;
+                endX = point2.x;
+            }
+            else
+            {
+                endX = point1.x;
+                startX = point2.x;
+            }
+            if (point1.y <= point2.y)
+            {
+                startY = point1.y;
+                endY = point2.y;
+            }
+            else
+            {
+                endY = point1.y;
+                startY = point2.y;
+            }
+            ///////////////
+            return new Rect(startX, startY, endX - startX, endY - startY);
+        }
     }
 }

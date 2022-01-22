@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DSGame.GraphSystem
 {
+    //Link between node
     [Serializable]
     public class NodeLink
     {

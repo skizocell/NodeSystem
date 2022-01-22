@@ -10,6 +10,7 @@ public class TestOutsideEditorData : MonoBehaviour
     void Start()
     {
         Graph testGraph = Resources.Load<Graph>("Test");
+        int onIndex = 0;
         testGraph.Excecute(
             n =>
             {
@@ -22,20 +23,16 @@ public class TestOutsideEditorData : MonoBehaviour
                 else if (n is DemoNodeChoice)
                 {
                     DemoNodeChoice choice = (DemoNodeChoice)n;
-                    int onIndex = -1;
+
                     for (int i=0; i<choice.choices.Count; i++)
                     {
-                        if (choice.choices[i].isOn) onIndex = i;
-                        choice.choices[i].isOn = false;
+                        if (onIndex==i) choice.choices[i].isOn = true; 
+                        else choice.choices[i].isOn = false;
                     }
-                    onIndex++;
-                    if (onIndex < choice.choices.Count) choice.choices[onIndex].isOn = true;
                     Debug.Log(choice.choices[onIndex].label);
-
+                    onIndex++;
                 }
-
             }
-            
         );
     }
 }

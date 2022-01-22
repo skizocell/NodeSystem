@@ -1,13 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 namespace DSGame.GraphSystem
 {
     //Controllers for different node pin
-
     public abstract class NodePinController
     {
         public enum NodePinType { Emiter, Receiver }
@@ -61,6 +57,7 @@ namespace DSGame.GraphSystem
         }
     }
 
+    //NodePin Caller
     public class NodePinCallerController : NodePinController
     {
         protected static Texture2D buttonTexture; //Pin Texture for pin button
@@ -93,6 +90,7 @@ namespace DSGame.GraphSystem
         }
     }
 
+    //NodePin Portal out
     public class NodePinPortalOutController : NodePinCallerController
     {
         public NodePinPortalOutController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
@@ -107,6 +105,7 @@ namespace DSGame.GraphSystem
         }
     }
 
+    //NodePin Called
     public class NodePinCalledController : NodePinController
     {
         protected static Texture2D buttonTexture; //Pin Texture for pin button
@@ -139,6 +138,7 @@ namespace DSGame.GraphSystem
         }
     }
 
+    //NodePin Portal in
     public class NodePinPortalInController : NodePinCalledController
     {
         public NodePinPortalInController(string methodName, NodeControllerComponent node, Nullable<bool> canHaveManyLink, float yOffset) : base(methodName, node, canHaveManyLink, yOffset)
@@ -154,6 +154,7 @@ namespace DSGame.GraphSystem
 
     }
 
+    //NodePin Data transfert base class (get, set)
     public abstract class NodePinDataTransfertController : NodePinController
     {
         public Type transfertDataType;
@@ -175,6 +176,7 @@ namespace DSGame.GraphSystem
         }
     }
 
+    //NodePin Setter
     public class NodePinSetterController : NodePinDataTransfertController
     {
         protected static Texture2D buttonTexture; //Pin Texture for pin button
@@ -202,6 +204,7 @@ namespace DSGame.GraphSystem
         }
     }
 
+    //NodePin Getter
     public class NodePinGetterController : NodePinDataTransfertController
     {
         protected static Texture2D buttonTexture; //Pin Texture for pin button

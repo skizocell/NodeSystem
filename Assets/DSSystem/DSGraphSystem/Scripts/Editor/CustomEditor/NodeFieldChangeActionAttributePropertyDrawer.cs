@@ -10,6 +10,7 @@ namespace DSGame.GraphSystem
     [CustomPropertyDrawer(typeof(NodeFieldEditorChangeActionAttribute))]
     public class NodeFieldChangeActionAttributePropertyDrawer : PropertyDrawer
     {
+        //We must give the height of the drawed property to let unity manage the space 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             int totalLine = 1;
@@ -25,6 +26,7 @@ namespace DSGame.GraphSystem
         {
             EditorGUI.BeginChangeCheck();
             EditorGUI.PropertyField(position, property, new GUIContent(label), true);
+            //When property change trigger, we call the OnChangeCall method parametred on the attribute if she exist in the property
             if (EditorGUI.EndChangeCheck())
             {
                 NodeFieldEditorChangeActionAttribute at = attribute as NodeFieldEditorChangeActionAttribute;

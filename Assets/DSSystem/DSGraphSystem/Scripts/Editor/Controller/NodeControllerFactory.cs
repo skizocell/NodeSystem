@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace DSGame.GraphSystem
 {
+    //Node Controller Factory
     public class NodeControllerFactory
     {
         protected GraphControllerBase graphController;
@@ -14,8 +15,9 @@ namespace DSGame.GraphSystem
         {
             this.graphController = graphController;
         }
-
-        public NodeControllerComponent BuildNodeControllerComponent(Node node)
+    
+        //Dynamicaly get the good controller for the node provided
+        public NodeControllerComponent BuildNodeControllerComponent<N>(N node) where N : Node
         {
             Type nodeType = node.GetType();
             Type graphControllerType = graphController.GetType();
@@ -32,7 +34,8 @@ namespace DSGame.GraphSystem
                     }
                 }
             }
-            return null;
+            //If no custom Controller found return the generic one
+            return new NodeControllerGeneric<N>(graphController, node); 
         }
     }
 }

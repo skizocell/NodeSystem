@@ -1,5 +1,3 @@
-
-using UnityEngine;
 using UnityEditor;
 
 namespace DSGame.GraphSystem
@@ -12,7 +10,7 @@ namespace DSGame.GraphSystem
         {
             PortalOut portalOut = (PortalOut)target;
             portalOut.name = EditorGUILayout.TextField("Portal name", portalOut.name);
-            SerializedObject serializedObject = new UnityEditor.SerializedObject(portalOut);
+            SerializedObject serializedObject = new SerializedObject(portalOut);
         }
     }
 }

@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
 using UnityEditor;
 
 namespace DSGame.GraphSystem
 {
-    //Custom inspector screen for portalin
+    //Custom inspector screen for portalin we can select portal only defined in the graph
     [CustomEditor(typeof(PortalIn))]
     public class PortalInDialogEditor : Editor
     {

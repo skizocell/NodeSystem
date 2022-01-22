@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
-using System.Reflection;
 using System.Linq;
 
 namespace DSGame.GraphSystem
@@ -57,6 +55,9 @@ namespace DSGame.GraphSystem
         {
             if (controllersNames.Count() > 0)
             {
+                GUIStyle style = new GUIStyle(EditorStyles.boldLabel);
+                style.normal.textColor = Color.red;
+
                 GUILayout.Space(20);
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(20);
@@ -67,6 +68,7 @@ namespace DSGame.GraphSystem
                 EditorGUILayout.LabelField("Graph Type:", EditorStyles.boldLabel);
                 selectedTypeIndex = EditorGUILayout.Popup(selectedTypeIndex, controllersNames);
                 EditorGUILayout.LabelField("Save Folder = " + controllers[selectedTypeIndex].GetGraphSaveFolderPath());
+                EditorGUILayout.LabelField("Warning : The save folder must be in a resources folder path. See unity Special folder names for more infos", style);
                 GUILayout.Space(20);
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("Create Graph", GUILayout.Height(40)))
@@ -98,8 +100,11 @@ namespace DSGame.GraphSystem
                 if (GUILayout.Button("Change Save Folder", GUILayout.Height(40)))
                 {
                     String path = EditorUtility.OpenFolderPanel("Load Graph", controllers[selectedTypeIndex].GetGraphSaveFolderPath(), "");
-                    path = path.Substring(path.IndexOf("Assets")) + "/";
-                    controllers[selectedTypeIndex].SetGraphSaveFolderPath(path);
+                    if (path != null && !path.Equals(""))
+                    {
+                        path = path.Substring(path.IndexOf("Assets")) + "/";
+                        controllers[selectedTypeIndex].SetGraphSaveFolderPath(path);
+                    }
                 }
                 if (GUILayout.Button("Cancel", GUILayout.Height(40)))
                 {

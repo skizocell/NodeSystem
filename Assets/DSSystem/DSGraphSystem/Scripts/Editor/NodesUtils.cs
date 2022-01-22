@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -7,9 +6,11 @@ using System.Linq;
 
 namespace DSGame.GraphSystem
 {
+    //Class used to manage all technic action on Graph and Node scriptable object (crate update delete)
     public static class NodesUtils
     {
         #region main method
+        //create Graph
         public static Graph CreateGraph(string assetFilePath, GraphControllerBase nodeController)
         {
             Graph graph = (Graph)ScriptableObject.CreateInstance(nodeController.GetGraphClassName());
@@ -20,6 +21,7 @@ namespace DSGame.GraphSystem
             return graph;
         }
 
+        //create Node
         public static T CreateNode<T>(Graph graph, Rect rect) where T : Node
         {
             T node = ScriptableObject.CreateInstance<T>();
@@ -34,6 +36,7 @@ namespace DSGame.GraphSystem
             return node;
         }
 
+        //Delete Node
         public static void DeleteNode(Graph nodeGraph, Node node)
         {
             if (nodeGraph != null)

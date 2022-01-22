@@ -8,6 +8,7 @@ using UnityEngine;
 namespace DSGame.GraphSystem
 {
     public enum ProcessStatus { Waiting, Ready, Running, Done }
+    //Base Graph class
     [Serializable]
     public class Graph : ScriptableObject
     {
@@ -90,11 +91,12 @@ namespace DSGame.GraphSystem
         private void ProcessNode(Node n, Action<Node> OnProcessNode)
         {
             n.processStatus = ProcessStatus.Running;
-            //if portal
+            //if portal in
             if (n is PortalIn)
             {
                 ProcessPortal((PortalIn)n);
             }
+            //else if not portal out
             else if (n is PortalOut==false)
             {
                 //Give control on user code with current active Node
@@ -113,6 +115,8 @@ namespace DSGame.GraphSystem
         private void ProcessPortal(PortalIn portalIn)
         {
             //Create a direct node link with portal link:
+
+            //Get link from portal in and portal out
             NodeLink inLink = links.Where(l => l.to.Equals(portalIn)).FirstOrDefault();
             NodeLink outLink = links.Where(l => l.from.Equals(portalIn.portalOut)).FirstOrDefault();
 
@@ -121,7 +125,7 @@ namespace DSGame.GraphSystem
                 Debug.LogWarning("Portal not correctly set is ignored. One of them has no entry");
             }
 
-            //Create real ling between node
+            //Create real link between node
             NodeLink finalLink = new NodeLink();
             finalLink.from = inLink.from;
             finalLink.to = outLink.to;
@@ -133,7 +137,6 @@ namespace DSGame.GraphSystem
             //Make portal in processed
             portalIn.processStatus = ProcessStatus.Done;
             portalIn.portalOut.processStatus = ProcessStatus.Done;
-            inLink.processStatus = ProcessStatus.Done;
             outLink.processStatus = ProcessStatus.Done;
 
             //reset to reuse if a loop is occured

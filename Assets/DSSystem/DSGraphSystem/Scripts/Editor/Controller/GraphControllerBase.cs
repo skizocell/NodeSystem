@@ -1,4 +1,3 @@
-using System.Collections;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -16,16 +15,20 @@ namespace DSGame.GraphSystem
     [Serializable]
     public abstract class GraphControllerBase
     {
-        protected Graph graph;
-        protected NodeControllerFactory nodeFactory;
-        protected List<NodeControllerComponent> nodes = new List<NodeControllerComponent>();
+        private Rect boxRect;
         private List<NodePinController> nodePins = new List<NodePinController>();
-        NodeControllerComponent curSelectedNode = null;
+        private NodeControllerComponent curSelectedNode = null;
 
         private NodePinController selectedEmiterPin;
         private NodePinController selectedReceiverPin;
 
-        public bool ctrlOn = false;
+        protected Graph graph;
+        protected NodeControllerFactory nodeFactory;
+        protected List<NodeControllerComponent> nodes = new List<NodeControllerComponent>();
+
+        public bool ctrlOn = false; //control button pushed
+        public bool dragBox = false;
+        public Vector2 selectBoxStartPos;
 
         protected GraphControllerBase()
         {
@@ -35,26 +38,8 @@ namespace DSGame.GraphSystem
         #region MetaData info method
         public abstract string GetDescription(); //Description of your graph
         public abstract string GetName(); //Name of graph
-        public abstract string GetGraphClassName(); //Name of graph
-        public abstract string GetDefaultSaveFolderPath(); //Name of graph
-
-        public string GetGraphSaveFolderPath()
-        {
-            string key = GetPlayerPrefSaveFolderKey();
-            String path = PlayerPrefs.GetString(key);
-            if (path == null)
-            {
-                path = GetDefaultSaveFolderPath();
-                PlayerPrefs.SetString(key, path);
-            }
-            return path;
-        }
-
-        public void SetGraphSaveFolderPath(string path)
-        {
-            string key = GetPlayerPrefSaveFolderKey();
-            PlayerPrefs.SetString(key, path);
-        }
+        public abstract string GetGraphClassName(); //Class Name of the graph
+        public abstract string GetDefaultSaveFolderPath(); //Default Save Folder of the graph (->>>>Resources folder!!!)
 
         public string GetNodeGraphControllerType()//Type of the graph controller
         {
@@ -69,45 +54,30 @@ namespace DSGame.GraphSystem
             menu.AddItem(new GUIContent("Portal Out"), false, (mousePos) => AddPortalOut((Vector2)mousePos), mousePosition);
             menu.AddItem(new GUIContent("Prortal In"), false, (mousePos) => AddPortalIn((Vector2)mousePos), mousePosition);
         }
-        public bool dragBox = false;
-        public Vector2 selectBoxStartPos;
-        Rect boxRect;
+
         public virtual void Update(Event e)
         {
             if (dragBox)
             {
-                boxRect = new Rect(selectBoxStartPos.x, selectBoxStartPos.y, e.mousePosition.x - selectBoxStartPos.x, e.mousePosition.y - selectBoxStartPos.y);
+                //draw selection box
+                boxRect = RectExtensions.MakeRect(selectBoxStartPos, e.mousePosition);
                 GUI.Box(boxRect, "");
                 GUI.changed = true;
             }
             DrawConnections();
             DrawConnectionLine(e);
-            int i = 0;
-            foreach (NodeControllerComponent nodeController in nodes)
-            {
-                if (dragBox)
-                {
-                    Node n = nodeController.GetNode();
-                    if (boxRect.Overlaps(n.rect))
-                    {
-                        nodeController.isSelected = true;
-                    }
-                    else if(!ctrlOn)
-                    {
-                        nodeController.isSelected = false;
-                    }
-                }
-                nodeController.Update(i, e, !dragBox);
-                i++;
-            }
+            DrawNodes(e);
+
             ctrlOn = e.control;
             switch (e.type)
             {
                 case EventType.MouseDown:
                     if (e.button == 1)
                     {
+                        //Right Clic 
                         if (selectedEmiterPin != null || selectedReceiverPin != null)
                         {
+                            //cancel link drawing
                             ClearConnectionSelection();
                             e.Use();
                         }
@@ -116,8 +86,10 @@ namespace DSGame.GraphSystem
                 case EventType.MouseDrag:
                     if (e.button == 0)
                     {
+                        //Left drag
                         if (!dragBox)
                         {
+                            //Activate drag mode and savec start position
                             dragBox = true;
                             selectBoxStartPos = e.mousePosition;
                         }
@@ -125,13 +97,18 @@ namespace DSGame.GraphSystem
                     }
                     break;
                 case EventType.MouseUp:
-                    dragBox = false;
+                    if (e.button == 0)
+                    {
+                        //Stop dragbox mode
+                        dragBox = false;
+                    }
                     break;
             }
- 
+
         }
 
-        internal void DragSelectedNode(Vector2 delta)
+        //Drag selected nodes
+        public void DragSelectedNode(Vector2 delta)
         {
             foreach (NodeControllerComponent node in nodes.Where(n=>n.isSelected))
             {
@@ -141,6 +118,26 @@ namespace DSGame.GraphSystem
         #endregion
 
         #region main method
+        //Get Player pref save folder to have much confort
+        public string GetGraphSaveFolderPath()
+        {
+            string key = GetPlayerPrefSaveFolderKey();
+            String path = PlayerPrefs.GetString(key);
+            if (path == null || path.Equals(""))
+            {
+                path = GetDefaultSaveFolderPath();
+                PlayerPrefs.SetString(key, path);
+            }
+            return path;
+        }
+
+        //Save last choodes folder to player pref
+        public void SetGraphSaveFolderPath(string path)
+        {
+            string key = GetPlayerPrefSaveFolderKey();
+            PlayerPrefs.SetString(key, path);
+        }
+
         //set the Graph to manage
         public void SetGraph(Graph graph)
         {
@@ -148,7 +145,8 @@ namespace DSGame.GraphSystem
 
             foreach (Node node in graph.GetNodes())
             {
-                MethodInfo methodInfo = typeof(GraphControllerBase).GetMethod("SetController", 
+                //Call generic method with the good type dynamicaly
+                MethodInfo methodInfo = typeof(GraphControllerBase).GetMethod("SetController",
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 MethodInfo setControllerGeneric = methodInfo.MakeGenericMethod(node.GetType());
                 setControllerGeneric.Invoke(this, new System.Object[] { node });
@@ -162,10 +160,13 @@ namespace DSGame.GraphSystem
 
         public void OnClicPinController(NodePinController nodePin)
         {
+            //If lin can not have many link
             if (!nodePin.canHaveManyLink)
             {
+                //If a link already exist
                 if (graph.IsLinkExistFor(nodePin.linkedNodeConroller.GetNode(), nodePin.nodePinId, nodePin.type == NodePinController.NodePinType.Emiter))
                 {
+                    //stop doing thing
                     return;
                 }
             }
@@ -186,12 +187,16 @@ namespace DSGame.GraphSystem
                 }
             }
 
+            //if selected Emiter and selected receiver is set 
             if (selectedEmiterPin != null && selectedReceiverPin != null)
             {
+                //if it's not the same node
                 if (selectedEmiterPin.linkedNodeConroller != selectedReceiverPin.linkedNodeConroller)
                 {
+                    //If the connexion can be done
                     if (selectedEmiterPin.CanConectTo(selectedReceiverPin))
                     {
+                        //create the link
                         NodeLink link = new NodeLink();
                         link.from = selectedEmiterPin.linkedNodeConroller.GetNode();
                         link.to = selectedReceiverPin.linkedNodeConroller.GetNode();
@@ -199,21 +204,6 @@ namespace DSGame.GraphSystem
                         link.toPinId = selectedReceiverPin.nodePinId;
                         link.linkType = selectedEmiterPin.generateLinkType;
                         AddLink(link);
-
-                        //List<Node> excecList = graph.GetChainedList();
-                        //int i = 0, indexFrom = 0, indexTo = 0;
-                        //foreach (Node node in excecList)
-                        //{
-                        //    if (node == link.from) indexFrom = i;
-                        //    else if (node == link.to) indexTo = i;
-                        //    i++;
-                        //}
-                        //if (indexFrom >= indexTo)
-                        //{
-                        //    //TODO arrange that
-                        //    //RemoveLink(link);
-                        //    //EditorUtility.DisplayDialog("Node message", "You can not connect with a node behind you in the chain", "Ok");
-                        //}
                     }
                     else
                     {
@@ -229,11 +219,13 @@ namespace DSGame.GraphSystem
             }
         }
 
+        //Register new node pin in the graph
         public void RegisterNodeControllerPin(NodePinController pin)
         {
             nodePins.Add(pin);
         }
 
+        //Drag selected node
         public void Drag(Vector2 delta)
         {
             if (curSelectedNode == null || !curSelectedNode.isSelected)
@@ -259,6 +251,7 @@ namespace DSGame.GraphSystem
 
         public void UnSelectNode()
         {
+            //if ctrl is pushed cancel unselect.
             if (ctrlOn) return;
             if (curSelectedNode != null) curSelectedNode=null;
             foreach (NodeControllerComponent node in nodes)
@@ -270,9 +263,10 @@ namespace DSGame.GraphSystem
         #endregion
 
         #region utility method
+        //Generate a key for player pref (one per company, product, graph class) to save 
         private string GetPlayerPrefSaveFolderKey()
         {
-            return PlayerSettings.companyName + "." + PlayerSettings.productName + "." + GetGraphClassName();
+            return PlayerSettings.companyName + "." + PlayerSettings.productName + "." + GetGraphClassName() + ".saveFolder";
         }
 
         private void AddPortalIn(Vector2 mousePos)
@@ -308,16 +302,14 @@ namespace DSGame.GraphSystem
             selectedReceiverPin = null;
         }
 
+        //Build a controller to show our node and register it to the graph controller
         protected void SetController<N>(N node) where N : Node
         {
             NodeControllerComponent controller = nodeFactory.BuildNodeControllerComponent(node);
-            if (controller == null)
-            {
-                controller= new NodeControllerGeneric<N>(this, node);
-            }
             nodes.Add(controller);
         }
 
+        //Get a node pin controller for a node
         private NodePinController GetNodePinController(Node node, string nodePinId)
         {
             IEnumerable<NodeControllerComponent> result = nodes.Where(n => n.GetNode() == node);
@@ -328,6 +320,30 @@ namespace DSGame.GraphSystem
             return null;
         }
 
+        //Draw nodes
+        private void DrawNodes(Event e)
+        {
+            int i = 0;
+            foreach (NodeControllerComponent nodeController in nodes)
+            {
+                if (dragBox)
+                {
+                    Node n = nodeController.GetNode();
+                    if (boxRect.Overlaps(n.rect))
+                    {
+                        nodeController.isSelected = true;
+                    }
+                    else if (!ctrlOn)
+                    {
+                        nodeController.isSelected = false;
+                    }
+                }
+                nodeController.Update(i, e, !dragBox);
+                i++;
+            }
+        }
+
+        //Draw connections
         private void DrawConnections()
         {
             foreach (NodeLink link in graph.GetLinks())
@@ -335,6 +351,7 @@ namespace DSGame.GraphSystem
                 NodePinController caller = GetNodePinController(link.from, link.fromPinId);
                 NodePinController called = GetNodePinController(link.to, link.toPinId);
 
+                //if one of thew is not found the link is corrupted and must be removed
                 if (caller == null || called == null)
                 {
                     Debug.LogError("Remove corrupted node link ");
@@ -357,6 +374,7 @@ namespace DSGame.GraphSystem
                         2f
                     );
 
+                //If you clic the linq he can be removed
                 if (Handles.Button((caller.GetRect().center + called.GetRect().center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
                 {
                     RemoveLink(link);
@@ -365,6 +383,7 @@ namespace DSGame.GraphSystem
             }
         }
 
+        //Draw connection line (when we create the connection)
         private void DrawConnectionLine(Event e)
         {
             if (selectedEmiterPin != null && selectedReceiverPin == null)
@@ -398,18 +417,21 @@ namespace DSGame.GraphSystem
             }
         }
 
+        //Add link
         private void AddLink(NodeLink link)
         {
             graph.AddLink(link);
             ForceSave();
         }
 
+        //Remove link
         private void RemoveLink(NodeLink link)
         {
             graph.RemoveLink(link);
             ForceSave();
         }
 
+        //Force the save of the graph
         private void ForceSave()
         {
             EditorUtility.SetDirty(graph);
