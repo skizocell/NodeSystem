@@ -225,14 +225,13 @@ namespace DSGame.GraphSystem
             nodePins.Add(pin);
         }
 
-        //Drag selected node
+        //Drag node
         public void Drag(Vector2 delta)
         {
-            if (curSelectedNode == null || !curSelectedNode.isSelected)
-                foreach (NodeControllerComponent node in nodes)
-                {
-                    node.Drag(delta);
-                }
+            foreach (NodeControllerComponent node in nodes)
+            {
+                node.Drag(delta);
+            }
         }
 
         public void DeleteNode(NodeControllerComponent nodeController)

@@ -1,0 +1,172 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9132567358487437425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 61
+    y: 95
+    width: 200
+    height: 45
+  data:
+    text: Salut
+    parameter: 
+--- !u!114 &-2354533855508319194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39b3cabab6fdf9499916477a177ab9c, type: 3}
+  m_Name: PortalIn
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 948
+    y: 54
+    width: 200
+    height: 41
+  graph: {fileID: 11400000}
+  portalOut: {fileID: 801123735433594430}
+--- !u!114 &-231150823732583298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 696
+    y: 200
+    width: 200
+    height: 45
+  data:
+    text: Au revoir
+    parameter: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4de558c6f87c60247b24583df28c32a8, type: 3}
+  m_Name: Test2
+  m_EditorClassIdentifier: 
+  nodeGraphControllerType: DemoDialogGraphController
+  nodes:
+  - {fileID: -9132567358487437425}
+  - {fileID: 6545311406676661523}
+  - {fileID: 4296151356739504196}
+  - {fileID: -231150823732583298}
+  - {fileID: 801123735433594430}
+  - {fileID: -2354533855508319194}
+  links:
+  - linkType: 1
+    from: {fileID: -9132567358487437425}
+    to: {fileID: 6545311406676661523}
+    fromPinId: Next
+    toPinId: T$Node
+  - linkType: 1
+    from: {fileID: 6545311406676661523}
+    to: {fileID: 4296151356739504196}
+    fromPinId: F$(choices)$[0]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: 6545311406676661523}
+    to: {fileID: -231150823732583298}
+    fromPinId: F$(choices)$[1]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: 4296151356739504196}
+    to: {fileID: -2354533855508319194}
+    fromPinId: Next
+    toPinId: T$portalOut
+  - linkType: 2
+    from: {fileID: 801123735433594430}
+    to: {fileID: 6545311406676661523}
+    fromPinId: F$Node
+    toPinId: T$Node
+--- !u!114 &801123735433594430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469cb4ac8ca1d314eb688fe055b00ba2, type: 3}
+  m_Name: Goto Choix1
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 73
+    y: 213
+    width: 200
+    height: 41
+--- !u!114 &4296151356739504196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 688
+    y: 63
+    width: 200
+    height: 45
+  data:
+    text: "Vas l\xE0 bas"
+    parameter: 
+--- !u!114 &6545311406676661523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7ef28746acd9f64995875492b94413d, type: 3}
+  m_Name: DemoNodeChoice
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 396
+    y: 83
+    width: 200
+    height: 81
+  choices:
+  - id: 0
+    label: Choix1
+  - id: 1
+    label: Choix2

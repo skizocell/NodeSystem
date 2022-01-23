@@ -1,5 +1,25 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8411875708225959389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39b3cabab6fdf9499916477a177ab9c, type: 3}
+  m_Name: PortalIn
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 1244.1111
+    y: 66.66666
+    width: 200
+    height: 41
+  graph: {fileID: 11400000}
+  portalOut: {fileID: 3622589077814395174}
 --- !u!114 &-7158920724063183646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14,13 +34,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 637
-    y: 191
+    x: 484.30554
+    y: 242.02777
     width: 200
     height: 45
   data:
     text: Au revoir
     parameter: 
+--- !u!114 &-6212917247779043685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39b3cabab6fdf9499916477a177ab9c, type: 3}
+  m_Name: PortalIn
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 1216.8889
+    y: 185.66656
+    width: 200
+    height: 41
+  graph: {fileID: 11400000}
+  portalOut: {fileID: -1090793055284961705}
+--- !u!114 &-5846172231511649519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7ef28746acd9f64995875492b94413d, type: 3}
+  m_Name: DemoNodeChoice
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 740.33325
+    y: 81.30554
+    width: 200
+    height: 81
+  choices:
+  - id: 0
+    label: "O\xF9"
+  - id: 1
+    label: Non
 --- !u!114 &-3996031735866071659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35,8 +98,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 637
-    y: 66
+    x: 487.30554
+    y: 110.02777
     width: 200
     height: 45
   data:
@@ -56,12 +119,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 50
-    y: 58
+    x: 1
+    y: 99
     width: 200
     height: 45
   data:
     text: Coucou
+    parameter: 
+--- !u!114 &-2974803543590900759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 977.5835
+    y: 186.61111
+    width: 200
+    height: 45
+  data:
+    text: Sur?
     parameter: 
 --- !u!114 &-1706096574551360384
 MonoBehaviour:
@@ -77,8 +161,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 940
-    y: 95
+    x: 742.33325
+    y: 175.30554
     width: 200
     height: 41
   graph: {fileID: 11400000}
@@ -97,8 +181,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 50
-    y: 127
+    x: 0
+    y: 195
     width: 200
     height: 41
 --- !u!114 &11400000
@@ -122,16 +206,17 @@ MonoBehaviour:
   - {fileID: 1285158615994544264}
   - {fileID: -7158920724063183646}
   - {fileID: -1706096574551360384}
+  - {fileID: -5846172231511649519}
+  - {fileID: 348194250509581057}
+  - {fileID: -2974803543590900759}
+  - {fileID: -6212917247779043685}
+  - {fileID: 3622589077814395174}
+  - {fileID: -8411875708225959389}
   links:
   - linkType: 1
     from: {fileID: -3618376044357770813}
     to: {fileID: 3386975879546473186}
     fromPinId: Next
-    toPinId: T$Node
-  - linkType: 2
-    from: {fileID: -1090793055284961705}
-    to: {fileID: 3386975879546473186}
-    fromPinId: F$Node
     toPinId: T$Node
   - linkType: 1
     from: {fileID: 3386975879546473186}
@@ -149,15 +234,66 @@ MonoBehaviour:
     fromPinId: F$(choices)$[2]
     toPinId: Call
   - linkType: 1
+    from: {fileID: -5846172231511649519}
+    to: {fileID: 348194250509581057}
+    fromPinId: F$(choices)$[0]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -5846172231511649519}
+    to: {fileID: -2974803543590900759}
+    fromPinId: F$(choices)$[1]
+    toPinId: Call
+  - linkType: 1
+    from: {fileID: -3996031735866071659}
+    to: {fileID: -5846172231511649519}
+    fromPinId: Next
+    toPinId: T$Node
+  - linkType: 1
     from: {fileID: 1285158615994544264}
     to: {fileID: -1706096574551360384}
     fromPinId: Next
     toPinId: T$portalOut
   - linkType: 1
-    from: {fileID: -3996031735866071659}
-    to: {fileID: -1706096574551360384}
+    from: {fileID: -2974803543590900759}
+    to: {fileID: -6212917247779043685}
     fromPinId: Next
     toPinId: T$portalOut
+  - linkType: 2
+    from: {fileID: 3622589077814395174}
+    to: {fileID: -5846172231511649519}
+    fromPinId: F$Node
+    toPinId: T$Node
+  - linkType: 1
+    from: {fileID: 348194250509581057}
+    to: {fileID: -8411875708225959389}
+    fromPinId: Next
+    toPinId: T$portalOut
+  - linkType: 2
+    from: {fileID: -1090793055284961705}
+    to: {fileID: 3386975879546473186}
+    fromPinId: F$Node
+    toPinId: T$Node
+--- !u!114 &348194250509581057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5794dae6fb73cf44a852bc43437b0f84, type: 3}
+  m_Name: DemoNodeDialog
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 987.1389
+    y: 72.83331
+    width: 200
+    height: 45
+  data:
+    text: Au Nord
+    parameter: 
 --- !u!114 &1285158615994544264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,8 +308,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 639
-    y: 128
+    x: 486.30554
+    y: 179.02783
     width: 200
     height: 45
   data:
@@ -193,8 +329,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rect:
     serializedVersion: 2
-    x: 356
-    y: 96
+    x: 240.75
+    y: 144.13892
     width: 200
     height: 101
   choices:
@@ -204,3 +340,21 @@ MonoBehaviour:
     label: Choix 2
   - id: 2
     label: Choix 3
+--- !u!114 &3622589077814395174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469cb4ac8ca1d314eb688fe055b00ba2, type: 3}
+  m_Name: Go Choice2
+  m_EditorClassIdentifier: 
+  rect:
+    serializedVersion: 2
+    x: 481.86108
+    y: 51.361145
+    width: 200
+    height: 41
